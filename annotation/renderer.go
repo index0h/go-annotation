@@ -2,7 +2,6 @@ package annotation
 
 import (
 	"go/format"
-	"strconv"
 	"strings"
 )
 
@@ -12,6 +11,7 @@ const Header = "" +
 	"// @FileIsGeneratedAnnotation(true)\n"
 
 type Renderer struct {
+	specRenderer SpecRenderer
 }
 
 func NewRenderer() *Renderer {
@@ -25,33 +25,28 @@ func (r *Renderer) Process(storage *Storage) {
 				continue
 			}
 
-			builder := &strings.Builder{}
-
-			builder.WriteString(Header)
-			r.renderComment(file.Comment, builder)
-			builder.WriteString("package " + file.PackageName + "\n\n")
+			content := Header + r.renderComment(file.Comment) +
+				"package " + file.PackageName + "\n\n"
 
 			for _, element := range file.ImportGroups {
-				r.renderImportGroup(element, builder)
+				content += r.renderImportGroup(element)
 			}
 
 			for _, element := range file.ConstGroups {
-				r.renderConstGroup(element, builder)
+				content += r.renderConstGroup(element)
 			}
 
 			for _, element := range file.VarGroups {
-				r.renderVarGroup(element, builder)
+				content += r.renderVarGroup(element)
 			}
 
 			for _, element := range file.TypeGroups {
-				r.renderTypeGroup(element, builder)
+				content += r.renderTypeGroup(element)
 			}
 
 			for _, element := range file.Funcs {
-				r.renderFunc(element, builder)
+				content += r.renderFunc(element)
 			}
-
-			content := builder.String()
 
 			formattedContent, err := format.Source([]byte(content))
 
@@ -70,290 +65,109 @@ func (r *Renderer) Process(storage *Storage) {
 	}
 }
 
-func (r *Renderer) renderComment(comment string, builder *strings.Builder) {
+func (r *Renderer) renderComment(comment string) string {
 	if comment == "" {
-		return
+		return ""
 	}
 
-	builder.WriteString("// " + strings.Join(strings.Split(strings.TrimSpace(comment), "\n"), "\n// ") + "\n")
+	return "// " + strings.Join(strings.Split(strings.TrimSpace(comment), "\n"), "\n// ") + "\n"
 }
 
-func (r *Renderer) renderImportGroup(entity *ImportGroup, builder *strings.Builder) {
+func (r *Renderer) renderImportGroup(entity *ImportGroup) string {
 	if len(entity.Imports) == 1 && entity.Imports[0].Comment == "" {
-		r.renderComment(entity.Comment, builder)
-		builder.WriteString("import " + entity.Imports[0].Alias + " \"" + entity.Imports[0].Namespace + "\"\n\n")
-
-		return
+		return r.renderComment(entity.Comment) +
+			"import " + entity.Imports[0].Alias + " \"" + entity.Imports[0].Namespace + "\"\n\n"
 	}
 
-	r.renderComment(entity.Comment, builder)
-	builder.WriteString("import (\n")
+	result := r.renderComment(entity.Comment) +
+		"import (\n"
 
 	for _, element := range entity.Imports {
-		r.renderComment(element.Comment, builder)
-		builder.WriteString(element.Alias + " \"" + element.Namespace + "\"\n")
+		result += r.renderComment(element.Comment) + element.Alias + " \"" + element.Namespace + "\"\n"
 	}
 
-	builder.WriteString(")\n\n")
+	return result + ")\n\n"
 }
 
-func (r *Renderer) renderConstGroup(entity *ConstGroup, builder *strings.Builder) {
+func (r *Renderer) renderConstGroup(entity *ConstGroup) string {
 	if len(entity.Consts) == 1 && entity.Consts[0].Comment == "" {
-		r.renderComment(entity.Comment, builder)
-		builder.WriteString("const " + entity.Consts[0].Name + " ")
-		r.renderSpec(entity.Consts[0].Spec, builder)
-		builder.WriteString(" = " + entity.Consts[0].Value + "\n\n")
-
-		return
+		return r.renderComment(entity.Comment) +
+			"const " + entity.Consts[0].Name + " " + r.specRenderer.RenderSpec(entity.Consts[0].Spec) +
+			" = " + entity.Consts[0].Value + "\n\n"
 	}
 
-	r.renderComment(entity.Comment, builder)
-	builder.WriteString("const (\n")
+	result := r.renderComment(entity.Comment) + "const (\n"
 
 	for _, element := range entity.Consts {
-		r.renderComment(element.Comment, builder)
-		builder.WriteString(element.Name + " ")
-		r.renderSpec(element.Spec, builder)
+		result += r.renderComment(element.Comment) +
+			element.Name + " " + r.specRenderer.RenderSpec(element.Spec)
 
 		if element.Value != "" {
-			builder.WriteString(" = " + element.Value)
+			result += " = " + element.Value
 		}
 
-		builder.WriteString("\n")
+		result += "\n"
 	}
 
-	builder.WriteString(")\n\n")
+	return result + ")\n\n"
 }
 
-func (r *Renderer) renderVarGroup(entity *VarGroup, builder *strings.Builder) {
+func (r *Renderer) renderVarGroup(entity *VarGroup) string {
 	if len(entity.Vars) == 1 && entity.Vars[0].Comment == "" {
-		r.renderComment(entity.Comment, builder)
-		builder.WriteString("var " + entity.Vars[0].Name + " ")
-		r.renderSpec(entity.Vars[0].Spec, builder)
+		result := r.renderComment(entity.Comment) +
+			"var " + entity.Vars[0].Name + " " + r.specRenderer.RenderSpec(entity.Vars[0].Spec)
 
 		if entity.Vars[0].Value != "" {
-			builder.WriteString(" = " + entity.Vars[0].Value + "\n\n")
+			return result + " = " + entity.Vars[0].Value + "\n\n"
 		} else {
-			builder.WriteString("\n\n")
+			return result + "\n\n"
 		}
-
-		return
 	}
 
-	r.renderComment(entity.Comment, builder)
-	builder.WriteString("var (\n")
+	result := r.renderComment(entity.Comment) + "var (\n"
 
 	for _, element := range entity.Vars {
-		r.renderComment(element.Comment, builder)
-		builder.WriteString(element.Name + " ")
-		r.renderSpec(element.Spec, builder)
+		result += r.renderComment(element.Comment) +
+			element.Name + " " + r.specRenderer.RenderSpec(element.Spec)
 
 		if element.Value != "" {
-			builder.WriteString(" = " + element.Value)
+			result += " = " + element.Value
 		}
 
-		builder.WriteString("\n")
+		result += "\n"
 	}
 
-	builder.WriteString(")\n\n")
+	return result + ")\n\n"
 }
 
-func (r *Renderer) renderTypeGroup(entity *TypeGroup, builder *strings.Builder) {
+func (r *Renderer) renderTypeGroup(entity *TypeGroup) string {
 	if len(entity.Types) == 1 && entity.Types[0].Comment == "" {
-		r.renderComment(entity.Comment, builder)
-		builder.WriteString("type " + entity.Types[0].Name + " ")
-		r.renderSpec(entity.Types[0].Spec, builder)
-		builder.WriteString("\n\n")
-
-		return
+		return r.renderComment(entity.Comment) +
+			"type " + entity.Types[0].Name + " " + r.specRenderer.RenderSpec(entity.Types[0].Spec) + "\n\n"
 	}
 
-	r.renderComment(entity.Comment, builder)
-	builder.WriteString("type (\n")
+	result := r.renderComment(entity.Comment) + "type (\n"
 
 	for _, element := range entity.Types {
-		r.renderComment(element.Comment, builder)
-		builder.WriteString(element.Name + " ")
-		r.renderSpec(element.Spec, builder)
-		builder.WriteString("\n")
+		result += r.renderComment(element.Comment) +
+			element.Name + " " + r.specRenderer.RenderSpec(element.Spec) + "\n"
 	}
 
-	builder.WriteString(")\n\n")
+	return result + ")\n\n"
 }
 
-func (r *Renderer) renderFunc(element *Func, builder *strings.Builder) {
-	r.renderComment(element.Comment, builder)
-	builder.WriteString("func ")
+func (r *Renderer) renderFunc(element *Func) string {
+	result := r.renderComment(element.Comment) + "func "
 
 	if element.Related != nil {
 		if element.Related.Comment != "" {
-			builder.WriteString("(\n")
-			r.renderComment(element.Related.Comment, builder)
+			result += "(\n" + r.renderComment(element.Related.Comment)
 		} else {
-			builder.WriteString("(")
+			result += "("
 		}
 
-		builder.WriteString(element.Related.Name + " ")
-		r.renderSpec(element.Related.Spec, builder)
-		builder.WriteString(") ")
+		result += element.Related.Name + " " + r.specRenderer.RenderSpec(element.Related.Spec) + ") "
 	}
 
-	builder.WriteString(" " + element.Name)
-	r.renderFuncSpec(element.Spec, builder)
-	builder.WriteString("{\n" + element.Content + "\n}\n\n")
-}
-
-func (r *Renderer) renderSpec(element interface{}, builder *strings.Builder) {
-	if element == nil {
-		return
-	}
-
-	switch element.(type) {
-	case *ArraySpec:
-		r.renderArraySpec(element.(*ArraySpec), builder)
-	case *FuncSpec:
-		r.renderFuncSpec(element.(*FuncSpec), builder)
-	case *InterfaceSpec:
-		r.renderInterfaceSpec(element.(*InterfaceSpec), builder)
-	case *MapSpec:
-		r.renderMapSpec(element.(*MapSpec), builder)
-	case *SimpleSpec:
-		r.renderSimpleSpec(element.(*SimpleSpec), builder)
-	case *StructSpec:
-		r.renderStructSpec(element.(*StructSpec), builder)
-	case *Func:
-		builder.WriteString("func ")
-		r.renderFuncSpec(element.(*Func).Spec, builder)
-	default:
-		panic(NewErrorf("Unknown spec %T", element))
-	}
-}
-
-func (r *Renderer) renderArraySpec(element *ArraySpec, builder *strings.Builder) {
-	if element == nil {
-		return
-	}
-
-	if element.IsEllipsis {
-		if element.IsFixedLength {
-			builder.WriteString("[...]")
-		} else {
-			builder.WriteString("...")
-		}
-	} else if element.IsFixedLength {
-		builder.WriteString("[" + strconv.Itoa(element.Length) + "]")
-	} else {
-		builder.WriteString("[]")
-	}
-
-	r.renderSpec(element.Value, builder)
-}
-
-func (r *Renderer) renderFuncSpec(element *FuncSpec, builder *strings.Builder) {
-	builder.WriteString("(")
-
-	for i, param := range element.Params {
-		if param.Comment != "" {
-			builder.WriteString("\n")
-			r.renderComment(param.Comment, builder)
-		}
-
-		if param.Name != "" {
-			builder.WriteString(param.Name + " ")
-		}
-
-		r.renderSpec(param.Spec, builder)
-
-		if i < len(element.Params)-1 {
-			builder.WriteString(", ")
-		}
-	}
-
-	builder.WriteString(")")
-
-	if len(element.Results) > 0 {
-		builder.WriteString(" (")
-
-		for i, result := range element.Results {
-			if result.Comment != "" {
-				builder.WriteString("\n")
-				r.renderComment(result.Comment, builder)
-			}
-
-			if result.Name != "" {
-				builder.WriteString(result.Name + " ")
-			}
-
-			r.renderSpec(result.Spec, builder)
-
-			if i < len(element.Results)-1 {
-				builder.WriteString(", ")
-			}
-		}
-
-		builder.WriteString(")")
-	}
-}
-
-func (r *Renderer) renderInterfaceSpec(element *InterfaceSpec, builder *strings.Builder) {
-	builder.WriteString("interface{")
-
-	if len(element.Methods) > 0 {
-		builder.WriteString("\n")
-	}
-
-	for _, method := range element.Methods {
-		if method.Comment != "" {
-			builder.WriteString("\n")
-			r.renderComment(method.Comment, builder)
-		}
-
-		builder.WriteString(method.Name + " ")
-		r.renderSpec(method.Spec, builder)
-		builder.WriteString("\n")
-	}
-
-	builder.WriteString("}")
-}
-
-func (r *Renderer) renderMapSpec(element *MapSpec, builder *strings.Builder) {
-	builder.WriteString("map[")
-	r.renderSpec(element.Key, builder)
-	builder.WriteString("]")
-	r.renderSpec(element.Value, builder)
-}
-
-func (r *Renderer) renderSimpleSpec(element *SimpleSpec, builder *strings.Builder) {
-	if element.IsPointer {
-		builder.WriteString("*")
-	}
-
-	if element.PackageName != "" {
-		builder.WriteString(element.PackageName + ".")
-	}
-
-	builder.WriteString(element.TypeName)
-}
-
-func (r *Renderer) renderStructSpec(element *StructSpec, builder *strings.Builder) {
-	builder.WriteString("struct{\n")
-
-	for _, field := range element.Fields {
-		if field.Comment != "" {
-			builder.WriteString("\n")
-			r.renderComment(field.Comment, builder)
-		}
-
-		builder.WriteString(field.Name + " ")
-		r.renderSpec(field.Spec, builder)
-		builder.WriteString(" ")
-
-		if field.Tag != "" {
-			builder.WriteString(field.Tag + " ")
-		}
-
-		builder.WriteString("\n")
-	}
-
-	builder.WriteString("}")
+	return result + " " + element.Name + r.specRenderer.RenderSpec(element.Spec) + "{\n" + element.Content + "\n}\n\n"
 }

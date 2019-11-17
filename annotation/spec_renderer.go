@@ -73,6 +73,10 @@ func (r *SpecRenderer) renderFuncSpec(element *FuncSpec) string {
 			result += field.Name + " "
 		}
 
+		if _, ok := field.Spec.(*FuncSpec); ok {
+			result += "func "
+		}
+
 		result += r.RenderSpec(field.Spec)
 	}
 
@@ -92,6 +96,10 @@ func (r *SpecRenderer) renderFuncSpec(element *FuncSpec) string {
 
 			if field.Name != "" {
 				result += field.Name + " "
+			}
+
+			if _, ok := field.Spec.(*FuncSpec); ok {
+				result += "func "
 			}
 
 			result += r.RenderSpec(field.Spec)
@@ -147,7 +155,13 @@ func (r *SpecRenderer) renderStructSpec(element *StructSpec) string {
 			result = "\n" + r.renderComment(field.Comment)
 		}
 
-		result += field.Name + " " + r.RenderSpec(field.Spec) + " "
+		result += field.Name + " "
+
+		if _, ok := field.Spec.(*FuncSpec); ok {
+			result += "func "
+		}
+
+		result += r.RenderSpec(field.Spec) + " "
 
 		if field.Tag != "" {
 			result += field.Tag + " "

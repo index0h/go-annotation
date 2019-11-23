@@ -329,8 +329,8 @@ func TestInterfaceSpec_Clone(t *testing.T) {
 		Methods: []*Field{
 			{
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "methodAnnotation",
+					&TestAnnotation{
+						Name: "methodAnnotation",
 					},
 				},
 				Spec: methodSpec,

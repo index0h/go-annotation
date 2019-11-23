@@ -232,8 +232,12 @@ func TestField_Clone(t *testing.T) {
 		Tag:     "tag",
 		Comment: "comment",
 		Annotations: []interface{}{
-			&SimpleSpec{TypeName: "firstTypeName"},
-			&SimpleSpec{TypeName: "secondTypeName"},
+			&TestAnnotation{
+				Name: "firstTypeName",
+			},
+			&TestAnnotation{
+				Name: "secondTypeName",
+			},
 		},
 		Spec: specSpec,
 	}

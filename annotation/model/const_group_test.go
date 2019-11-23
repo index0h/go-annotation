@@ -13,8 +13,8 @@ func TestConstGroup_Validate(t *testing.T) {
 	modelValue := &ConstGroup{
 		Comment: "comment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeName",
+			&TestAnnotation{
+				Name: "constGroupAnnotation",
 			},
 		},
 		Consts: []*Const{
@@ -34,8 +34,8 @@ func TestConstGroup_Validate_WithNilConst(t *testing.T) {
 	modelValue := &ConstGroup{
 		Comment: "comment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeName",
+			&TestAnnotation{
+				Name: "constGroupAnnotation",
 			},
 		},
 		Consts: []*Const{nil},
@@ -53,8 +53,8 @@ func TestConstGroup_Validate_WithInvalidConst(t *testing.T) {
 	modelValue := &ConstGroup{
 		Comment: "comment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeName",
+			&TestAnnotation{
+				Name: "constGroupAnnotation",
 			},
 		},
 		Consts: []*Const{
@@ -378,8 +378,8 @@ func TestConstGroup_Clone(t *testing.T) {
 	modelValue := &ConstGroup{
 		Comment: "constGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "constGroupAnnotation",
+			&TestAnnotation{
+				Name: "constGroupAnnotation",
 			},
 		},
 		Consts: []*Const{
@@ -388,8 +388,8 @@ func TestConstGroup_Clone(t *testing.T) {
 				Value:   "iota",
 				Comment: "const1\ncomment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "const1Annotation",
+					&TestAnnotation{
+						Name: "const1Annotation",
 					},
 				},
 				Spec: &SimpleSpec{
@@ -402,8 +402,8 @@ func TestConstGroup_Clone(t *testing.T) {
 				Value:   "iota",
 				Comment: "const2\ncomment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "const2Annotation",
+					&TestAnnotation{
+						Name: "const2Annotation",
 					},
 				},
 				Spec: &SimpleSpec{

@@ -16,8 +16,8 @@ func TestConst_Validate(t *testing.T) {
 		Value:   "iota",
 		Comment: "const\ncomment",
 		Annotations: []interface{}{
-			SimpleSpec{
-				TypeName: "typeName",
+			&TestAnnotation{
+				Name: "constAnnotation",
 			},
 		},
 		Spec: &SimpleSpec{
@@ -221,8 +221,8 @@ func TestConst_Clone(t *testing.T) {
 		Value:   "iota",
 		Comment: "const\ncomment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "value",
+			&TestAnnotation{
+				Name: "constAnnotation",
 			},
 		},
 		Spec: &SimpleSpec{

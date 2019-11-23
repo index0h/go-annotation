@@ -17,16 +17,16 @@ func TestFile_Validate(t *testing.T) {
 		Content:     "package filePackage",
 		Comment:     "fileComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "fileAnnotation",
+			&TestAnnotation{
+				Name: "fileAnnotation",
 			},
 		},
 		ImportGroups: []*ImportGroup{
 			{
 				Comment: "importGroupComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "importGroupAnnotation",
+					&TestAnnotation{
+						Name: "importGroupAnnotation",
 					},
 				},
 				Imports: []*Import{
@@ -35,8 +35,8 @@ func TestFile_Validate(t *testing.T) {
 						Namespace: "importNamespace",
 						Comment:   "importComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "importAnnotation",
+							&TestAnnotation{
+								Name: "importAnnotation",
 							},
 						},
 					},
@@ -47,8 +47,8 @@ func TestFile_Validate(t *testing.T) {
 			{
 				Comment: "constGroupComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "constGroupAnnotation",
+					&TestAnnotation{
+						Name: "constGroupAnnotation",
 					},
 				},
 				Consts: []*Const{
@@ -57,8 +57,8 @@ func TestFile_Validate(t *testing.T) {
 						Value:   "constValue",
 						Comment: "constComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "constAnnotation",
+							&TestAnnotation{
+								Name: "constAnnotation",
 							},
 						},
 						Spec: &SimpleSpec{
@@ -73,8 +73,8 @@ func TestFile_Validate(t *testing.T) {
 			{
 				Comment: "varGroupComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "varGroupAnnotation",
+					&TestAnnotation{
+						Name: "varGroupAnnotation",
 					},
 				},
 				Vars: []*Var{
@@ -83,8 +83,8 @@ func TestFile_Validate(t *testing.T) {
 						Value:   "varValue",
 						Comment: "varComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "varAnnotation",
+							&TestAnnotation{
+								Name: "varAnnotation",
 							},
 						},
 						Spec: &SimpleSpec{
@@ -99,8 +99,8 @@ func TestFile_Validate(t *testing.T) {
 			{
 				Comment: "typeGroupComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "typeGroupAnnotation",
+					&TestAnnotation{
+						Name: "typeGroupAnnotation",
 					},
 				},
 				Types: []*Type{
@@ -108,8 +108,8 @@ func TestFile_Validate(t *testing.T) {
 						Name:    "typeName",
 						Comment: "typeComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "typeAnnotation",
+							&TestAnnotation{
+								Name: "typeAnnotation",
 							},
 						},
 						Spec: &SimpleSpec{
@@ -126,8 +126,8 @@ func TestFile_Validate(t *testing.T) {
 				Content: "funcContent",
 				Comment: "funcComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "funcAnnotation",
+					&TestAnnotation{
+						Name: "funcAnnotation",
 					},
 				},
 				Spec: &FuncSpec{},
@@ -470,16 +470,16 @@ func (
 		PackageName: "filePackageName",
 		Comment:     "file\nComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "fileAnnotation",
+			&TestAnnotation{
+				Name: "fileAnnotation",
 			},
 		},
 		ImportGroups: []*ImportGroup{
 			{
 				Comment: "importGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "importGroupAnnotation",
+					&TestAnnotation{
+						Name: "importGroupAnnotation",
 					},
 				},
 				Imports: []*Import{
@@ -488,8 +488,8 @@ func (
 						Namespace: "importNamespace",
 						Comment:   "import\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "importAnnotation",
+							&TestAnnotation{
+								Name: "importAnnotation",
 							},
 						},
 					},
@@ -500,8 +500,8 @@ func (
 			{
 				Comment: "constGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "constGroupAnnotation",
+					&TestAnnotation{
+						Name: "constGroupAnnotation",
 					},
 				},
 				Consts: []*Const{
@@ -510,8 +510,8 @@ func (
 						Value:   "constValue",
 						Comment: "const\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "constAnnotation",
+							&TestAnnotation{
+								Name: "constAnnotation",
 							},
 						},
 						Spec: &SimpleSpec{
@@ -526,8 +526,8 @@ func (
 			{
 				Comment: "varGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "varGroupAnnotation",
+					&TestAnnotation{
+						Name: "varGroupAnnotation",
 					},
 				},
 				Vars: []*Var{
@@ -536,8 +536,8 @@ func (
 						Value:   "varValue",
 						Comment: "var\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "varAnnotation",
+							&TestAnnotation{
+								Name: "varAnnotation",
 							},
 						},
 						Spec: varSpec,
@@ -549,8 +549,8 @@ func (
 			{
 				Comment: "typeGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "typeGroupAnnotation",
+					&TestAnnotation{
+						Name: "typeGroupAnnotation",
 					},
 				},
 				Types: []*Type{
@@ -558,8 +558,8 @@ func (
 						Name:    "typeName",
 						Comment: "type\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "typeAnnotation",
+							&TestAnnotation{
+								Name: "typeAnnotation",
 							},
 						},
 						Spec: typeSpec,
@@ -573,8 +573,8 @@ func (
 				Content: "funcContent",
 				Comment: "func\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "funcAnnotation",
+					&TestAnnotation{
+						Name: "funcAnnotation",
 					},
 				},
 				Spec: &FuncSpec{
@@ -583,8 +583,8 @@ func (
 							Name:    "funcParamName",
 							Comment: "funcParam\nComment",
 							Annotations: []interface{}{
-								&SimpleSpec{
-									TypeName: "funcParamAnnotation",
+								&TestAnnotation{
+									Name: "funcParamAnnotation",
 								},
 							},
 							Spec: &FuncSpec{
@@ -601,8 +601,8 @@ func (
 							Name:    "funcResultName",
 							Comment: "funcResult\nComment",
 							Annotations: []interface{}{
-								&SimpleSpec{
-									TypeName: "funcResultAnnotation",
+								&TestAnnotation{
+									Name: "funcResultAnnotation",
 								},
 							},
 							Spec: &FuncSpec{
@@ -619,8 +619,8 @@ func (
 					Name:    "funcRelatedName",
 					Comment: "funcRelated\nComment",
 					Annotations: []interface{}{
-						&SimpleSpec{
-							TypeName: "funcRelatedAnnotation",
+						&TestAnnotation{
+							Name: "funcRelatedAnnotation",
 						},
 					},
 					Spec: funcRelatedSpec,
@@ -738,16 +738,16 @@ func TestFile_Clone(t *testing.T) {
 		PackageName: "filePackageName",
 		Comment:     "file\nComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "fileAnnotation",
+			&TestAnnotation{
+				Name: "fileAnnotation",
 			},
 		},
 		ImportGroups: []*ImportGroup{
 			{
 				Comment: "importGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "importGroupAnnotation",
+					&TestAnnotation{
+						Name: "importGroupAnnotation",
 					},
 				},
 				Imports: []*Import{
@@ -756,8 +756,8 @@ func TestFile_Clone(t *testing.T) {
 						Namespace: "importNamespace",
 						Comment:   "import\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "importAnnotation",
+							&TestAnnotation{
+								Name: "importAnnotation",
 							},
 						},
 					},
@@ -768,8 +768,8 @@ func TestFile_Clone(t *testing.T) {
 			{
 				Comment: "constGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "constGroupAnnotation",
+					&TestAnnotation{
+						Name: "constGroupAnnotation",
 					},
 				},
 				Consts: []*Const{
@@ -778,8 +778,8 @@ func TestFile_Clone(t *testing.T) {
 						Value:   "constValue",
 						Comment: "const\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "constAnnotation",
+							&TestAnnotation{
+								Name: "constAnnotation",
 							},
 						},
 						Spec: &SimpleSpec{
@@ -794,8 +794,8 @@ func TestFile_Clone(t *testing.T) {
 			{
 				Comment: "varGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "varGroupAnnotation",
+					&TestAnnotation{
+						Name: "varGroupAnnotation",
 					},
 				},
 				Vars: []*Var{
@@ -804,8 +804,8 @@ func TestFile_Clone(t *testing.T) {
 						Value:   "varValue",
 						Comment: "var\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "varAnnotation",
+							&TestAnnotation{
+								Name: "varAnnotation",
 							},
 						},
 						Spec: varSpec,
@@ -817,8 +817,8 @@ func TestFile_Clone(t *testing.T) {
 			{
 				Comment: "typeGroup\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "typeGroupAnnotation",
+					&TestAnnotation{
+						Name: "typeGroupAnnotation",
 					},
 				},
 				Types: []*Type{
@@ -826,8 +826,8 @@ func TestFile_Clone(t *testing.T) {
 						Name:    "typeName",
 						Comment: "type\nComment",
 						Annotations: []interface{}{
-							&SimpleSpec{
-								TypeName: "typeAnnotation",
+							&TestAnnotation{
+								Name: "typeAnnotation",
 							},
 						},
 						Spec: typeSpec,
@@ -841,8 +841,8 @@ func TestFile_Clone(t *testing.T) {
 				Content: "funcContent",
 				Comment: "func\nComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "funcAnnotation",
+					&TestAnnotation{
+						Name: "funcAnnotation",
 					},
 				},
 				Spec: &FuncSpec{
@@ -851,8 +851,8 @@ func TestFile_Clone(t *testing.T) {
 							Name:    "funcParamName",
 							Comment: "funcParam\nComment",
 							Annotations: []interface{}{
-								&SimpleSpec{
-									TypeName: "funcParamAnnotation",
+								&TestAnnotation{
+									Name: "funcParamAnnotation",
 								},
 							},
 							Spec: funcParamSpec,
@@ -863,8 +863,8 @@ func TestFile_Clone(t *testing.T) {
 							Name:    "funcResultName",
 							Comment: "funcResult\nComment",
 							Annotations: []interface{}{
-								&SimpleSpec{
-									TypeName: "funcResultAnnotation",
+								&TestAnnotation{
+									Name: "funcResultAnnotation",
 								},
 							},
 							Spec: funcResultSpec,
@@ -875,8 +875,8 @@ func TestFile_Clone(t *testing.T) {
 					Name:    "funcRelatedName",
 					Comment: "funcRelated\nComment",
 					Annotations: []interface{}{
-						&SimpleSpec{
-							TypeName: "funcRelatedAnnotation",
+						&TestAnnotation{
+							Name: "funcRelatedAnnotation",
 						},
 					},
 					Spec: funcRelatedSpec,

@@ -22,8 +22,8 @@ func TestVarGroup_Validate_WithSimpleSpecValue(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -46,8 +46,8 @@ func TestVarGroup_Validate_WithArraySpecValue(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -72,8 +72,8 @@ func TestVarGroup_Validate_WithMapSpecValue(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -101,8 +101,8 @@ func TestVarGroup_Validate_WithStructSpecValue(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -123,8 +123,8 @@ func TestVarGroup_Validate_WithInterfaceSpecValue(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -145,8 +145,8 @@ func TestVarGroup_Validate_WithFuncSpecValue(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -167,8 +167,8 @@ func TestVarGroup_Validate_WithInvalidVar(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -190,8 +190,8 @@ func TestVarGroup_Validate_WithNilVar(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -856,8 +856,8 @@ func TestVarGroup_Clone(t *testing.T) {
 	modelValue := &VarGroup{
 		Comment: "varGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varGroupAnnotation",
+			&TestAnnotation{
+				Name: "varGroupAnnotation",
 			},
 		},
 		Vars: []*Var{
@@ -865,8 +865,8 @@ func TestVarGroup_Clone(t *testing.T) {
 				Name:    "var1Name",
 				Comment: "var1\ncomment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "var1Annotation",
+					&TestAnnotation{
+						Name: "var1Annotation",
 					},
 				},
 				Spec: var1Spec,
@@ -875,8 +875,8 @@ func TestVarGroup_Clone(t *testing.T) {
 				Name:    "var2Name",
 				Comment: "var2\ncomment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "var2Annotation",
+					&TestAnnotation{
+						Name: "var2Annotation",
 					},
 				},
 				Spec: var2Spec,

@@ -5,6 +5,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+type TestAnnotation struct {
+	Name string
+}
+
 type (
 	StringerMock struct {
 		ctrl        *unit.Controller

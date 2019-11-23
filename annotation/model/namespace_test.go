@@ -20,8 +20,8 @@ func TestNamespace_Validate(t *testing.T) {
 				Content:     "package filePackage",
 				Comment:     "file1Comment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "file1Annotation",
+					&TestAnnotation{
+						Name: "file1Annotation",
 					},
 				},
 			},
@@ -31,8 +31,8 @@ func TestNamespace_Validate(t *testing.T) {
 				Content:     "package filePackage",
 				Comment:     "file2Comment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "file2Annotation",
+					&TestAnnotation{
+						Name: "file2Annotation",
 					},
 				},
 			},
@@ -174,8 +174,8 @@ func TestNamespace_Clone(t *testing.T) {
 				Content:     "package filePackage",
 				Comment:     "file1Comment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "file1Annotation",
+					&TestAnnotation{
+						Name: "file1Annotation",
 					},
 				},
 			},
@@ -185,8 +185,8 @@ func TestNamespace_Clone(t *testing.T) {
 				Content:     "package filePackage",
 				Comment:     "file2Comment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "file2Annotation",
+					&TestAnnotation{
+						Name: "file2Annotation",
 					},
 				},
 			},

@@ -22,8 +22,8 @@ func TestTypeGroup_Validate_WithSimpleSpecValue(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -46,8 +46,8 @@ func TestTypeGroup_Validate_WithArraySpecValue(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -72,8 +72,8 @@ func TestTypeGroup_Validate_WithMapSpecValue(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -101,8 +101,8 @@ func TestTypeGroup_Validate_WithStructSpecValue(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -123,8 +123,8 @@ func TestTypeGroup_Validate_WithInterfaceSpecValue(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -145,8 +145,8 @@ func TestTypeGroup_Validate_WithFuncSpecValue(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -167,8 +167,8 @@ func TestTypeGroup_Validate_WithInvalidType(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -190,8 +190,8 @@ func TestTypeGroup_Validate_WithNilType(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -588,8 +588,8 @@ func TestTypeGroup_Clone(t *testing.T) {
 	modelValue := &TypeGroup{
 		Comment: "typeGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeGroupAnnotation",
+			&TestAnnotation{
+				Name: "typeGroupAnnotation",
 			},
 		},
 		Types: []*Type{
@@ -597,8 +597,8 @@ func TestTypeGroup_Clone(t *testing.T) {
 				Name:    "type1Name",
 				Comment: "type1\ncomment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "type1Annotation",
+					&TestAnnotation{
+						Name: "type1Annotation",
 					},
 				},
 				Spec: type1Spec,
@@ -607,8 +607,8 @@ func TestTypeGroup_Clone(t *testing.T) {
 				Name:    "type2Name",
 				Comment: "type2\ncomment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "type2Annotation",
+					&TestAnnotation{
+						Name: "type2Annotation",
 					},
 				},
 				Spec: type2Spec,

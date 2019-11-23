@@ -651,52 +651,52 @@ func TestFuncSpec_String_WithParamCommentAndParamNameAndResultCommentAndResultNa
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramComment := "paramComment\nhere"
-	paramName := "paramName"
-	paramSpecString := "paramSpecString"
-	resultComment := "resultComment\nhere"
-	resultName := "resultName"
-	resultSpecString := "resultSpecString"
+	funcSpecParamComment := "funcSpecParamComment\nhere"
+	funcSpecParamName := "funcSpecParamName"
+	funcSpecParamSpecString := "funcSpecParamSpecString"
+	funcSpecResultComment := "funcSpecResultComment\nhere"
+	funcSpecResultName := "funcSpecResultName"
+	funcSpecResultString := "funcSpecResultString"
 	expected := `(
-// paramComment
+// funcSpecParamComment
 // here
-paramName ...paramSpecString) (
-// resultComment
+funcSpecParamName ...funcSpecParamSpecString) (
+// funcSpecResultComment
 // here
-resultName resultSpecString)`
+funcSpecResultName funcSpecResultString)`
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		IsVariadic: true,
 		Params: []*Field{
 			{
-				Name:    paramName,
-				Comment: paramComment,
+				Name:    funcSpecParamName,
+				Comment: funcSpecParamComment,
 				Spec: &ArraySpec{
-					Value: paramSpec,
+					Value: funcSpecParamSpec,
 				},
 			},
 		},
 		Results: []*Field{
 			{
-				Name:    resultName,
-				Comment: resultComment,
-				Spec:    resultSpec,
+				Name:    funcSpecResultName,
+				Comment: funcSpecResultComment,
+				Spec:    funcSpecResult,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		String().
-		Return(paramSpecString)
+		Return(funcSpecParamSpecString)
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		String().
-		Return(resultSpecString)
+		Return(funcSpecResultString)
 
 	actual := modelValue.String()
 
@@ -707,49 +707,49 @@ func TestFuncSpec_String_WithParamCommentAndParamNameAndResultCommentAndResultNa
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramComment := "paramComment\nhere"
-	paramName := "paramName"
-	paramSpecString := "paramSpecString"
-	resultComment := "resultComment\nhere"
-	resultName := "resultName"
-	resultSpecString := "resultSpecString"
+	funcSpecParamComment := "funcSpecParamComment\nhere"
+	funcSpecParamName := "funcSpecParamName"
+	funcSpecParamSpecString := "funcSpecParamSpecString"
+	funcSpecResultComment := "funcSpecResultComment\nhere"
+	funcSpecResultName := "funcSpecResultName"
+	funcSpecResultString := "funcSpecResultString"
 	expected := `(
-// paramComment
+// funcSpecParamComment
 // here
-paramName paramSpecString) (
-// resultComment
+funcSpecParamName funcSpecParamSpecString) (
+// funcSpecResultComment
 // here
-resultName resultSpecString)`
+funcSpecResultName funcSpecResultString)`
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Name:    paramName,
-				Comment: paramComment,
-				Spec:    paramSpec,
+				Name:    funcSpecParamName,
+				Comment: funcSpecParamComment,
+				Spec:    funcSpecParamSpec,
 			},
 		},
 		Results: []*Field{
 			{
-				Name:    resultName,
-				Comment: resultComment,
-				Spec:    resultSpec,
+				Name:    funcSpecResultName,
+				Comment: funcSpecResultComment,
+				Spec:    funcSpecResult,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		String().
-		Return(paramSpecString)
+		Return(funcSpecParamSpecString)
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		String().
-		Return(resultSpecString)
+		Return(funcSpecResultString)
 
 	actual := modelValue.String()
 
@@ -760,39 +760,39 @@ func TestFuncSpec_String_WithParamNameAndResultName(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramName := "paramName"
-	paramSpecString := "paramSpecString"
-	resultName := "resultName"
-	resultSpecString := "resultSpecString"
-	expected := `(paramName paramSpecString) (resultName resultSpecString)`
+	funcSpecParamName := "funcSpecParamName"
+	funcSpecParamSpecString := "funcSpecParamSpecString"
+	funcSpecResultName := "funcSpecResultName"
+	funcSpecResultString := "funcSpecResultString"
+	expected := `(funcSpecParamName funcSpecParamSpecString) (funcSpecResultName funcSpecResultString)`
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Name: paramName,
-				Spec: paramSpec,
+				Name: funcSpecParamName,
+				Spec: funcSpecParamSpec,
 			},
 		},
 		Results: []*Field{
 			{
-				Name: resultName,
-				Spec: resultSpec,
+				Name: funcSpecResultName,
+				Spec: funcSpecResult,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		String().
-		Return(paramSpecString)
+		Return(funcSpecParamSpecString)
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		String().
-		Return(resultSpecString)
+		Return(funcSpecResultString)
 
 	actual := modelValue.String()
 
@@ -803,35 +803,35 @@ func TestFuncSpec_String(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramSpecString := "paramSpecString"
-	resultSpecString := "resultSpecString"
-	expected := `(paramSpecString) (resultSpecString)`
+	funcSpecParamSpecString := "funcSpecParamSpecString"
+	funcSpecResultString := "funcSpecResultString"
+	expected := `(funcSpecParamSpecString) (funcSpecResultString)`
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Spec: paramSpec,
+				Spec: funcSpecParamSpec,
 			},
 		},
 		Results: []*Field{
 			{
-				Spec: resultSpec,
+				Spec: funcSpecResult,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		String().
-		Return(paramSpecString)
+		Return(funcSpecParamSpecString)
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		String().
-		Return(resultSpecString)
+		Return(funcSpecResultString)
 
 	actual := modelValue.String()
 
@@ -842,32 +842,32 @@ func TestFuncSpec_String_WithParamCommentAndParamNameAndResultCommentAndResultNa
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramComment := "paramComment\nhere"
-	paramName := "paramName"
-	paramSpecString := "paramSpecString"
-	resultComment := "resultComment\nhere"
-	resultName := "resultName"
-	resultSpecString := "resultSpecString"
+	funcSpecParamComment := "funcSpecParamComment\nhere"
+	funcSpecParamName := "funcSpecParamName"
+	funcSpecParamSpecString := "funcSpecParamSpecString"
+	funcSpecResultComment := "funcSpecResultComment\nhere"
+	funcSpecResultName := "funcSpecResultName"
+	funcSpecResultString := "funcSpecResultString"
 	expected := `(
-// paramComment
+// funcSpecParamComment
 // here
-paramName func (paramSpecString)) (
-// resultComment
+funcSpecParamName func (funcSpecParamSpecString)) (
+// funcSpecResultComment
 // here
-resultName func (resultSpecString))`
+funcSpecResultName func (funcSpecResultString))`
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Name:    paramName,
-				Comment: paramComment,
+				Name:    funcSpecParamName,
+				Comment: funcSpecParamComment,
 				Spec: &FuncSpec{
 					Params: []*Field{
 						{
-							Spec: paramSpec,
+							Spec: funcSpecParamSpec,
 						},
 					},
 				},
@@ -875,12 +875,12 @@ resultName func (resultSpecString))`
 		},
 		Results: []*Field{
 			{
-				Name:    resultName,
-				Comment: resultComment,
+				Name:    funcSpecResultName,
+				Comment: funcSpecResultComment,
 				Spec: &FuncSpec{
 					Params: []*Field{
 						{
-							Spec: resultSpec,
+							Spec: funcSpecResult,
 						},
 					},
 				},
@@ -888,15 +888,15 @@ resultName func (resultSpecString))`
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		String().
-		Return(paramSpecString)
+		Return(funcSpecParamSpecString)
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		String().
-		Return(resultSpecString)
+		Return(funcSpecResultString)
 
 	actual := modelValue.String()
 
@@ -907,23 +907,23 @@ func TestFuncSpec_String_WithParamNameAndFuncSpecParamSpecAndResultNameAndFuncSp
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramName := "paramName"
-	paramSpecString := "paramSpecString"
-	resultName := "resultName"
-	resultSpecString := "resultSpecString"
-	expected := `(paramName func (paramSpecString)) (resultName func (resultSpecString))`
+	funcSpecParamName := "funcSpecParamName"
+	funcSpecParamSpecString := "funcSpecParamSpecString"
+	funcSpecResultName := "funcSpecResultName"
+	funcSpecResultString := "funcSpecResultString"
+	expected := `(funcSpecParamName func (funcSpecParamSpecString)) (funcSpecResultName func (funcSpecResultString))`
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Name: paramName,
+				Name: funcSpecParamName,
 				Spec: &FuncSpec{
 					Params: []*Field{
 						{
-							Spec: paramSpec,
+							Spec: funcSpecParamSpec,
 						},
 					},
 				},
@@ -931,11 +931,11 @@ func TestFuncSpec_String_WithParamNameAndFuncSpecParamSpecAndResultNameAndFuncSp
 		},
 		Results: []*Field{
 			{
-				Name: resultName,
+				Name: funcSpecResultName,
 				Spec: &FuncSpec{
 					Params: []*Field{
 						{
-							Spec: resultSpec,
+							Spec: funcSpecResult,
 						},
 					},
 				},
@@ -943,15 +943,15 @@ func TestFuncSpec_String_WithParamNameAndFuncSpecParamSpecAndResultNameAndFuncSp
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		String().
-		Return(paramSpecString)
+		Return(funcSpecParamSpecString)
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		String().
-		Return(resultSpecString)
+		Return(funcSpecResultString)
 
 	actual := modelValue.String()
 
@@ -962,12 +962,12 @@ func TestFuncSpec_String_WithFuncSpecParamSpecAndFuncSpecResultSpec(t *testing.T
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramSpecString := "paramSpecString"
-	resultSpecString := "resultSpecString"
-	expected := `(func (paramSpecString)) (func (resultSpecString))`
+	funcSpecParamSpecString := "funcSpecParamSpecString"
+	funcSpecResultString := "funcSpecResultString"
+	expected := `(func (funcSpecParamSpecString)) (func (funcSpecResultString))`
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
@@ -975,7 +975,7 @@ func TestFuncSpec_String_WithFuncSpecParamSpecAndFuncSpecResultSpec(t *testing.T
 				Spec: &FuncSpec{
 					Params: []*Field{
 						{
-							Spec: paramSpec,
+							Spec: funcSpecParamSpec,
 						},
 					},
 				},
@@ -986,7 +986,7 @@ func TestFuncSpec_String_WithFuncSpecParamSpecAndFuncSpecResultSpec(t *testing.T
 				Spec: &FuncSpec{
 					Params: []*Field{
 						{
-							Spec: resultSpec,
+							Spec: funcSpecResult,
 						},
 					},
 				},
@@ -994,15 +994,15 @@ func TestFuncSpec_String_WithFuncSpecParamSpecAndFuncSpecResultSpec(t *testing.T
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		String().
-		Return(paramSpecString)
+		Return(funcSpecParamSpecString)
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		String().
-		Return(resultSpecString)
+		Return(funcSpecResultString)
 
 	actual := modelValue.String()
 
@@ -1013,89 +1013,89 @@ func TestFuncSpec_String_WithParamCommentAndParamNameAndResultCommentAndResultNa
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	param1Comment := "param1Comment\nhere"
-	param2Comment := "param2Comment\nhere"
-	param1Name := "param1Name"
-	param2Name := "param2Name"
-	param1SpecString := "param1SpecString"
-	param2SpecString := "param2SpecString"
-	result1Comment := "result1Comment\nhere"
-	result2Comment := "result2Comment\nhere"
-	result1Name := "result1Name"
-	result2Name := "result2Name"
-	result1SpecString := "result1SpecString"
-	result2SpecString := "result2SpecString"
+	funcSpecParam1Comment := "funcSpecParam1Comment\nhere"
+	funcSpecParam2Comment := "funcSpecParam2Comment\nhere"
+	funcSpecParam1Name := "funcSpecParam1Name"
+	funcSpecParam2Name := "funcSpecParam2Name"
+	funcSpecParam1SpecString := "funcSpecParam1SpecString"
+	funcSpecParam2SpecString := "funcSpecParam2SpecString"
+	funcSpecResult1Comment := "funcSpecResult1Comment\nhere"
+	funcSpecResult2Comment := "funcSpecResult2Comment\nhere"
+	funcSpecResult1Name := "funcSpecResult1Name"
+	funcSpecResult2Name := "funcSpecResult2Name"
+	funcSpecResult1SpecString := "funcSpecResult1SpecString"
+	funcSpecResult2SpecString := "funcSpecResult2SpecString"
 
 	expected := `(
-// param1Comment
+// funcSpecParam1Comment
 // here
-param1Name []param1SpecString, 
-// param2Comment
+funcSpecParam1Name []funcSpecParam1SpecString, 
+// funcSpecParam2Comment
 // here
-param2Name ...param2SpecString) (
-// result1Comment
+funcSpecParam2Name ...funcSpecParam2SpecString) (
+// funcSpecResult1Comment
 // here
-result1Name result1SpecString, 
-// result2Comment
+funcSpecResult1Name funcSpecResult1SpecString, 
+// funcSpecResult2Comment
 // here
-result2Name result2SpecString)`
+funcSpecResult2Name funcSpecResult2SpecString)`
 
-	param1Spec := NewSpecMock(ctrl)
-	param2Spec := NewSpecMock(ctrl)
-	result1Spec := NewSpecMock(ctrl)
-	result2Spec := NewSpecMock(ctrl)
+	funcSpecParam1Spec := NewSpecMock(ctrl)
+	funcSpecParam2Spec := NewSpecMock(ctrl)
+	funcSpecResult1Spec := NewSpecMock(ctrl)
+	funcSpecResult2Spec := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		IsVariadic: true,
 		Params: []*Field{
 			{
-				Name:    param1Name,
-				Comment: param1Comment,
+				Name:    funcSpecParam1Name,
+				Comment: funcSpecParam1Comment,
 				Spec: &ArraySpec{
-					Value: param1Spec,
+					Value: funcSpecParam1Spec,
 				},
 			},
 			{
-				Name:    param2Name,
-				Comment: param2Comment,
+				Name:    funcSpecParam2Name,
+				Comment: funcSpecParam2Comment,
 				Spec: &ArraySpec{
-					Value: param2Spec,
+					Value: funcSpecParam2Spec,
 				},
 			},
 		},
 		Results: []*Field{
 			{
-				Name:    result1Name,
-				Comment: result1Comment,
-				Spec:    result1Spec,
+				Name:    funcSpecResult1Name,
+				Comment: funcSpecResult1Comment,
+				Spec:    funcSpecResult1Spec,
 			},
 			{
-				Name:    result2Name,
-				Comment: result2Comment,
-				Spec:    result2Spec,
+				Name:    funcSpecResult2Name,
+				Comment: funcSpecResult2Comment,
+				Spec:    funcSpecResult2Spec,
 			},
 		},
 	}
 
-	param1Spec.
+	funcSpecParam1Spec.
 		EXPECT().
 		String().
-		Return(param1SpecString)
+		Return(funcSpecParam1SpecString)
 
-	param2Spec.
+	funcSpecParam2Spec.
 		EXPECT().
 		String().
-		Return(param2SpecString)
+		Return(funcSpecParam2SpecString)
 
-	result1Spec.
+	funcSpecResult1Spec.
 		EXPECT().
 		String().
-		Return(result1SpecString)
+		Return(funcSpecResult1SpecString)
 
-	result2Spec.
+	funcSpecResult2Spec.
 		EXPECT().
 		String().
-		Return(result2SpecString)
+		Return(funcSpecResult2SpecString)
 
 	actual := modelValue.String()
 
@@ -1106,84 +1106,84 @@ func TestFuncSpec_String_WithParamCommentAndParamNameAndResultCommentAndResultNa
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	param1Comment := "param1Comment\nhere"
-	param2Comment := "param2Comment\nhere"
-	param1Name := "param1Name"
-	param2Name := "param2Name"
-	param1SpecString := "param1SpecString"
-	param2SpecString := "param2SpecString"
-	result1Comment := "result1Comment\nhere"
-	result2Comment := "result2Comment\nhere"
-	result1Name := "result1Name"
-	result2Name := "result2Name"
-	result1SpecString := "result1SpecString"
-	result2SpecString := "result2SpecString"
+	funcSpecParam1Comment := "funcSpecParam1Comment\nhere"
+	funcSpecParam2Comment := "funcSpecParam2Comment\nhere"
+	funcSpecParam1Name := "funcSpecParam1Name"
+	funcSpecParam2Name := "funcSpecParam2Name"
+	funcSpecParam1SpecString := "funcSpecParam1SpecString"
+	funcSpecParam2SpecString := "funcSpecParam2SpecString"
+	funcSpecResult1Comment := "funcSpecResult1Comment\nhere"
+	funcSpecResult2Comment := "funcSpecResult2Comment\nhere"
+	funcSpecResult1Name := "funcSpecResult1Name"
+	funcSpecResult2Name := "funcSpecResult2Name"
+	funcSpecResult1SpecString := "funcSpecResult1SpecString"
+	funcSpecResult2SpecString := "funcSpecResult2SpecString"
 
 	expected := `(
-// param1Comment
+// funcSpecParam1Comment
 // here
-param1Name param1SpecString, 
-// param2Comment
+funcSpecParam1Name funcSpecParam1SpecString, 
+// funcSpecParam2Comment
 // here
-param2Name param2SpecString) (
-// result1Comment
+funcSpecParam2Name funcSpecParam2SpecString) (
+// funcSpecResult1Comment
 // here
-result1Name result1SpecString, 
-// result2Comment
+funcSpecResult1Name funcSpecResult1SpecString, 
+// funcSpecResult2Comment
 // here
-result2Name result2SpecString)`
+funcSpecResult2Name funcSpecResult2SpecString)`
 
-	param1Spec := NewSpecMock(ctrl)
-	param2Spec := NewSpecMock(ctrl)
-	result1Spec := NewSpecMock(ctrl)
-	result2Spec := NewSpecMock(ctrl)
+	funcSpecParam1Spec := NewSpecMock(ctrl)
+	funcSpecParam2Spec := NewSpecMock(ctrl)
+	funcSpecResult1Spec := NewSpecMock(ctrl)
+	funcSpecResult2Spec := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Name:    param1Name,
-				Comment: param1Comment,
-				Spec:    param1Spec,
+				Name:    funcSpecParam1Name,
+				Comment: funcSpecParam1Comment,
+				Spec:    funcSpecParam1Spec,
 			},
 			{
-				Name:    param2Name,
-				Comment: param2Comment,
-				Spec:    param2Spec,
+				Name:    funcSpecParam2Name,
+				Comment: funcSpecParam2Comment,
+				Spec:    funcSpecParam2Spec,
 			},
 		},
 		Results: []*Field{
 			{
-				Name:    result1Name,
-				Comment: result1Comment,
-				Spec:    result1Spec,
+				Name:    funcSpecResult1Name,
+				Comment: funcSpecResult1Comment,
+				Spec:    funcSpecResult1Spec,
 			},
 			{
-				Name:    result2Name,
-				Comment: result2Comment,
-				Spec:    result2Spec,
+				Name:    funcSpecResult2Name,
+				Comment: funcSpecResult2Comment,
+				Spec:    funcSpecResult2Spec,
 			},
 		},
 	}
 
-	param1Spec.
+	funcSpecParam1Spec.
 		EXPECT().
 		String().
-		Return(param1SpecString)
+		Return(funcSpecParam1SpecString)
 
-	param2Spec.
+	funcSpecParam2Spec.
 		EXPECT().
 		String().
-		Return(param2SpecString)
+		Return(funcSpecParam2SpecString)
 
-	result1Spec.
+	funcSpecResult1Spec.
 		EXPECT().
 		String().
-		Return(result1SpecString)
+		Return(funcSpecResult1SpecString)
 
-	result2Spec.
+	funcSpecResult2Spec.
 		EXPECT().
 		String().
-		Return(result2SpecString)
+		Return(funcSpecResult2SpecString)
 
 	actual := modelValue.String()
 
@@ -1194,65 +1194,65 @@ func TestFuncSpec_String_WithParamNameAndResultNameAndMultipleValues(t *testing.
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	param1Name := "param1Name"
-	param2Name := "param2Name"
-	param1SpecString := "param1SpecString"
-	param2SpecString := "param2SpecString"
-	result1Name := "result1Name"
-	result2Name := "result2Name"
-	result1SpecString := "result1SpecString"
-	result2SpecString := "result2SpecString"
+	funcSpecParam1Name := "funcSpecParam1Name"
+	funcSpecParam2Name := "funcSpecParam2Name"
+	funcSpecParam1SpecString := "funcSpecParam1SpecString"
+	funcSpecParam2SpecString := "funcSpecParam2SpecString"
+	funcSpecResult1Name := "funcSpecResult1Name"
+	funcSpecResult2Name := "funcSpecResult2Name"
+	funcSpecResult1SpecString := "funcSpecResult1SpecString"
+	funcSpecResult2SpecString := "funcSpecResult2SpecString"
 
-	expected := `(param1Name param1SpecString, param2Name param2SpecString) ` +
-		`(result1Name result1SpecString, result2Name result2SpecString)`
+	expected := `(funcSpecParam1Name funcSpecParam1SpecString, funcSpecParam2Name funcSpecParam2SpecString) ` +
+		`(funcSpecResult1Name funcSpecResult1SpecString, funcSpecResult2Name funcSpecResult2SpecString)`
 
-	param1Spec := NewSpecMock(ctrl)
-	param2Spec := NewSpecMock(ctrl)
-	result1Spec := NewSpecMock(ctrl)
-	result2Spec := NewSpecMock(ctrl)
+	funcSpecParam1Spec := NewSpecMock(ctrl)
+	funcSpecParam2Spec := NewSpecMock(ctrl)
+	funcSpecResult1Spec := NewSpecMock(ctrl)
+	funcSpecResult2Spec := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Name: param1Name,
-				Spec: param1Spec,
+				Name: funcSpecParam1Name,
+				Spec: funcSpecParam1Spec,
 			},
 			{
-				Name: param2Name,
-				Spec: param2Spec,
+				Name: funcSpecParam2Name,
+				Spec: funcSpecParam2Spec,
 			},
 		},
 		Results: []*Field{
 			{
-				Name: result1Name,
-				Spec: result1Spec,
+				Name: funcSpecResult1Name,
+				Spec: funcSpecResult1Spec,
 			},
 			{
-				Name: result2Name,
-				Spec: result2Spec,
+				Name: funcSpecResult2Name,
+				Spec: funcSpecResult2Spec,
 			},
 		},
 	}
 
-	param1Spec.
+	funcSpecParam1Spec.
 		EXPECT().
 		String().
-		Return(param1SpecString)
+		Return(funcSpecParam1SpecString)
 
-	param2Spec.
+	funcSpecParam2Spec.
 		EXPECT().
 		String().
-		Return(param2SpecString)
+		Return(funcSpecParam2SpecString)
 
-	result1Spec.
+	funcSpecResult1Spec.
 		EXPECT().
 		String().
-		Return(result1SpecString)
+		Return(funcSpecResult1SpecString)
 
-	result2Spec.
+	funcSpecResult2Spec.
 		EXPECT().
 		String().
-		Return(result2SpecString)
+		Return(funcSpecResult2SpecString)
 
 	actual := modelValue.String()
 
@@ -1263,56 +1263,56 @@ func TestFuncSpec_String_AndMultipleValues(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	param1SpecString := "param1SpecString"
-	param2SpecString := "param2SpecString"
-	result1SpecString := "result1SpecString"
-	result2SpecString := "result2SpecString"
+	funcSpecParam1SpecString := "funcSpecParam1SpecString"
+	funcSpecParam2SpecString := "funcSpecParam2SpecString"
+	funcSpecResult1SpecString := "funcSpecResult1SpecString"
+	funcSpecResult2SpecString := "funcSpecResult2SpecString"
 
-	expected := `(param1SpecString, param2SpecString) (result1SpecString, result2SpecString)`
+	expected := `(funcSpecParam1SpecString, funcSpecParam2SpecString) (funcSpecResult1SpecString, funcSpecResult2SpecString)`
 
-	param1Spec := NewSpecMock(ctrl)
-	param2Spec := NewSpecMock(ctrl)
-	result1Spec := NewSpecMock(ctrl)
-	result2Spec := NewSpecMock(ctrl)
+	funcSpecParam1Spec := NewSpecMock(ctrl)
+	funcSpecParam2Spec := NewSpecMock(ctrl)
+	funcSpecResult1Spec := NewSpecMock(ctrl)
+	funcSpecResult2Spec := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Spec: param1Spec,
+				Spec: funcSpecParam1Spec,
 			},
 			{
-				Spec: param2Spec,
+				Spec: funcSpecParam2Spec,
 			},
 		},
 		Results: []*Field{
 			{
-				Spec: result1Spec,
+				Spec: funcSpecResult1Spec,
 			},
 			{
-				Spec: result2Spec,
+				Spec: funcSpecResult2Spec,
 			},
 		},
 	}
 
-	param1Spec.
+	funcSpecParam1Spec.
 		EXPECT().
 		String().
-		Return(param1SpecString)
+		Return(funcSpecParam1SpecString)
 
-	param2Spec.
+	funcSpecParam2Spec.
 		EXPECT().
 		String().
-		Return(param2SpecString)
+		Return(funcSpecParam2SpecString)
 
-	result1Spec.
+	funcSpecResult1Spec.
 		EXPECT().
 		String().
-		Return(result1SpecString)
+		Return(funcSpecResult1SpecString)
 
-	result2Spec.
+	funcSpecResult2Spec.
 		EXPECT().
 		String().
-		Return(result2SpecString)
+		Return(funcSpecResult2SpecString)
 
 	actual := modelValue.String()
 
@@ -1323,44 +1323,44 @@ func TestFuncSpec_Clone(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcResultSpec := NewSpecMock(ctrl)
 
-	clonedParamSpec := NewSpecMock(ctrl)
-	clonedResultSpec := NewSpecMock(ctrl)
+	clonedFuncParamSpec := NewSpecMock(ctrl)
+	clonedFuncResultSpec := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "paramAnnotation",
+					&TestAnnotation{
+						Name: "funcParamAnnotation",
 					},
 				},
-				Spec: paramSpec,
+				Spec: funcSpecParamSpec,
 			},
 		},
 		Results: []*Field{
 			{
 				Annotations: []interface{}{
 					&SimpleSpec{
-						TypeName: "resultAnnotation",
+						TypeName: "funcSpecResultAnnotation",
 					},
 				},
-				Spec: resultSpec,
+				Spec: funcResultSpec,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		Clone().
-		Return(clonedParamSpec)
+		Return(clonedFuncParamSpec)
 
-	resultSpec.
+	funcResultSpec.
 		EXPECT().
 		Clone().
-		Return(clonedResultSpec)
+		Return(clonedFuncResultSpec)
 
 	actual := modelValue.Clone()
 
@@ -1371,9 +1371,9 @@ func TestFuncSpec_Clone(t *testing.T) {
 		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
 	)
 	ctrl.AssertNotSame(modelValue, actual)
-	ctrl.AssertSame(clonedParamSpec, actual.(*FuncSpec).Params[0].Spec)
+	ctrl.AssertSame(clonedFuncParamSpec, actual.(*FuncSpec).Params[0].Spec)
 	ctrl.AssertNotSame(modelValue.Params[0].Annotations[0], actual.(*FuncSpec).Params[0].Annotations[0])
-	ctrl.AssertSame(clonedResultSpec, actual.(*FuncSpec).Results[0].Spec)
+	ctrl.AssertSame(clonedFuncResultSpec, actual.(*FuncSpec).Results[0].Spec)
 	ctrl.AssertNotSame(modelValue.Results[0].Annotations[0], actual.(*FuncSpec).Results[0].Annotations[0])
 }
 
@@ -1396,37 +1396,37 @@ func TestFuncSpec_FetchImports(t *testing.T) {
 
 	expected := []*Import{
 		{
-			Alias:     "paramPackageName",
-			Namespace: "paramNamespace",
+			Alias:     "funcSpecParamPackageName",
+			Namespace: "funcSpecParamNamespace",
 		},
 		{
-			Alias:     "resultPackageName",
-			Namespace: "resultNamespace",
+			Alias:     "funcSpecResultPackageName",
+			Namespace: "funcSpecResultNamespace",
 		},
 	}
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcResultSpec := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Spec: paramSpec,
+				Spec: funcSpecParamSpec,
 			},
 		},
 		Results: []*Field{
 			{
-				Spec: resultSpec,
+				Spec: funcResultSpec,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		FetchImports(ctrl.Same(file)).
 		Return([]*Import{expected[0]})
 
-	resultSpec.
+	funcResultSpec.
 		EXPECT().
 		FetchImports(ctrl.Same(file)).
 		Return([]*Import{expected[1]})
@@ -1442,28 +1442,28 @@ func TestFuncSpec_FetchImports_WithoutImports(t *testing.T) {
 
 	file := &File{}
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcResultSpec := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Spec: paramSpec,
+				Spec: funcSpecParamSpec,
 			},
 		},
 		Results: []*Field{
 			{
-				Spec: resultSpec,
+				Spec: funcResultSpec,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		FetchImports(ctrl.Same(file)).
 		Return(nil)
 
-	resultSpec.
+	funcResultSpec.
 		EXPECT().
 		FetchImports(ctrl.Same(file)).
 		Return(nil)
@@ -1493,28 +1493,28 @@ func TestFuncSpec_RenameImports(t *testing.T) {
 	oldAlias := "oldPackageName"
 	newAlias := "newPackageName"
 
-	paramSpec := NewSpecMock(ctrl)
-	resultSpec := NewSpecMock(ctrl)
+	funcSpecParamSpec := NewSpecMock(ctrl)
+	funcSpecResult := NewSpecMock(ctrl)
 
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Spec: paramSpec,
+				Spec: funcSpecParamSpec,
 			},
 		},
 		Results: []*Field{
 			{
-				Spec: resultSpec,
+				Spec: funcSpecResult,
 			},
 		},
 	}
 
-	paramSpec.
+	funcSpecParamSpec.
 		EXPECT().
 		RenameImports(oldAlias, newAlias).
 		Return()
 
-	resultSpec.
+	funcSpecResult.
 		EXPECT().
 		RenameImports(oldAlias, newAlias).
 		Return()

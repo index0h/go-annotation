@@ -283,8 +283,8 @@ var name specSpecString = value
 		Comment: comment,
 		Value:   value,
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeAnnotation",
+			&TestAnnotation{
+				Name: "varAnnotation",
 			},
 		},
 		Spec: specSpec,
@@ -318,8 +318,8 @@ var name specSpecString
 		Name:    name,
 		Comment: comment,
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeAnnotation",
+			&TestAnnotation{
+				Name: "varAnnotation",
 			},
 		},
 		Spec: specSpec,
@@ -351,8 +351,8 @@ func TestVar_String_WithValue(t *testing.T) {
 		Name:  name,
 		Value: value,
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeAnnotation",
+			&TestAnnotation{
+				Name: "varAnnotation",
 			},
 		},
 		Spec: specSpec,
@@ -405,8 +405,8 @@ func TestVar_Clone(t *testing.T) {
 		Comment: "comment",
 		Value:   "value",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "varAnnotation",
+			&TestAnnotation{
+				Name: "varAnnotation",
 			},
 		},
 		Spec: specSpec,

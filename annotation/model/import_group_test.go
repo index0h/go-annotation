@@ -13,8 +13,8 @@ func TestImportGroup_Validate(t *testing.T) {
 	modelValue := &ImportGroup{
 		Comment: "importGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "importGroupAnnotation",
+			&TestAnnotation{
+				Name: "importGroupAnnotation",
 			},
 		},
 		Imports: []*Import{
@@ -24,8 +24,8 @@ func TestImportGroup_Validate(t *testing.T) {
 				Namespace: "namespace",
 				Comment:   "importComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "importAnnotation",
+					&TestAnnotation{
+						Name: "importAnnotation",
 					},
 				},
 			},
@@ -333,8 +333,8 @@ func TestImportGroup_Clone(t *testing.T) {
 	modelValue := &ImportGroup{
 		Comment: "importGroupComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "importGroupAnnotation",
+			&TestAnnotation{
+				Name: "importGroupAnnotation",
 			},
 		},
 		Imports: []*Import{
@@ -343,8 +343,8 @@ func TestImportGroup_Clone(t *testing.T) {
 				Namespace: "namespace",
 				Comment:   "importComment",
 				Annotations: []interface{}{
-					&SimpleSpec{
-						TypeName: "importAnnotation",
+					&TestAnnotation{
+						Name: "importAnnotation",
 					},
 				},
 			},

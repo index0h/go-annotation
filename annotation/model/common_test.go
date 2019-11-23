@@ -13,11 +13,11 @@ func Test_cloneAnnotations(t *testing.T) {
 	defer ctrl.Finish()
 
 	annotations := []interface{}{
-		&SimpleSpec{
-			TypeName: "typeName1",
+		&TestAnnotation{
+			Name: "typeName1",
 		},
-		&SimpleSpec{
-			TypeName: "typeName2",
+		&TestAnnotation{
+			Name: "typeName2",
 		},
 	}
 

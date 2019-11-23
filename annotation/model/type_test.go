@@ -266,8 +266,8 @@ type name specSpecString
 		Name:    name,
 		Comment: comment,
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeAnnotation",
+			&TestAnnotation{
+				Name: "typeAnnotation",
 			},
 		},
 		Spec: specSpec,
@@ -320,8 +320,8 @@ func TestType_Clone(t *testing.T) {
 		Name:    "name",
 		Comment: "comment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "typeAnnotation",
+			&TestAnnotation{
+				Name: "typeAnnotation",
 			},
 		},
 		Spec: specSpec,

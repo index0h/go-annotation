@@ -16,8 +16,8 @@ func TestFunc_Validate(t *testing.T) {
 		Content: "funcContent",
 		Comment: "funcComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "funcAnnotation",
+			&TestAnnotation{
+				Name: "funcAnnotation",
 			},
 		},
 		Spec: &FuncSpec{},
@@ -209,8 +209,8 @@ funcContent
 		Content: content,
 		Comment: comment,
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "funcAnnotation",
+			&TestAnnotation{
+				Name: "funcAnnotation",
 			},
 		},
 		Spec: &FuncSpec{
@@ -279,8 +279,8 @@ funcContent
 		Content: content,
 		Comment: comment,
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "funcAnnotation",
+			&TestAnnotation{
+				Name: "funcAnnotation",
 			},
 		},
 		Spec: &FuncSpec{
@@ -330,8 +330,8 @@ funcContent
 		Name:    name,
 		Content: content,
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "funcAnnotation",
+			&TestAnnotation{
+				Name: "funcAnnotation",
 			},
 		},
 		Spec: &FuncSpec{},
@@ -359,8 +359,8 @@ func TestFunc_Clone(t *testing.T) {
 		Comment: "funcComment",
 		Content: "funcContent",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "funcAnnotation",
+			&TestAnnotation{
+				Name: "funcAnnotation",
 			},
 		},
 		Spec: &FuncSpec{

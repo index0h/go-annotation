@@ -46,8 +46,8 @@ func TestImport_Validate_WithAlias(t *testing.T) {
 		Namespace: "namespace",
 		Comment:   "importComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "importAnnotation",
+			&TestAnnotation{
+				Name: "importAnnotation",
 			},
 		},
 	}
@@ -163,8 +163,8 @@ func TestImport_Clone(t *testing.T) {
 		Namespace: "namespace",
 		Comment:   "importComment",
 		Annotations: []interface{}{
-			&SimpleSpec{
-				TypeName: "importAnnotation",
+			&TestAnnotation{
+				Name: "importAnnotation",
 			},
 		},
 	}

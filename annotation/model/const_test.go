@@ -222,7 +222,7 @@ func TestConst_Clone(t *testing.T) {
 		Comment: "const\ncomment",
 		Annotations: []interface{}{
 			&SimpleSpec{
-				TypeName: "annotation",
+				TypeName: "value",
 			},
 		},
 		Spec: &SimpleSpec{

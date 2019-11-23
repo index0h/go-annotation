@@ -6,7 +6,9 @@ import (
 	"regexp"
 )
 
-var identRegexp = regexp.MustCompile("^[\\p{L}_][\\p{L}0-9_]*$")
+var identRegexp = regexp.MustCompile(`^[\p{L}_][\p{L}\d_]*$`)
+
+type FileIsGeneratedAnnotation bool
 
 func cloneAnnotations(annotations []interface{}) []interface{} {
 	if annotations == nil {

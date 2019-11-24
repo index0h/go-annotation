@@ -5,9 +5,8 @@ import (
 )
 
 type ArraySpec struct {
-	Value      Spec
-	Length     string
-	IsEllipsis bool
+	Value  Spec
+	Length string
 }
 
 func (m *ArraySpec) Validate() {
@@ -41,9 +40,8 @@ func (m *ArraySpec) String() string {
 
 func (m *ArraySpec) Clone() interface{} {
 	return &ArraySpec{
-		Value:      m.Value.Clone().(Spec),
-		Length:     m.Length,
-		IsEllipsis: m.IsEllipsis,
+		Value:  m.Value.Clone().(Spec),
+		Length: m.Length,
 	}
 }
 

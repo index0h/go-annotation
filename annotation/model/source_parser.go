@@ -13,6 +13,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+type ellipsis struct {
+	ArraySpec
+}
+
 type SourceParser struct {
 	annotationParser AnnotationParser
 }
@@ -382,12 +386,13 @@ func (p *SourceParser) parseArraySpec(node *ast.ArrayType, astFile *ast.File, fi
 	return result
 }
 
-func (p *SourceParser) parseEllipsisSpec(node *ast.Ellipsis, astFile *ast.File, fileSet *token.FileSet) *ArraySpec {
+func (p *SourceParser) parseEllipsisSpec(node *ast.Ellipsis, astFile *ast.File, fileSet *token.FileSet) *ellipsis {
 	value := p.parseSpec(node.Elt, astFile, fileSet)
 
-	return &ArraySpec{
-		Value:      value,
-		IsEllipsis: true,
+	return &ellipsis{
+		ArraySpec{
+			Value: value,
+		},
 	}
 }
 
@@ -503,11 +508,11 @@ func (p *SourceParser) parseFuncSpec(node *ast.FuncType, astFile *ast.File, file
 	isVariadic := false
 
 	if len(params) > 0 {
-		if spec, ok := params[len(params)-1].Spec.(*ArraySpec); ok {
-			if spec.IsEllipsis {
-				isVariadic = true
-				spec.IsEllipsis = false
-			}
+		id := len(params) - 1
+
+		if spec, ok := params[id].Spec.(*ellipsis); ok {
+			params[id].Spec = &spec.ArraySpec
+			isVariadic = true
 		}
 	}
 

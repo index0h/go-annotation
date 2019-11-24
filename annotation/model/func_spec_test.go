@@ -429,7 +429,7 @@ func TestFuncSpec_Validate_WithInvalidInterfaceSpecParamSpec(t *testing.T) {
 		Params: []*Field{
 			{
 				Spec: &InterfaceSpec{
-					Methods: []*Field{nil},
+					Fields: []*Field{nil},
 				},
 			},
 		},
@@ -437,7 +437,7 @@ func TestFuncSpec_Validate_WithInvalidInterfaceSpecParamSpec(t *testing.T) {
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Methods[0]' must be not nil"))
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Fields[0]' must be not nil"))
 }
 
 func TestFuncSpec_Validate_WithInvalidInterfaceSpecResultSpec(t *testing.T) {
@@ -448,7 +448,7 @@ func TestFuncSpec_Validate_WithInvalidInterfaceSpecResultSpec(t *testing.T) {
 		Results: []*Field{
 			{
 				Spec: &InterfaceSpec{
-					Methods: []*Field{nil},
+					Fields: []*Field{nil},
 				},
 			},
 		},
@@ -456,7 +456,7 @@ func TestFuncSpec_Validate_WithInvalidInterfaceSpecResultSpec(t *testing.T) {
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Methods[0]' must be not nil"))
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Fields[0]' must be not nil"))
 }
 
 func TestFuncSpec_Validate_WithInvalidFuncSpecParamSpec(t *testing.T) {

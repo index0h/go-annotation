@@ -11,7 +11,7 @@ func TestInterfaceSpec_Validate_WithSimpleSpecValue(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Spec: &SimpleSpec{
 					TypeName: "typeName",
@@ -28,7 +28,7 @@ func TestInterfaceSpec_Validate_WithFuncSpecValue(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Name: "name",
 				Spec: &FuncSpec{},
@@ -53,14 +53,14 @@ func TestInterfaceSpec_Validate_WithNilField(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			nil,
 		},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Methods[0]' must be not nil"))
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Fields[0]' must be not nil"))
 }
 
 func TestInterfaceSpec_Validate_WithInvalidSimpleSpecValue(t *testing.T) {
@@ -68,7 +68,7 @@ func TestInterfaceSpec_Validate_WithInvalidSimpleSpecValue(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Spec: &SimpleSpec{
 					TypeName: "+invalid",
@@ -87,7 +87,7 @@ func TestInterfaceSpec_Validate_WithSimpleSpecValueAndMethodName(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Name: "name",
 				Spec: &SimpleSpec{
@@ -101,7 +101,7 @@ func TestInterfaceSpec_Validate_WithSimpleSpecValueAndMethodName(t *testing.T) {
 		Call(modelValue.Validate).
 		ExpectPanic(
 			NewErrorMessageConstraint(
-				"Variable 'Methods[0].Name' must be empty for 'Methods[0].Spec' type *SimpleSpec",
+				"Variable 'Fields[0].Name' must be empty for 'Fields[0].Spec' type *SimpleSpec",
 			),
 		)
 }
@@ -111,7 +111,7 @@ func TestInterfaceSpec_Validate_WithSimpleSpecValueAndIsPointer(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Spec: &SimpleSpec{
 					TypeName:  "typeName",
@@ -125,7 +125,7 @@ func TestInterfaceSpec_Validate_WithSimpleSpecValueAndIsPointer(t *testing.T) {
 		Call(modelValue.Validate).
 		ExpectPanic(
 			NewErrorMessageConstraint(
-				"Variable 'Methods[0].Spec.(*model.SimpleSpec).IsPointer' must be 'false'",
+				"Variable 'Fields[0].Spec.(*model.SimpleSpec).IsPointer' must be 'false'",
 			),
 		)
 }
@@ -135,7 +135,7 @@ func TestInterfaceSpec_Validate_WithInvalidFuncSpecValue(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Name: "name",
 				Spec: &FuncSpec{
@@ -155,7 +155,7 @@ func TestInterfaceSpec_Validate_WithFuncSpecValueAndWithoutMethodName(t *testing
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Spec: &FuncSpec{},
 			},
@@ -166,7 +166,7 @@ func TestInterfaceSpec_Validate_WithFuncSpecValueAndWithoutMethodName(t *testing
 		Call(modelValue.Validate).
 		ExpectPanic(
 			NewErrorMessageConstraint(
-				"Variable 'Methods[0].Name' must be not empty for 'Methods[0].Spec' type *FuncSpec",
+				"Variable 'Fields[0].Name' must be not empty for 'Fields[0].Spec' type *FuncSpec",
 			),
 		)
 }
@@ -176,7 +176,7 @@ func TestInterfaceSpec_Validate_WithInvalidTypeValue(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Spec: NewSpecMock(ctrl),
 			},
@@ -185,7 +185,7 @@ func TestInterfaceSpec_Validate_WithInvalidTypeValue(t *testing.T) {
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Methods[0]' has invalid type *model.SpecMock"))
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Fields[0]' has invalid type *model.SpecMock"))
 }
 
 func TestInterfaceSpec_Validate_WithInvalidField(t *testing.T) {
@@ -193,7 +193,7 @@ func TestInterfaceSpec_Validate_WithInvalidField(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Name: "+invalid",
 				Spec: &FuncSpec{},
@@ -222,7 +222,7 @@ name(methodSpecString)
 	methodSpec := NewSpecMock(ctrl)
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Name:    name,
 				Comment: comment,
@@ -256,7 +256,7 @@ methodSpecString
 	methodSpec := NewSpecMock(ctrl)
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Comment: comment,
 				Spec:    methodSpec,
@@ -287,7 +287,7 @@ name(methodSpecString)
 	methodSpec := NewSpecMock(ctrl)
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Name: name,
 				Spec: methodSpec,
@@ -326,7 +326,7 @@ func TestInterfaceSpec_Clone(t *testing.T) {
 	clonedMethodSpec := NewSpecMock(ctrl)
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Annotations: []interface{}{
 					&TestAnnotation{
@@ -352,8 +352,8 @@ func TestInterfaceSpec_Clone(t *testing.T) {
 		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
 	)
 	ctrl.AssertNotSame(modelValue, actual)
-	ctrl.AssertSame(clonedMethodSpec, actual.(*InterfaceSpec).Methods[0].Spec)
-	ctrl.AssertNotSame(modelValue.Methods[0].Annotations[0], actual.(*InterfaceSpec).Methods[0].Annotations[0])
+	ctrl.AssertSame(clonedMethodSpec, actual.(*InterfaceSpec).Fields[0].Spec)
+	ctrl.AssertNotSame(modelValue.Fields[0].Annotations[0], actual.(*InterfaceSpec).Fields[0].Annotations[0])
 }
 
 func TestInterfaceSpec_Clone_WithoutMethods(t *testing.T) {
@@ -383,7 +383,7 @@ func TestInterfaceSpec_FetchImports(t *testing.T) {
 	valueSpec := NewSpecMock(ctrl)
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Spec: valueSpec,
 			},
@@ -410,7 +410,7 @@ func TestInterfaceSpec_RenameImports(t *testing.T) {
 	valueSpec := NewSpecMock(ctrl)
 
 	modelValue := &InterfaceSpec{
-		Methods: []*Field{
+		Fields: []*Field{
 			{
 				Spec: valueSpec,
 			},

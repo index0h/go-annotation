@@ -729,7 +729,7 @@ func TestMapSpec_Validate_WithInvalidInterfaceSpecKey(t *testing.T) {
 
 	modelValue := &MapSpec{
 		Key: &InterfaceSpec{
-			Methods: []*Field{nil},
+			Fields: []*Field{nil},
 		},
 		Value: &SimpleSpec{
 			TypeName: "typeName",
@@ -738,7 +738,7 @@ func TestMapSpec_Validate_WithInvalidInterfaceSpecKey(t *testing.T) {
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Methods[0]' must be not nil"))
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Fields[0]' must be not nil"))
 }
 
 func TestMapSpec_Validate_WithInvalidFuncSpecKey(t *testing.T) {
@@ -863,13 +863,13 @@ func TestMapSpec_Validate_WithInvalidInterfaceSpecValue(t *testing.T) {
 			TypeName: "typeName",
 		},
 		Value: &InterfaceSpec{
-			Methods: []*Field{nil},
+			Fields: []*Field{nil},
 		},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Methods[0]' must be not nil"))
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Fields[0]' must be not nil"))
 }
 
 func TestMapSpec_Validate_WithInvalidFuncSpecValue(t *testing.T) {

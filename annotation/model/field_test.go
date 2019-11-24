@@ -183,13 +183,13 @@ func TestField_Validate_WithInvalidInterfaceSpecValue(t *testing.T) {
 
 	modelValue := &Field{
 		Spec: &InterfaceSpec{
-			Methods: []*Field{nil},
+			Fields: []*Field{nil},
 		},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Methods[0]' must be not nil"))
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Fields[0]' must be not nil"))
 }
 
 func TestField_Validate_WithInvalidFuncSpecValue(t *testing.T) {

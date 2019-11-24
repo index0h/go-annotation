@@ -27,21 +27,7 @@ func TestArraySpec_Validate_WithSimpleSpecValueAndLength(t *testing.T) {
 		Value: &SimpleSpec{
 			TypeName: "typeName",
 		},
-		Length: 10,
-	}
-
-	modelValue.Validate()
-}
-
-func TestArraySpec_Validate_WithSimpleSpecValueAndIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value: &SimpleSpec{
-			TypeName: "typeName",
-		},
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	modelValue.Validate()
@@ -72,23 +58,7 @@ func TestArraySpec_Validate_WithArraySpecValueAndLength(t *testing.T) {
 				TypeName: "typeName",
 			},
 		},
-		Length: 10,
-	}
-
-	modelValue.Validate()
-}
-
-func TestArraySpec_Validate_WithArraySpecValueAndIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value: &ArraySpec{
-			Value: &SimpleSpec{
-				TypeName: "typeName",
-			},
-		},
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	modelValue.Validate()
@@ -125,26 +95,7 @@ func TestArraySpec_Validate_WithMapSpecValueAndLength(t *testing.T) {
 				TypeName: "typeName",
 			},
 		},
-		Length: 10,
-	}
-
-	modelValue.Validate()
-}
-
-func TestArraySpec_Validate_WithMapSpecValueAndIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value: &MapSpec{
-			Key: &SimpleSpec{
-				TypeName: "typeName",
-			},
-			Value: &SimpleSpec{
-				TypeName: "typeName",
-			},
-		},
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	modelValue.Validate()
@@ -167,19 +118,7 @@ func TestArraySpec_Validate_WithStructSpecValueAndLength(t *testing.T) {
 
 	modelValue := &ArraySpec{
 		Value:  &StructSpec{},
-		Length: 10,
-	}
-
-	modelValue.Validate()
-}
-
-func TestArraySpec_Validate_WithStructSpecValueAndIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value:      &StructSpec{},
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	modelValue.Validate()
@@ -202,19 +141,7 @@ func TestArraySpec_Validate_WithInterfaceSpecValueAndLength(t *testing.T) {
 
 	modelValue := &ArraySpec{
 		Value:  &InterfaceSpec{},
-		Length: 10,
-	}
-
-	modelValue.Validate()
-}
-
-func TestArraySpec_Validate_WithInterfaceSpecValueAndIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value:      &InterfaceSpec{},
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	modelValue.Validate()
@@ -237,19 +164,7 @@ func TestArraySpec_Validate_WithFuncSpecValueAndLength(t *testing.T) {
 
 	modelValue := &ArraySpec{
 		Value:  &FuncSpec{},
-		Length: 10,
-	}
-
-	modelValue.Validate()
-}
-
-func TestArraySpec_Validate_WithFuncSpecValueAndIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value:      &FuncSpec{},
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	modelValue.Validate()
@@ -264,41 +179,6 @@ func TestArraySpec_Validate_WithNilValue(t *testing.T) {
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
 		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
-}
-
-func TestArraySpec_Validate_WithNegativeLength(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value: &SimpleSpec{
-			TypeName: "+invalid",
-		},
-		Length: -100,
-	}
-
-	ctrl.Subtest("").
-		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
-}
-
-func TestArraySpec_Validate_WithPositiveLengthAndIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &ArraySpec{
-		Value: &SimpleSpec{
-			TypeName: "+invalid",
-		},
-		Length:     10,
-		IsEllipsis: true,
-	}
-
-	ctrl.Subtest("").
-		Call(modelValue.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Array must have only length or only ellipsis"))
 }
 
 func TestArraySpec_Validate_WithInvalidSimpleSpecValue(t *testing.T) {
@@ -322,18 +202,13 @@ func TestArraySpec_Validate_WithInvalidArraySpecValue(t *testing.T) {
 
 	modelValue := &ArraySpec{
 		Value: &ArraySpec{
-			Value: &SimpleSpec{
-				TypeName: "typeName",
-			},
-			Length: -100,
+			Value: nil,
 		},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
 }
 
 func TestArraySpec_Validate_WithInvalidMapSpecValue(t *testing.T) {
@@ -445,31 +320,7 @@ func TestArraySpec_String_WithLength(t *testing.T) {
 
 	modelValue := &ArraySpec{
 		Value:  valueSpec,
-		Length: 10,
-	}
-
-	valueSpec.
-		EXPECT().
-		String().
-		Return(valueSpecString)
-
-	actual := modelValue.String()
-
-	ctrl.AssertSame(expected, actual)
-}
-
-func TestArraySpec_String_WithIsEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	valueSpecString := "valueSpecString"
-	expected := "[...]valueSpecString"
-
-	valueSpec := NewSpecMock(ctrl)
-
-	modelValue := &ArraySpec{
-		Value:      valueSpec,
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	valueSpec.
@@ -528,37 +379,7 @@ func TestArraySpec_String_WithLengthAndFuncSpecValue(t *testing.T) {
 				},
 			},
 		},
-		Length: 10,
-	}
-
-	fieldSpec.
-		EXPECT().
-		String().
-		Return(fieldSpecString)
-
-	actual := modelValue.String()
-
-	ctrl.AssertSame(expected, actual)
-}
-
-func TestArraySpec_String_WithIsEllipsisAndFuncSpecValue(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	fieldSpecString := "fieldSpecString"
-	expected := "[...]func (fieldSpecString)"
-
-	fieldSpec := NewSpecMock(ctrl)
-
-	modelValue := &ArraySpec{
-		Value: &FuncSpec{
-			Params: []*Field{
-				{
-					Spec: fieldSpec,
-				},
-			},
-		},
-		IsEllipsis: true,
+		Length: "10",
 	}
 
 	fieldSpec.

@@ -301,21 +301,14 @@ func TestFuncSpec_Validate_WithInvalidArraySpecParamSpec(t *testing.T) {
 	modelValue := &FuncSpec{
 		Params: []*Field{
 			{
-				Spec: &ArraySpec{
-					Value: &SimpleSpec{
-						TypeName: "typeName",
-					},
-					Length: -100,
-				},
+				Spec: &ArraySpec{},
 			},
 		},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
 }
 func TestFuncSpec_Validate_WithInvalidArraySpecResultSpec(t *testing.T) {
 	ctrl := unit.NewController(t)
@@ -324,21 +317,14 @@ func TestFuncSpec_Validate_WithInvalidArraySpecResultSpec(t *testing.T) {
 	modelValue := &FuncSpec{
 		Results: []*Field{
 			{
-				Spec: &ArraySpec{
-					Value: &SimpleSpec{
-						TypeName: "typeName",
-					},
-					Length: -100,
-				},
+				Spec: &ArraySpec{},
 			},
 		},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
 }
 
 func TestFuncSpec_Validate_WithInvalidMapSpecParamSpec(t *testing.T) {
@@ -546,60 +532,6 @@ func TestFuncSpec_Validate_WithInvalidTypeParamSpecAndIsVariadic(t *testing.T) {
 		Call(modelValue.Validate).
 		ExpectPanic(
 			NewErrorMessageConstraint("Variable 'Params[0].Spec' has invalid type for variadic *model.FuncSpec"),
-		)
-}
-
-func TestFuncSpec_Validate_WithArraySpecParamSpecWithEllipsisAndIsVariadic(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &FuncSpec{
-		IsVariadic: true,
-		Params: []*Field{
-			{
-				Spec: &ArraySpec{
-					Value: &SimpleSpec{
-						TypeName: "typeName",
-					},
-					IsEllipsis: true,
-				},
-			},
-		},
-	}
-
-	ctrl.Subtest("").
-		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint(
-				"Variable 'Params[0].Spec.(*model.ArraySpec).IsEllipsis' must be 'false' for variadic *model.FuncSpec",
-			),
-		)
-}
-
-func TestFuncSpec_Validate_WithArraySpecParamSpecWithLengthAndIsVariadic(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	modelValue := &FuncSpec{
-		IsVariadic: true,
-		Params: []*Field{
-			{
-				Spec: &ArraySpec{
-					Value: &SimpleSpec{
-						TypeName: "typeName",
-					},
-					Length: 10,
-				},
-			},
-		},
-	}
-
-	ctrl.Subtest("").
-		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint(
-				"Variable 'Params[0].Spec.(*model.ArraySpec).Length' must be '0' for variadic *model.FuncSpec",
-			),
 		)
 }
 

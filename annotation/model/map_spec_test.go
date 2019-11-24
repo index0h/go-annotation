@@ -667,12 +667,7 @@ func TestMapSpec_Validate_WithInvalidArraySpecKey(t *testing.T) {
 	defer ctrl.Finish()
 
 	modelValue := &MapSpec{
-		Key: &ArraySpec{
-			Value: &SimpleSpec{
-				TypeName: "typeName",
-			},
-			Length: -100,
-		},
+		Key: &ArraySpec{},
 		Value: &SimpleSpec{
 			TypeName: "typeName",
 		},
@@ -680,9 +675,7 @@ func TestMapSpec_Validate_WithInvalidArraySpecKey(t *testing.T) {
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
 }
 
 func TestMapSpec_Validate_WithInvalidMapSpecKey(t *testing.T) {
@@ -801,19 +794,12 @@ func TestMapSpec_Validate_WithInvalidArraySpecValue(t *testing.T) {
 		Key: &SimpleSpec{
 			TypeName: "typeName",
 		},
-		Value: &ArraySpec{
-			Value: &SimpleSpec{
-				TypeName: "typeName",
-			},
-			Length: -100,
-		},
+		Value: &ArraySpec{},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
 }
 
 func TestMapSpec_Validate_WithInvalidMapSpecValue(t *testing.T) {

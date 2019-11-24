@@ -183,21 +183,14 @@ func TestStructSpec_Validate_WithInvalidArraySpecValue(t *testing.T) {
 		Fields: []*Field{
 			{
 				Name: "name",
-				Spec: &ArraySpec{
-					Value: &SimpleSpec{
-						TypeName: "typeName",
-					},
-					Length: -100,
-				},
+				Spec: &ArraySpec{},
 			},
 		},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
 }
 
 func TestStructSpec_Validate_WithInvalidMapSpecValue(t *testing.T) {

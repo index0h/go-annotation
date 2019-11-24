@@ -26,38 +26,8 @@ func (m *FuncSpec) Validate() {
 			panic(errors.Errorf("Variable 'Params' must be not empty for variadic %T", m))
 		}
 
-		lastParamArraySpec, ok := m.Params[len(m.Params)-1].Spec.(*ArraySpec)
-
-		if !ok {
-			panic(
-				errors.Errorf(
-					"Variable 'Params[%d].Spec' has invalid type for variadic %T",
-					len(m.Params)-1,
-					m,
-				),
-			)
-		}
-
-		if lastParamArraySpec.IsEllipsis {
-			panic(
-				errors.Errorf(
-					"Variable 'Params[%d].Spec.(%T).IsEllipsis' must be 'false' for variadic %T",
-					len(m.Params)-1,
-					lastParamArraySpec,
-					m,
-				),
-			)
-		}
-
-		if lastParamArraySpec.Length > 0 {
-			panic(
-				errors.Errorf(
-					"Variable 'Params[%d].Spec.(%T).Length' must be '0' for variadic %T",
-					len(m.Params)-1,
-					lastParamArraySpec,
-					m,
-				),
-			)
+		if _, ok := m.Params[len(m.Params)-1].Spec.(*ArraySpec); !ok {
+			panic(errors.Errorf("Variable 'Params[%d].Spec' has invalid type for variadic %T", len(m.Params)-1, m))
 		}
 	}
 

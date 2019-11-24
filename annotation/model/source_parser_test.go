@@ -3985,40 +3985,7 @@ type typeName [5]valueSpec
 		Value: &SimpleSpec{
 			TypeName: "valueSpec",
 		},
-		Length: 5,
-	}
-
-	annotationParser := NewAnnotationParserMock(ctrl)
-
-	parser := &SourceParser{
-		annotationParser: annotationParser,
-	}
-
-	actual := parser.Parse(fileName, fileContent)
-
-	ctrl.AssertNotNil(actual)
-	ctrl.AssertNotEmpty(actual.TypeGroups)
-	ctrl.AssertNotNil(actual.TypeGroups[0])
-	ctrl.AssertNotEmpty(actual.TypeGroups[0].Types)
-	ctrl.AssertNotNil(actual.TypeGroups[0].Types[0])
-	ctrl.AssertNotNil(actual.TypeGroups[0].Types[0].Spec)
-	ctrl.AssertEqual(expected, actual.TypeGroups[0].Types[0].Spec)
-}
-
-func TestSourceParser_Parse_WithArraySpecAndEllipsis(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	fileName := "fileName"
-	fileContent := `package filePackageName
-
-type typeName [...]valueSpec
-`
-	expected := &ArraySpec{
-		Value: &SimpleSpec{
-			TypeName: "valueSpec",
-		},
-		IsEllipsis: true,
+		Length: "5",
 	}
 
 	annotationParser := NewAnnotationParserMock(ctrl)
@@ -4979,7 +4946,7 @@ func TestSourceParser_parseSpec_WithNilExpression(t *testing.T) {
 		annotationParser: annotationParser,
 	}
 
-	actual := parser.parseSpec(nil, nil)
+	actual := parser.parseSpec(nil, nil, nil)
 
 	ctrl.AssertNil(actual)
 }
@@ -4995,7 +4962,7 @@ func TestSourceParser_parseSpec_WithUnknownExpressionType(t *testing.T) {
 	}
 
 	ctrl.Subtest("").
-		Call(parser.parseSpec, &ast.BadExpr{}, nil).
+		Call(parser.parseSpec, &ast.BadExpr{}, nil, nil).
 		ExpectPanic(
 			NewErrorMessageConstraint("Variable 'expression' has not allowed type: *ast.BadExpr"),
 		)

@@ -153,19 +153,12 @@ func TestType_Validate_WithInvalidArraySpecValue(t *testing.T) {
 
 	modelValue := &Type{
 		Name: "name",
-		Spec: &ArraySpec{
-			Value: &SimpleSpec{
-				TypeName: "typeName",
-			},
-			Length: -100,
-		},
+		Spec: &ArraySpec{},
 	}
 
 	ctrl.Subtest("").
 		Call(modelValue.Validate).
-		ExpectPanic(
-			NewErrorMessageConstraint("Variable 'Length' must be greater than or equal to 0, actual value: -100"),
-		)
+		ExpectPanic(NewErrorMessageConstraint("Variable 'Value' must be not nil"))
 }
 
 func TestType_Validate_WithInvalidMapSpecValue(t *testing.T) {

@@ -414,7 +414,7 @@ func (p *SourceParser) parseFieldsList(node *ast.FieldList, astFile *ast.File, f
 	}
 
 	beforeCommentPosition := node.Pos()
-	afterCommentPosition := beforeCommentPosition
+	afterCommentPosition := node.Pos()
 
 	for _, astField := range node.List {
 		tag := ""

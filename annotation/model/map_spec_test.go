@@ -1110,12 +1110,7 @@ func TestMapSpec_FetchImports(t *testing.T) {
 
 	actual := modelValue.FetchImports(file)
 
-	ctrl.AssertEqual(
-		expected,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(expected, actual, unit.IgnoreUnexportedOption{Value: AnnotationParserMock{}})
 }
 
 func TestMapSpec_RenameImports(t *testing.T) {

@@ -1296,12 +1296,7 @@ func TestFuncSpec_Clone(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertSame(clonedFuncParamSpec, actual.(*FuncSpec).Params[0].Spec)
 	ctrl.AssertNotSame(modelValue.Params[0].Annotations[0], actual.(*FuncSpec).Params[0].Annotations[0])

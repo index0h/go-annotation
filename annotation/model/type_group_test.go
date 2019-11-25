@@ -621,12 +621,7 @@ func TestTypeGroup_Clone(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertNotSame(modelValue.Annotations[0], actual.(*TypeGroup).Annotations[0])
 	ctrl.AssertNotSame(modelValue.Types[0], actual.(*TypeGroup).Types[0])

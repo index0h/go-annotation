@@ -851,12 +851,7 @@ func TestStructSpec_Clone(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertSame(clonedFieldSpec, actual.(*StructSpec).Fields[0].Spec)
 	ctrl.AssertNotSame(modelValue.Fields[0].Annotations[0], actual.(*StructSpec).Fields[0].Annotations[0])

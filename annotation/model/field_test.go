@@ -242,12 +242,7 @@ func TestField_Clone(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertSame(clonedSpecSpec, actual.(*Field).Spec)
 	ctrl.AssertNotSame(modelValue.Annotations[0], actual.(*Field).Annotations[0])

@@ -889,12 +889,7 @@ func TestVarGroup_Clone(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertNotSame(modelValue.Annotations[0], actual.(*VarGroup).Annotations[0])
 	ctrl.AssertNotSame(modelValue.Vars[0], actual.(*VarGroup).Vars[0])

@@ -401,12 +401,7 @@ func TestFunc_Clone(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertSame(clonedFuncSpecParamSpec, actual.(*Func).Spec.Params[0].Spec)
 	ctrl.AssertSame(clonedFuncSpecResultSpec, actual.(*Func).Spec.Results[0].Spec)
@@ -425,12 +420,7 @@ func TestFunc_Clone_WithEmptyFields(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertNotSame(modelValue.Spec, actual.(*Func).Spec)
 }

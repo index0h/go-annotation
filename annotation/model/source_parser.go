@@ -324,25 +324,25 @@ func (p *SourceParser) parseSpec(expression ast.Expr, astFile *ast.File, fileSet
 		return nil
 	}
 
-	switch expression.(type) {
+	switch expression := expression.(type) {
 	case *ast.Ident:
-		return p.parseIdentSpec(expression.(*ast.Ident))
+		return p.parseIdentSpec(expression)
 	case *ast.SelectorExpr:
-		return p.parseSelectorExprSpec(expression.(*ast.SelectorExpr))
+		return p.parseSelectorExprSpec(expression)
 	case *ast.StarExpr:
-		return p.parseStarExprSpec(expression.(*ast.StarExpr), astFile, fileSet)
+		return p.parseStarExprSpec(expression, astFile, fileSet)
 	case *ast.ArrayType:
-		return p.parseArraySpec(expression.(*ast.ArrayType), astFile, fileSet)
+		return p.parseArraySpec(expression, astFile, fileSet)
 	case *ast.Ellipsis:
-		return p.parseEllipsisSpec(expression.(*ast.Ellipsis), astFile, fileSet)
+		return p.parseEllipsisSpec(expression, astFile, fileSet)
 	case *ast.MapType:
-		return p.parseMapSpec(expression.(*ast.MapType), astFile, fileSet)
+		return p.parseMapSpec(expression, astFile, fileSet)
 	case *ast.FuncType:
-		return p.parseFuncSpec(expression.(*ast.FuncType), astFile, fileSet)
+		return p.parseFuncSpec(expression, astFile, fileSet)
 	case *ast.StructType:
-		return p.parseStructSpec(expression.(*ast.StructType), astFile, fileSet)
+		return p.parseStructSpec(expression, astFile, fileSet)
 	case *ast.InterfaceType:
-		return p.parseInterfaceSpec(expression.(*ast.InterfaceType), astFile, fileSet)
+		return p.parseInterfaceSpec(expression, astFile, fileSet)
 	default:
 		panic(errors.Errorf("Variable 'expression' has not allowed type: %T", expression))
 	}

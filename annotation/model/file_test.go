@@ -912,12 +912,7 @@ func TestFile_Clone(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 	ctrl.AssertNotSame(modelValue.Annotations[0], actual.(*File).Annotations[0])
 
@@ -984,12 +979,7 @@ func TestFile_Clone_WithEmptyFields(t *testing.T) {
 
 	actual := modelValue.Clone()
 
-	ctrl.AssertEqual(
-		modelValue,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(modelValue, actual)
 }
 
@@ -1183,12 +1173,7 @@ func TestFile_RenameImports(t *testing.T) {
 
 	modelValue.RenameImports(oldAlias, newAlias)
 
-	ctrl.AssertEqual(
-		modelValue,
-		modelExpected,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, modelExpected, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 }
 
 func TestFile_RenameImports_WithNotRenamedImports(t *testing.T) {
@@ -1381,12 +1366,7 @@ func TestFile_RenameImports_WithNotRenamedImports(t *testing.T) {
 
 	modelValue.RenameImports(oldAlias, newAlias)
 
-	ctrl.AssertEqual(
-		modelValue,
-		modelExpected,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, modelExpected, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 }
 
 func TestFile_RenameImports_WithEmptyFields(t *testing.T) {
@@ -1408,12 +1388,7 @@ func TestFile_RenameImports_WithEmptyFields(t *testing.T) {
 
 	modelValue.RenameImports(oldAlias, newAlias)
 
-	ctrl.AssertEqual(
-		modelValue,
-		modelExpected,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(modelValue, modelExpected, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 }
 
 func TestFile_RenameImports_WithInvalidOldAlias(t *testing.T) {

@@ -20,12 +20,7 @@ func TestNewSourceParser(t *testing.T) {
 
 	actual := NewSourceParser(annotationParser)
 
-	ctrl.AssertEqual(
-		expected,
-		actual,
-		unit.IgnoreUnexportedOption{Value: *ctrl},
-		unit.IgnoreUnexportedOption{Value: MockCallManager{}},
-	)
+	ctrl.AssertEqual(expected, actual, unit.IgnoreUnexportedOption{Value: AnnotationParserMock{}})
 	ctrl.AssertSame(annotationParser, actual.annotationParser)
 }
 

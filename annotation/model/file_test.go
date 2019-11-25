@@ -407,7 +407,7 @@ func TestFile_String(t *testing.T) {
 	funcResultSpecString := "funcResultSpecString"
 	funcRelatedSpecString := "funcRelatedSpecString"
 
-	expected := `// file
+	expected := Header + `// file
 // Comment
 package filePackageName
 
@@ -663,7 +663,7 @@ func TestFile_String_WithEmptyFields(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	expected := `package filePackageName
+	expected := Header + `package filePackageName
 `
 
 	modelValue := &File{

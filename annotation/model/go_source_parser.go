@@ -17,21 +17,21 @@ type ellipsis struct {
 	ArraySpec
 }
 
-type SourceParser struct {
+type GoSourceParser struct {
 	annotationParser AnnotationParser
 }
 
-func NewSourceParser(annotationParser AnnotationParser) *SourceParser {
+func NewGoSourceParser(annotationParser AnnotationParser) *GoSourceParser {
 	if annotationParser == nil {
 		panic(errors.New("Variable 'annotationParser' must be not nil"))
 	}
 
-	return &SourceParser{
+	return &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 }
 
-func (p *SourceParser) Parse(fileName string, content string) *File {
+func (p *GoSourceParser) Parse(fileName string, content string) *File {
 	fileSet := token.NewFileSet()
 	astFile, err := parser.ParseFile(fileSet, fileName, content, parser.ParseComments)
 
@@ -77,7 +77,7 @@ func (p *SourceParser) Parse(fileName string, content string) *File {
 	return result
 }
 
-func (p *SourceParser) parseImportGroup(decl *ast.GenDecl) *ImportGroup {
+func (p *GoSourceParser) parseImportGroup(decl *ast.GenDecl) *ImportGroup {
 	result := &ImportGroup{
 		Comment: strings.TrimSpace(decl.Doc.Text()),
 		Imports: []*Import{},
@@ -111,7 +111,7 @@ func (p *SourceParser) parseImportGroup(decl *ast.GenDecl) *ImportGroup {
 	return result
 }
 
-func (p *SourceParser) parseConstGroup(decl *ast.GenDecl, astFile *ast.File, fileSet *token.FileSet) *ConstGroup {
+func (p *GoSourceParser) parseConstGroup(decl *ast.GenDecl, astFile *ast.File, fileSet *token.FileSet) *ConstGroup {
 	result := &ConstGroup{
 		Comment: strings.TrimSpace(decl.Doc.Text()),
 		Consts:  []*Const{},
@@ -186,7 +186,7 @@ func (p *SourceParser) parseConstGroup(decl *ast.GenDecl, astFile *ast.File, fil
 	return result
 }
 
-func (p *SourceParser) parseVarGroup(decl *ast.GenDecl, astFile *ast.File, fileSet *token.FileSet) *VarGroup {
+func (p *GoSourceParser) parseVarGroup(decl *ast.GenDecl, astFile *ast.File, fileSet *token.FileSet) *VarGroup {
 	result := &VarGroup{
 		Comment: strings.TrimSpace(decl.Doc.Text()),
 		Vars:    []*Var{},
@@ -255,7 +255,7 @@ func (p *SourceParser) parseVarGroup(decl *ast.GenDecl, astFile *ast.File, fileS
 	return result
 }
 
-func (p *SourceParser) parseTypeGroup(decl *ast.GenDecl, astFile *ast.File, fileSet *token.FileSet) *TypeGroup {
+func (p *GoSourceParser) parseTypeGroup(decl *ast.GenDecl, astFile *ast.File, fileSet *token.FileSet) *TypeGroup {
 	result := &TypeGroup{
 		Comment: strings.TrimSpace(decl.Doc.Text()),
 		Types:   []*Type{},
@@ -290,7 +290,7 @@ func (p *SourceParser) parseTypeGroup(decl *ast.GenDecl, astFile *ast.File, file
 	return result
 }
 
-func (p *SourceParser) parseFunc(decl *ast.FuncDecl, astFile *ast.File, fileSet *token.FileSet) *Func {
+func (p *GoSourceParser) parseFunc(decl *ast.FuncDecl, astFile *ast.File, fileSet *token.FileSet) *Func {
 	result := &Func{
 		Comment: strings.TrimSpace(decl.Doc.Text()),
 		Spec:    p.parseFuncSpec(decl.Type, astFile, fileSet),
@@ -319,7 +319,7 @@ func (p *SourceParser) parseFunc(decl *ast.FuncDecl, astFile *ast.File, fileSet 
 	return result
 }
 
-func (p *SourceParser) parseSpec(expression ast.Expr, astFile *ast.File, fileSet *token.FileSet) Spec {
+func (p *GoSourceParser) parseSpec(expression ast.Expr, astFile *ast.File, fileSet *token.FileSet) Spec {
 	if expression == nil {
 		return nil
 	}
@@ -348,27 +348,27 @@ func (p *SourceParser) parseSpec(expression ast.Expr, astFile *ast.File, fileSet
 	}
 }
 
-func (p *SourceParser) parseIdentSpec(node *ast.Ident) *SimpleSpec {
+func (p *GoSourceParser) parseIdentSpec(node *ast.Ident) *SimpleSpec {
 	return &SimpleSpec{
 		TypeName: node.Name,
 	}
 }
 
-func (p *SourceParser) parseSelectorExprSpec(node *ast.SelectorExpr) *SimpleSpec {
+func (p *GoSourceParser) parseSelectorExprSpec(node *ast.SelectorExpr) *SimpleSpec {
 	return &SimpleSpec{
 		TypeName:    node.Sel.Name,
 		PackageName: node.X.(*ast.Ident).Name,
 	}
 }
 
-func (p *SourceParser) parseStarExprSpec(node *ast.StarExpr, astFile *ast.File, fileSet *token.FileSet) *SimpleSpec {
+func (p *GoSourceParser) parseStarExprSpec(node *ast.StarExpr, astFile *ast.File, fileSet *token.FileSet) *SimpleSpec {
 	result := p.parseSpec(node.X, astFile, fileSet).(*SimpleSpec)
 	result.IsPointer = true
 
 	return result
 }
 
-func (p *SourceParser) parseArraySpec(node *ast.ArrayType, astFile *ast.File, fileSet *token.FileSet) *ArraySpec {
+func (p *GoSourceParser) parseArraySpec(node *ast.ArrayType, astFile *ast.File, fileSet *token.FileSet) *ArraySpec {
 	value := p.parseSpec(node.Elt, astFile, fileSet)
 
 	result := &ArraySpec{
@@ -386,7 +386,7 @@ func (p *SourceParser) parseArraySpec(node *ast.ArrayType, astFile *ast.File, fi
 	return result
 }
 
-func (p *SourceParser) parseEllipsisSpec(node *ast.Ellipsis, astFile *ast.File, fileSet *token.FileSet) *ellipsis {
+func (p *GoSourceParser) parseEllipsisSpec(node *ast.Ellipsis, astFile *ast.File, fileSet *token.FileSet) *ellipsis {
 	value := p.parseSpec(node.Elt, astFile, fileSet)
 
 	return &ellipsis{
@@ -396,7 +396,7 @@ func (p *SourceParser) parseEllipsisSpec(node *ast.Ellipsis, astFile *ast.File, 
 	}
 }
 
-func (p *SourceParser) parseMapSpec(node *ast.MapType, astFile *ast.File, fileSet *token.FileSet) *MapSpec {
+func (p *GoSourceParser) parseMapSpec(node *ast.MapType, astFile *ast.File, fileSet *token.FileSet) *MapSpec {
 	key := p.parseSpec(node.Key, astFile, fileSet)
 	value := p.parseSpec(node.Value, astFile, fileSet)
 
@@ -406,7 +406,7 @@ func (p *SourceParser) parseMapSpec(node *ast.MapType, astFile *ast.File, fileSe
 	}
 }
 
-func (p *SourceParser) parseFieldsList(node *ast.FieldList, astFile *ast.File, fileSet *token.FileSet) []*Field {
+func (p *GoSourceParser) parseFieldsList(node *ast.FieldList, astFile *ast.File, fileSet *token.FileSet) []*Field {
 	result := []*Field{}
 
 	if node == nil {
@@ -482,7 +482,7 @@ func (p *SourceParser) parseFieldsList(node *ast.FieldList, astFile *ast.File, f
 	return result
 }
 
-func (p *SourceParser) parseStructSpec(node *ast.StructType, astFile *ast.File, fileSet *token.FileSet) *StructSpec {
+func (p *GoSourceParser) parseStructSpec(node *ast.StructType, astFile *ast.File, fileSet *token.FileSet) *StructSpec {
 	fields := p.parseFieldsList(node.Fields, astFile, fileSet)
 
 	return &StructSpec{
@@ -490,7 +490,7 @@ func (p *SourceParser) parseStructSpec(node *ast.StructType, astFile *ast.File, 
 	}
 }
 
-func (p *SourceParser) parseInterfaceSpec(
+func (p *GoSourceParser) parseInterfaceSpec(
 	node *ast.InterfaceType,
 	astFile *ast.File,
 	fileSet *token.FileSet,
@@ -502,7 +502,7 @@ func (p *SourceParser) parseInterfaceSpec(
 	}
 }
 
-func (p *SourceParser) parseFuncSpec(node *ast.FuncType, astFile *ast.File, fileSet *token.FileSet) *FuncSpec {
+func (p *GoSourceParser) parseFuncSpec(node *ast.FuncType, astFile *ast.File, fileSet *token.FileSet) *FuncSpec {
 	params := p.parseFieldsList(node.Params, astFile, fileSet)
 	results := p.parseFieldsList(node.Results, astFile, fileSet)
 	isVariadic := false

@@ -88,7 +88,7 @@ func (m *File) String() string {
 		return m.Content
 	}
 
-	result := ""
+	result := Header
 
 	if m.Comment != "" {
 		result += "// " + strings.Join(strings.Split(strings.TrimSpace(m.Comment), "\n"), "\n// ") + "\n"

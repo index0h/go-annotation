@@ -8,17 +8,17 @@ import (
 	"github.com/index0h/go-unit/unit"
 )
 
-func TestNewSourceParser(t *testing.T) {
+func TestNewGoSourceParser(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	expected := &SourceParser{
+	expected := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
-	actual := NewSourceParser(annotationParser)
+	actual := NewGoSourceParser(annotationParser)
 
 	ctrl.AssertEqual(expected, actual, unit.IgnoreUnexportedOption{Value: AnnotationParserMock{}})
 	ctrl.AssertSame(annotationParser, actual.annotationParser)
@@ -29,7 +29,7 @@ func TestNewSourceParser_WithNilAnnotationParser(t *testing.T) {
 	defer ctrl.Finish()
 
 	ctrl.Subtest("").
-		Call(NewSourceParser, nil).
+		Call(NewGoSourceParser, nil).
 		ExpectPanic(NewErrorMessageConstraint("Variable 'annotationParser' must be not nil"))
 }
 
@@ -65,7 +65,7 @@ package filePackageName
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -102,7 +102,7 @@ func TestSourceParser_Parse_WithEmptyFields(t *testing.T) {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -147,7 +147,7 @@ import (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -189,7 +189,7 @@ import (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -240,7 +240,7 @@ import importAlias "importNamespace/path"`
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -288,7 +288,7 @@ import importAlias "importNamespace/path"`
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -339,7 +339,7 @@ import "importNamespace/path"`
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -387,7 +387,7 @@ import "importNamespace/path"`
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -468,7 +468,7 @@ import (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -537,7 +537,7 @@ import (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -618,7 +618,7 @@ import (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -688,7 +688,7 @@ import (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -733,7 +733,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -775,7 +775,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -845,7 +845,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -917,7 +917,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -972,7 +972,7 @@ const constName constPackageName.constTypeName = constValue
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1018,7 +1018,7 @@ const constName = 10
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1064,7 +1064,7 @@ const constName = 10.20
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1110,7 +1110,7 @@ const constName = "data"
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1197,7 +1197,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1292,7 +1292,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1363,7 +1363,7 @@ const const1Name, const2Name constPackageName.constTypeName = const1Value, const
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1418,7 +1418,7 @@ const const1Name, const2Name = 10, 20
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1473,7 +1473,7 @@ const const1Name, const2Name = 10.20, 20.40
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1528,7 +1528,7 @@ const const1Name, const2Name = "data1", "data2"
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1607,7 +1607,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1688,7 +1688,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1754,7 +1754,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1810,7 +1810,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1866,7 +1866,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1922,7 +1922,7 @@ const (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -1967,7 +1967,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2009,7 +2009,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2079,7 +2079,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2151,7 +2151,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2206,7 +2206,7 @@ var varName varPackageName.varTypeName = varValue
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2252,7 +2252,7 @@ var varName = 10
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2298,7 +2298,7 @@ var varName = 10.20
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2344,7 +2344,7 @@ var varName = "data"
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2431,7 +2431,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2526,7 +2526,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2597,7 +2597,7 @@ var var1Name, var2Name varPackageName.varTypeName = var1Value, var2Value
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2652,7 +2652,7 @@ var var1Name, var2Name = 10, 20
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2707,7 +2707,7 @@ var var1Name, var2Name = 10.20, 20.40
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2762,7 +2762,7 @@ var var1Name, var2Name = "data1", "data2"
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2841,7 +2841,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2922,7 +2922,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -2988,7 +2988,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3046,7 +3046,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3104,7 +3104,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3162,7 +3162,7 @@ var (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3230,7 +3230,7 @@ type (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3300,7 +3300,7 @@ type (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3353,7 +3353,7 @@ type typeName typePackageName.typeTypeName
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3430,7 +3430,7 @@ type (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3509,7 +3509,7 @@ type (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3573,7 +3573,7 @@ type (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3657,7 +3657,7 @@ func (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3732,7 +3732,7 @@ func (funcRelatedName *funcRelatedType) funcName(funcArgumentName funcArgumentTy
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3784,7 +3784,7 @@ func funcName(funcArgumentName funcArgumentType) {funcContent}
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3802,7 +3802,7 @@ func TestSourceParser_Parse_WithInvalidFileContent(t *testing.T) {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3826,7 +3826,7 @@ type typeName valueSpec
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3857,7 +3857,7 @@ type typeName valueSpecPackageName.valueSpec
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3888,7 +3888,7 @@ type typeName *valueSpec
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3920,7 +3920,7 @@ type typeName *valueSpecPackageName.valueSpec
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3952,7 +3952,7 @@ type typeName []valueSpec
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -3985,7 +3985,7 @@ type typeName [5]valueSpec
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4020,7 +4020,7 @@ type typeName map[keySpec]valueSpec
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4050,7 +4050,7 @@ type typeName struct {}
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4100,7 +4100,7 @@ type typeName struct {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4147,7 +4147,7 @@ type typeName struct {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4210,7 +4210,7 @@ type typeName struct {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4273,7 +4273,7 @@ type typeName struct {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4303,7 +4303,7 @@ type typeName interface {}
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4352,7 +4352,7 @@ type typeName interface {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4399,7 +4399,7 @@ type typeName interface {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4453,7 +4453,7 @@ type typeName interface {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4502,7 +4502,7 @@ type typeName interface {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4537,7 +4537,7 @@ type typeName func ()
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4590,7 +4590,7 @@ type typeName func (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4639,7 +4639,7 @@ type typeName func (...paramType)
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4676,7 +4676,7 @@ type typeName func (paramType)
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4734,7 +4734,7 @@ type typeName func (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4798,7 +4798,7 @@ type typeName func () (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4844,7 +4844,7 @@ type typeName func () resultType
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4902,7 +4902,7 @@ type typeName func () (
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4937,7 +4937,7 @@ func TestSourceParser_parseSpec_WithNilExpression(t *testing.T) {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 
@@ -4952,7 +4952,7 @@ func TestSourceParser_parseSpec_WithUnknownExpressionType(t *testing.T) {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	parser := &SourceParser{
+	parser := &GoSourceParser{
 		annotationParser: annotationParser,
 	}
 

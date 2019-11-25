@@ -5,10 +5,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-type TestAnnotation struct {
-	Name string
-}
-
 type (
 	SpecMock struct {
 		ctrl        *unit.Controller
@@ -60,6 +56,21 @@ type (
 )
 
 type (
+	SourceParserMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	SourceParserMockRecorder struct {
+		mock *SourceParserMock
+	}
+
+	SourceParserMockRecorderForParse struct {
+		call *MockCall
+	}
+)
+
+type (
 	MarshalerJSONMock struct {
 		ctrl        *unit.Controller
 		callManager *MockCallManager
@@ -96,7 +107,7 @@ func (m *SpecMock) String() (result string) {
 	case MockCallTypeCallback:
 		return __result.(func() (result string))()
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
@@ -130,7 +141,7 @@ func (m *SpecMock) Validate() {
 	case MockCallTypeCallback:
 		__result.(func())()
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
@@ -165,7 +176,7 @@ func (m *SpecMock) Clone() (result interface{}) {
 	case MockCallTypeCallback:
 		return __result.(func() (result interface{}))()
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
@@ -203,7 +214,7 @@ func (m *SpecMock) FetchImports(file *File) (result0 []*Import) {
 	case MockCallTypeCallback:
 		return __result.(func(file *File) []*Import)(file)
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
@@ -244,7 +255,7 @@ func (m *SpecMock) RenameImports(oldAlias string, newAlias string) {
 	case MockCallTypeCallback:
 		__result.(func(oldAlias string, newAlias string))(oldAlias, newAlias)
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
@@ -286,7 +297,7 @@ func (m *SpecMock) IsEqual(value interface{}) (result bool) {
 	case MockCallTypeCallback:
 		return __result.(func(value interface{}) (result bool))(value)
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
@@ -338,7 +349,7 @@ func (m *AnnotationParserMock) Parse(source string) (annotations []interface{}) 
 	case MockCallTypeCallback:
 		return __result.(func(source string) (annotations []interface{}))(source)
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
@@ -362,6 +373,60 @@ func (mrm *AnnotationParserMockRecorderForParse) Parse(value interface{}) {
 }
 
 func (mrm *AnnotationParserMockRecorderForParse) Callback(callback func(source string) (annotations []interface{})) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewSourceParserMock(ctrl *unit.Controller, options ...interface{}) *SourceParserMock {
+	return &SourceParserMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *SourceParserMock) EXPECT() *SourceParserMockRecorder {
+	return &SourceParserMockRecorder{mock: m}
+}
+
+func (m *SourceParserMock) Parse(fileName string, content string) (result0 *File) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, fileName)
+	__params = append(__params, content)
+
+	switch __result, __type := m.callManager.FetchCall("Parse", __params...).Call(); __type {
+	case MockCallTypeReturn:
+		return __result.([]interface{})[0].(*File)
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		return __result.(func(fileName string, content string) *File)(fileName, content)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *SourceParserMockRecorder) Parse(fileName interface{}, content interface{}) *SourceParserMockRecorderForParse {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, fileName)
+	__params = append(__params, content)
+
+	return &SourceParserMockRecorderForParse{
+		call: mr.mock.callManager.CreateCall("Parse", __params...),
+	}
+}
+
+func (mrm *SourceParserMockRecorderForParse) Return(result0 *File) {
+	mrm.call.SetReturn(result0)
+}
+
+func (mrm *SourceParserMockRecorderForParse) Parse(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *SourceParserMockRecorderForParse) Callback(callback func(fileName string, content string) *File) {
 	mrm.call.SetCallback(callback)
 }
 
@@ -397,7 +462,7 @@ func (m *MarshalerJSONMock) MarshalJSON() (result0 []byte, result1 error) {
 	case MockCallTypeCallback:
 		return __result.(func() ([]byte, error))()
 	default:
-		panic(errors.Errorf("Unknown mock call type, you should regenerate mock"))
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 

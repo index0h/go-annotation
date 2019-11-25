@@ -94,6 +94,27 @@ func TestNamespace_Validate_WithInvalidPath(t *testing.T) {
 		ExpectPanic(NewErrorMessageConstraint("Variable 'Path' must be absolute path, actual value: 'namespace/path'"))
 }
 
+func TestNamespace_Validate_WithIgnoredAndFiles(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	modelValue := &Namespace{
+		Name:      "namespace/alias",
+		Path:      "/namespace/path",
+		IsIgnored: true,
+		Files: []*File{
+			{
+				Name:        "fileName",
+				PackageName: "filePackageName",
+			},
+		},
+	}
+
+	ctrl.Subtest("").
+		Call(modelValue.Validate).
+		ExpectPanic(NewErrorMessageConstraint("Ignored namespace with name: 'namespace/alias' must have no files"))
+}
+
 func TestNamespace_Validate_WithNilFile(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

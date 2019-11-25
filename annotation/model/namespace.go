@@ -26,6 +26,10 @@ func (m *Namespace) Validate() {
 		panic(errors.Errorf("Variable 'Path' must be absolute path, actual value: '%s'", m.Path))
 	}
 
+	if m.IsIgnored && len(m.Files) > 0 {
+		panic(errors.Errorf("Ignored namespace with name: '%s' must have no files", m.Name))
+	}
+
 	fileNames := map[string]bool{}
 	packageName := ""
 

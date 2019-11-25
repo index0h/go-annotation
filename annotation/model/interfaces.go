@@ -31,3 +31,7 @@ type Spec interface {
 type AnnotationParser interface {
 	Parse(string) []interface{}
 }
+
+type SourceParser interface {
+	Parse(fileName string, content string) *File
+}

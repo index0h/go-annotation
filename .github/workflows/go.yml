@@ -20,6 +20,3 @@ jobs:
 
       - name: Test
         run: go test -race -cover -coverprofile=coverage.out ./...
-
-      - name: Coveralls
-        run: go get github.com/mattn/goveralls && $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service=github -repotoken ${{ secrets.github_token }}

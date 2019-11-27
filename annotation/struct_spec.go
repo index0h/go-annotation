@@ -7,10 +7,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+// InterfaceSpec represents specification of struct type.
 type StructSpec struct {
 	Fields []*Field
 }
 
+// Validates StructSpec model fields.
 func (m *StructSpec) Validate() {
 	for i, field := range m.Fields {
 		if field == nil {
@@ -25,6 +27,7 @@ func (m *StructSpec) Validate() {
 	}
 }
 
+// Renders StructSpec model to string.
 func (m *StructSpec) String() string {
 	if len(m.Fields) == 0 {
 		return "struct{}"
@@ -55,6 +58,7 @@ func (m *StructSpec) String() string {
 	return result + "}"
 }
 
+// Creates deep copy of StructSpec model.
 func (m *StructSpec) Clone() interface{} {
 	if m.Fields == nil {
 		return &StructSpec{}
@@ -73,6 +77,7 @@ func (m *StructSpec) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Fields field.
 func (m *StructSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}
 
@@ -83,6 +88,7 @@ func (m *StructSpec) FetchImports(file *File) []*Import {
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Fields field.
 func (m *StructSpec) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

@@ -6,12 +6,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// ConstGroup represents list of const declaration.
 type ConstGroup struct {
 	Comment     string
 	Annotations []interface{}
 	Consts      []*Const
 }
 
+// Validates ConstGroup model fields.
 func (m *ConstGroup) Validate() {
 	for i, element := range m.Consts {
 		if element == nil {
@@ -22,6 +24,8 @@ func (m *ConstGroup) Validate() {
 	}
 }
 
+// Renders ConstGroup model to string.
+// If ConstGroup contain only one const, without own comment, it will be rendered as single const, without braces.
 func (m *ConstGroup) String() string {
 	if len(m.Consts) == 1 && m.Consts[0].Comment == "" {
 		result := ""
@@ -62,6 +66,7 @@ func (m *ConstGroup) String() string {
 	return result + ")\n"
 }
 
+// Creates deep copy of ConstGroup model.
 func (m *ConstGroup) Clone() interface{} {
 	result := &ConstGroup{
 		Comment:     m.Comment,
@@ -79,6 +84,7 @@ func (m *ConstGroup) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Consts field.
 func (m *ConstGroup) FetchImports(file *File) []*Import {
 	result := []*Import{}
 
@@ -89,6 +95,7 @@ func (m *ConstGroup) FetchImports(file *File) []*Import {
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Consts field.
 func (m *ConstGroup) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

@@ -6,12 +6,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// VarGroup represents list of var declaration.
 type VarGroup struct {
 	Comment     string
 	Annotations []interface{}
 	Vars        []*Var
 }
 
+// Validates VarGroup model fields.
 func (m *VarGroup) Validate() {
 	for i, element := range m.Vars {
 		if element == nil {
@@ -22,6 +24,8 @@ func (m *VarGroup) Validate() {
 	}
 }
 
+// Renders VarGroup model to string.
+// If VarGroup contain only one var, without own comment, it will be rendered as single var, without braces.
 func (m *VarGroup) String() string {
 	if len(m.Vars) == 1 && m.Vars[0].Comment == "" {
 		result := ""
@@ -62,6 +66,7 @@ func (m *VarGroup) String() string {
 	return result + ")\n"
 }
 
+// Creates deep copy of VarGroup model.
 func (m *VarGroup) Clone() interface{} {
 	result := &VarGroup{
 		Comment:     m.Comment,
@@ -79,6 +84,7 @@ func (m *VarGroup) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Vars field.
 func (m *VarGroup) FetchImports(file *File) []*Import {
 	result := []*Import{}
 
@@ -89,6 +95,7 @@ func (m *VarGroup) FetchImports(file *File) []*Import {
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Vars field.
 func (m *VarGroup) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

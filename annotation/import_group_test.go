@@ -102,7 +102,7 @@ func TestImportGroup_String_WithOneImport(t *testing.T) {
 	defer ctrl.Finish()
 
 	namespace := "namespace"
-	expected := `import  "namespace"
+	expected := `import "namespace"
 `
 
 	model := &ImportGroup{
@@ -156,7 +156,7 @@ func TestImportGroup_String_WithOneImportAndComment(t *testing.T) {
 	expected := `import (
 // import
 // comment
- "namespace"
+"namespace"
 )
 `
 
@@ -209,7 +209,7 @@ func TestImportGroup_String_WithImportGroupCommentAndOneImport(t *testing.T) {
 	namespace := "namespace"
 	expected := `// importGroup
 // comment
-import  "namespace"
+import "namespace"
 `
 
 	model := &ImportGroup{
@@ -271,7 +271,7 @@ func TestImportGroup_String_WithImportGroupCommentAndOneImportAndComment(t *test
 import (
 // import
 // comment
- "namespace"
+"namespace"
 )
 `
 
@@ -303,8 +303,8 @@ func TestImportGroup_String_WithMultipleImports(t *testing.T) {
 import (
 // import
 // comment1
- "namespace1"
- "namespace2"
+"namespace1"
+"namespace2"
 )
 `
 

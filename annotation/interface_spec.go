@@ -6,10 +6,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+// InterfaceSpec represents specification of an interface type.
 type InterfaceSpec struct {
 	Fields []*Field
 }
 
+// Validates InterfaceSpec model fields.
 func (m *InterfaceSpec) Validate() {
 	for i, method := range m.Fields {
 		if method == nil {
@@ -49,6 +51,7 @@ func (m *InterfaceSpec) Validate() {
 	}
 }
 
+// Renders InterfaceSpec model to string.
 func (m *InterfaceSpec) String() string {
 	if len(m.Fields) == 0 {
 		return "interface{}"
@@ -56,17 +59,18 @@ func (m *InterfaceSpec) String() string {
 
 	result := "interface{\n"
 
-	for _, method := range m.Fields {
-		if method.Comment != "" {
-			result += "// " + strings.Join(strings.Split(strings.TrimSpace(method.Comment), "\n"), "\n// ") + "\n"
+	for _, field := range m.Fields {
+		if field.Comment != "" {
+			result += "// " + strings.Join(strings.Split(strings.TrimSpace(field.Comment), "\n"), "\n// ") + "\n"
 		}
 
-		result += method.Name + method.Spec.String() + "\n"
+		result += field.Name + field.Spec.String() + "\n"
 	}
 
 	return result + "}"
 }
 
+// Creates deep copy of InterfaceSpec model.
 func (m *InterfaceSpec) Clone() interface{} {
 	if m.Fields == nil {
 		return &InterfaceSpec{}
@@ -85,6 +89,7 @@ func (m *InterfaceSpec) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Fields field.
 func (m *InterfaceSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}
 
@@ -95,6 +100,7 @@ func (m *InterfaceSpec) FetchImports(file *File) []*Import {
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Fields field.
 func (m *InterfaceSpec) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

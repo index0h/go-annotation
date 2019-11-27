@@ -2,12 +2,12 @@ package annotation
 
 import (
 	"go/parser"
-	"regexp"
 	"strings"
 
 	"github.com/pkg/errors"
 )
 
+// Func represents declaration of function.
 type Func struct {
 	Name        string
 	Content     string
@@ -17,6 +17,7 @@ type Func struct {
 	Related     *Field
 }
 
+// Validates Func model fields.
 func (m *Func) Validate() {
 	if m.Name == "" {
 		panic(errors.New("Variable 'Name' must be not empty"))
@@ -26,11 +27,9 @@ func (m *Func) Validate() {
 		panic(errors.Errorf("Variable 'Name' must be valid identifier, actual value: '%s'", m.Name))
 	}
 
-	if m.Spec == nil {
-		panic(errors.New("Variable 'Spec' must be not nil"))
+	if m.Spec != nil {
+		m.Spec.Validate()
 	}
-
-	m.Spec.Validate()
 
 	if m.Related != nil {
 		m.Related.Validate()
@@ -51,6 +50,7 @@ func (m *Func) Validate() {
 	}
 }
 
+// Renders Func model to string.
 func (m *Func) String() string {
 	result := ""
 
@@ -70,16 +70,28 @@ func (m *Func) String() string {
 		result += m.Related.Name + " " + m.Related.Spec.String() + ") "
 	}
 
-	return result + m.Name + m.Spec.String() + " {\n" + m.Content + "\n}\n"
+	result += m.Name
+
+	if m.Spec == nil {
+		result += "()"
+	} else {
+		result += m.Spec.String()
+	}
+
+	return result + " {\n" + m.Content + "\n}\n"
 }
 
+// Creates deep copy of Func model.
 func (m *Func) Clone() interface{} {
 	result := &Func{
 		Name:        m.Name,
 		Content:     m.Content,
 		Comment:     m.Comment,
 		Annotations: cloneAnnotations(m.Annotations),
-		Spec:        m.Spec.Clone().(*FuncSpec),
+	}
+
+	if m.Spec != nil {
+		result.Spec = m.Spec.Clone().(*FuncSpec)
 	}
 
 	if m.Related != nil {
@@ -89,17 +101,24 @@ func (m *Func) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Spec, Content and Related fields.
 func (m *Func) FetchImports(file *File) []*Import {
 	result := []*Import{}
-	result = append(result, m.Spec.FetchImports(file)...)
+
+	if m.Spec != nil {
+		result = append(result, m.Spec.FetchImports(file)...)
+	}
 
 	if m.Related != nil {
 		result = append(result, m.Related.FetchImports(file)...)
 	}
 
+	result = append(result, fetchImportsFromContent(m.Content, file)...)
+
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Spec, Content and Related fields.
 func (m *Func) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))
@@ -109,15 +128,13 @@ func (m *Func) RenameImports(oldAlias string, newAlias string) {
 		panic(errors.Errorf("Variable 'newAlias' must be valid identifier, actual value: '%s'", newAlias))
 	}
 
-	m.Spec.RenameImports(oldAlias, newAlias)
+	if m.Spec != nil {
+		m.Spec.RenameImports(oldAlias, newAlias)
+	}
 
 	if m.Related != nil {
 		m.Related.RenameImports(oldAlias, newAlias)
 	}
 
-	if m.Content != "" {
-		m.Content = regexp.
-			MustCompile("([ \\t\\n&;,!~^=+\\-*/()\\[\\]{}])"+oldAlias+"([ \\t]*\\.)").
-			ReplaceAllString(m.Content, "${1}"+newAlias+"${2}")
-	}
+	m.Content = renameImportsInContent(m.Content, oldAlias, newAlias)
 }

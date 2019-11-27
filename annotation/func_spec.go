@@ -6,12 +6,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// FuncSpec represents specification of func.
 type FuncSpec struct {
 	Params     []*Field
 	Results    []*Field
 	IsVariadic bool
 }
 
+// Validates FuncSpec model fields.
 func (m *FuncSpec) Validate() {
 	for i, param := range m.Params {
 		if param == nil {
@@ -48,6 +50,7 @@ func (m *FuncSpec) Validate() {
 	}
 }
 
+// Renders FuncSpec model to string.
 func (m *FuncSpec) String() string {
 	result := "("
 
@@ -114,6 +117,7 @@ func (m *FuncSpec) String() string {
 	return result
 }
 
+// Creates deep copy of FuncSpec model.
 func (m *FuncSpec) Clone() interface{} {
 	if m.Params == nil && m.Results == nil {
 		return &FuncSpec{}
@@ -142,6 +146,7 @@ func (m *FuncSpec) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Params and Results fields.
 func (m *FuncSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}
 
@@ -156,6 +161,7 @@ func (m *FuncSpec) FetchImports(file *File) []*Import {
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Params and Results fields.
 func (m *FuncSpec) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

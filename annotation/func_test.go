@@ -38,7 +38,6 @@ func TestFunc_Validate_WithEmptyFields(t *testing.T) {
 
 	model := &Func{
 		Name: "funcName",
-		Spec: &FuncSpec{},
 	}
 
 	model.Validate()
@@ -48,9 +47,7 @@ func TestFunc_Validate_WithEmptyFuncName(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	model := &Func{
-		Spec: &FuncSpec{},
-	}
+	model := &Func{}
 
 	ctrl.Subtest("").
 		Call(model.Validate).
@@ -63,25 +60,11 @@ func TestFunc_Validate_WithInvalidFuncName(t *testing.T) {
 
 	model := &Func{
 		Name: "+invalid",
-		Spec: &FuncSpec{},
 	}
 
 	ctrl.Subtest("").
 		Call(model.Validate).
 		ExpectPanic(NewErrorMessageConstraint("Variable 'Name' must be valid identifier, actual value: '+invalid'"))
-}
-
-func TestFunc_Validate_WithNilSpec(t *testing.T) {
-	ctrl := unit.NewController(t)
-	defer ctrl.Finish()
-
-	model := &Func{
-		Name: "funcName",
-	}
-
-	ctrl.Subtest("").
-		Call(model.Validate).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Spec' must be not nil"))
 }
 
 func TestFunc_Validate_WithInvalidSpec(t *testing.T) {
@@ -334,7 +317,6 @@ funcContent
 				Name: "funcAnnotation",
 			},
 		},
-		Spec: &FuncSpec{},
 	}
 
 	actual := model.String()
@@ -415,14 +397,12 @@ func TestFunc_Clone_WithEmptyFields(t *testing.T) {
 
 	model := &Func{
 		Name: "funcName",
-		Spec: &FuncSpec{},
 	}
 
 	actual := model.Clone()
 
 	ctrl.AssertEqual(model, actual, unit.IgnoreUnexportedOption{Value: SpecMock{}})
 	ctrl.AssertNotSame(model, actual)
-	ctrl.AssertNotSame(model.Spec, actual.(*Func).Spec)
 }
 
 func TestFunc_FetchImports(t *testing.T) {
@@ -540,7 +520,7 @@ func TestFunc_FetchImports_WithoutImports(t *testing.T) {
 	ctrl.AssertEmpty(actual)
 }
 
-func TestFunc_FetchImports_WithoutRelatedAndWithEmptyFunc(t *testing.T) {
+func TestFunc_FetchImports_WithEmptyFields(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
@@ -548,7 +528,6 @@ func TestFunc_FetchImports_WithoutRelatedAndWithEmptyFunc(t *testing.T) {
 
 	model := &Func{
 		Name: "funcName",
-		Spec: &FuncSpec{},
 	}
 
 	actual := model.FetchImports(file)
@@ -609,7 +588,7 @@ func TestFunc_RenameImports(t *testing.T) {
 	ctrl.AssertSame(expectedContent, model.Content)
 }
 
-func TestFunc_RenameImports_WithoutRelatedAndWithEmptySpec(t *testing.T) {
+func TestFunc_RenameImports_WithEmptyFields(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
@@ -618,7 +597,6 @@ func TestFunc_RenameImports_WithoutRelatedAndWithEmptySpec(t *testing.T) {
 
 	model := &Func{
 		Name: "funcName",
-		Spec: &FuncSpec{},
 	}
 
 	model.RenameImports(oldAlias, newAlias)

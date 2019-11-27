@@ -141,7 +141,7 @@ func TestImport_String_WithComment(t *testing.T) {
 	comment := "import\ncomment"
 	expected := `// import
 // comment
-import  "namespace"
+import "namespace"
 `
 
 	model := &Import{

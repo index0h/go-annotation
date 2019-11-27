@@ -184,3 +184,19 @@ func Test_uniqImports_WithSameValues(t *testing.T) {
 	ctrl.AssertSame(importExpected[0], actual[0])
 	ctrl.AssertSame(importExpected[1], actual[1])
 }
+
+func Test_fetchImportsFromContent_WithEmptyFileImportGroups(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	file := &File{
+		Name:        "file.go",
+		PackageName: "packageName",
+	}
+
+	content := "fmt.Println(\"Hello world\")"
+
+	actual := fetchImportsFromContent(content, file)
+
+	ctrl.AssertEmpty(actual)
+}

@@ -6,13 +6,16 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Type represents type declaration.
 type Type struct {
 	Name        string
 	Comment     string
 	Annotations []interface{}
-	Spec        Spec
+	// Allowed types: *SimpleSpec, *ArraySpec, *MapSpec, *StructSpec, *InterfaceSpec, *FuncSpec.
+	Spec Spec
 }
 
+// Validates Type model fields.
 func (m *Type) Validate() {
 	if m.Name == "" {
 		panic(errors.New("Variable 'Name' must be not empty"))
@@ -34,6 +37,7 @@ func (m *Type) Validate() {
 	}
 }
 
+// Renders Type model to string.
 func (m *Type) String() string {
 	result := ""
 
@@ -44,6 +48,7 @@ func (m *Type) String() string {
 	return result + "type " + m.Name + " " + m.Spec.String() + "\n"
 }
 
+// Creates deep copy of Type model.
 func (m *Type) Clone() interface{} {
 	return &Type{
 		Name:        m.Name,
@@ -53,10 +58,12 @@ func (m *Type) Clone() interface{} {
 	}
 }
 
+// Fetches list of Import models registered in file argument, which are used by Spec field.
 func (m *Type) FetchImports(file *File) []*Import {
 	return m.Spec.FetchImports(file)
 }
 
+// Renames import aliases, which are used by Spec field.
 func (m *Type) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

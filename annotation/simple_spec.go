@@ -2,12 +2,14 @@ package annotation
 
 import "github.com/pkg/errors"
 
+// SimpleSpec model represents an identifier of type.
 type SimpleSpec struct {
 	PackageName string
 	TypeName    string
 	IsPointer   bool
 }
 
+// Validates SimpleSpec model fields.
 func (m *SimpleSpec) Validate() {
 	if m.TypeName == "" {
 		panic(errors.New("Variable 'TypeName' must be not empty"))
@@ -22,6 +24,7 @@ func (m *SimpleSpec) Validate() {
 	}
 }
 
+// Renders SimpleSpec model to string.
 func (m *SimpleSpec) String() string {
 	result := ""
 
@@ -36,6 +39,7 @@ func (m *SimpleSpec) String() string {
 	return result + m.TypeName
 }
 
+// Creates copy of SimpleSpec model.
 func (m *SimpleSpec) Clone() interface{} {
 	return &SimpleSpec{
 		PackageName: m.PackageName,
@@ -44,6 +48,7 @@ func (m *SimpleSpec) Clone() interface{} {
 	}
 }
 
+// Fetches list of Import models registered in file argument, which are used by PackageName field.
 func (m *SimpleSpec) FetchImports(file *File) []*Import {
 	if m.PackageName == "" {
 		return []*Import{}
@@ -60,6 +65,7 @@ func (m *SimpleSpec) FetchImports(file *File) []*Import {
 	return []*Import{}
 }
 
+// Renames PackageName field if its same as oldAlias argument.
 func (m *SimpleSpec) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

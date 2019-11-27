@@ -14,10 +14,12 @@ var protectedAnnotations = map[string]interface{}{
 	"FileIsGenerated": FileIsGeneratedAnnotation(false),
 }
 
+// Parsers comment and creates list of annotations.
 type JSONAnnotationParser struct {
 	annotations map[string]interface{}
 }
 
+// Creates new instance of JSONAnnotationParser.
 func NewJSONAnnotationParser() *JSONAnnotationParser {
 	result := &JSONAnnotationParser{
 		annotations: map[string]interface{}{},
@@ -30,6 +32,7 @@ func NewJSONAnnotationParser() *JSONAnnotationParser {
 	return result
 }
 
+// Registers new or updates old annotation by name and its type.
 func (p *JSONAnnotationParser) SetAnnotation(name string, annotationType interface{}) {
 	if name == "" {
 		panic(errors.New("Variable 'name' must be not empty"))
@@ -42,6 +45,7 @@ func (p *JSONAnnotationParser) SetAnnotation(name string, annotationType interfa
 	p.annotations[name] = annotationType
 }
 
+// Parsers comment and creates list of annotations.
 func (p *JSONAnnotationParser) Parse(content string) []interface{} {
 	if content == "" {
 		return nil
@@ -54,7 +58,7 @@ func (p *JSONAnnotationParser) Parse(content string) []interface{} {
 		annotation, ok := p.annotations[part[1]]
 
 		if !ok {
-			panic(errors.Errorf("Unknown annotation name '%s'", part[1]))
+			continue
 		}
 
 		value := reflect.New(reflect.TypeOf(annotation)).Interface()

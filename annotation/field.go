@@ -2,14 +2,18 @@ package annotation
 
 import "github.com/pkg/errors"
 
+// Field represents field of struct, interface, func param, func result or func related field.
 type Field struct {
-	Name        string
+	Name string
+	// Used for render *StructSpec
 	Tag         string
 	Comment     string
 	Annotations []interface{}
-	Spec        Spec
+	// Allowed types: *SimpleSpec, *ArraySpec, *MapSpec, *StructSpec, *InterfaceSpec, *FuncSpec.
+	Spec Spec
 }
 
+// Validates Field model fields.
 func (m *Field) Validate() {
 	if m.Name != "" && !identRegexp.MatchString(m.Name) {
 		panic(errors.Errorf("Variable 'Name' must be valid identifier, actual value: '%s'", m.Name))
@@ -27,6 +31,7 @@ func (m *Field) Validate() {
 	}
 }
 
+// Creates deep copy of Field model.
 func (m *Field) Clone() interface{} {
 	return &Field{
 		Name:        m.Name,
@@ -37,10 +42,12 @@ func (m *Field) Clone() interface{} {
 	}
 }
 
+// Fetches list of Import models registered in file argument, which are used by Spec field.
 func (m *Field) FetchImports(file *File) []*Import {
 	return m.Spec.FetchImports(file)
 }
 
+// Renames import aliases, which are used by Spec field.
 func (m *Field) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

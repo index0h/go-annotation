@@ -6,12 +6,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// TypeGroup represents list of type declaration.
 type TypeGroup struct {
 	Comment     string
 	Annotations []interface{}
 	Types       []*Type
 }
 
+// Validates TypeGroup model fields.
 func (m *TypeGroup) Validate() {
 	for i, element := range m.Types {
 		if element == nil {
@@ -22,6 +24,8 @@ func (m *TypeGroup) Validate() {
 	}
 }
 
+// Renders TypeGroup model to string.
+// If TypeGroup contain only one type, without own comment, it will be rendered as single type, without braces.
 func (m *TypeGroup) String() string {
 	if len(m.Types) == 1 && m.Types[0].Comment == "" {
 		result := ""
@@ -52,6 +56,7 @@ func (m *TypeGroup) String() string {
 	return result + ")\n"
 }
 
+// Creates deep copy of TypeGroup model.
 func (m *TypeGroup) Clone() interface{} {
 	result := &TypeGroup{
 		Comment:     m.Comment,
@@ -69,6 +74,7 @@ func (m *TypeGroup) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Types field.
 func (m *TypeGroup) FetchImports(file *File) []*Import {
 	result := []*Import{}
 
@@ -79,6 +85,7 @@ func (m *TypeGroup) FetchImports(file *File) []*Import {
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Types field.
 func (m *TypeGroup) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

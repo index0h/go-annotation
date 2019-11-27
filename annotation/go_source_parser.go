@@ -6,7 +6,6 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -17,10 +16,12 @@ type ellipsis struct {
 	ArraySpec
 }
 
+// Parses golang sources and build File models.
 type GoSourceParser struct {
 	annotationParser AnnotationParser
 }
 
+// Creates new instance of GoSourceParser.
 func NewGoSourceParser(annotationParser AnnotationParser) *GoSourceParser {
 	if annotationParser == nil {
 		panic(errors.New("Variable 'annotationParser' must be not nil"))
@@ -31,6 +32,7 @@ func NewGoSourceParser(annotationParser AnnotationParser) *GoSourceParser {
 	}
 }
 
+// Generates File model by golang source.
 func (p *GoSourceParser) Parse(fileName string, content string) *File {
 	fileSet := token.NewFileSet()
 	astFile, err := parser.ParseFile(fileSet, fileName, content, parser.ParseComments)
@@ -99,9 +101,7 @@ func (p *GoSourceParser) parseImportGroup(decl *ast.GenDecl) *ImportGroup {
 			element.Annotations = p.annotationParser.Parse(element.Comment)
 		}
 
-		if importSpec.Name == nil {
-			_, element.Alias = filepath.Split(element.Namespace)
-		} else {
+		if importSpec.Name != nil {
 			element.Alias = importSpec.Name.Name
 		}
 

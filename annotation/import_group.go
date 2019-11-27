@@ -7,12 +7,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// ImportGroup represents list of import declaration.
 type ImportGroup struct {
 	Comment     string
 	Annotations []interface{}
 	Imports     []*Import
 }
 
+// Validates ImportGroup model fields.
 func (m *ImportGroup) Validate() {
 	for i, element := range m.Imports {
 		if element == nil {
@@ -23,6 +25,8 @@ func (m *ImportGroup) Validate() {
 	}
 }
 
+// Renders ImportGroup model to string.
+// If ImportGroup contain only one import, without own comment, it will be rendered as single import, without braces.
 func (m *ImportGroup) String() string {
 	if len(m.Imports) == 1 && m.Imports[0].Comment == "" {
 		result := ""
@@ -47,12 +51,17 @@ func (m *ImportGroup) String() string {
 			result += "// " + strings.Join(strings.Split(strings.TrimSpace(element.Comment), "\n"), "\n// ") + "\n"
 		}
 
-		result += element.Alias + " " + strconv.Quote(element.Namespace) + "\n"
+		if element.Alias != "" {
+			result += element.Alias + " "
+		}
+
+		result += strconv.Quote(element.Namespace) + "\n"
 	}
 
 	return result + ")\n"
 }
 
+// Creates deep copy of ImportGroup model.
 func (m *ImportGroup) Clone() interface{} {
 	result := &ImportGroup{
 		Comment:     m.Comment,
@@ -70,6 +79,7 @@ func (m *ImportGroup) Clone() interface{} {
 	return result
 }
 
+// Renames import aliases, which are used in Imports field.
 func (m *ImportGroup) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

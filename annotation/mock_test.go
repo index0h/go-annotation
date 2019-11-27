@@ -50,6 +50,10 @@ type (
 		mock *AnnotationParserMock
 	}
 
+	AnnotationParserMockRecorderForSetAnnotation struct {
+		call *MockCall
+	}
+
 	AnnotationParserMockRecorderForParse struct {
 		call *MockCall
 	}
@@ -333,6 +337,48 @@ func NewAnnotationParserMock(ctrl *unit.Controller, options ...interface{}) *Ann
 
 func (m *AnnotationParserMock) EXPECT() *AnnotationParserMockRecorder {
 	return &AnnotationParserMockRecorder{mock: m}
+}
+
+func (m *AnnotationParserMock) SetAnnotation(name string, annotationType interface{}) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, name)
+	__params = append(__params, annotationType)
+
+	switch __result, __type := m.callManager.FetchCall("SetAnnotation", __params...).Call(); __type {
+	case MockCallTypeReturn:
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		__result.(func(name string, annotationType interface{}))(name, annotationType)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *AnnotationParserMockRecorder) SetAnnotation(name interface{}, annotationType interface{}) *AnnotationParserMockRecorderForSetAnnotation {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, name)
+	__params = append(__params, annotationType)
+
+	return &AnnotationParserMockRecorderForSetAnnotation{
+		call: mr.mock.callManager.CreateCall("SetAnnotation", __params...),
+	}
+}
+
+func (mrm *AnnotationParserMockRecorderForSetAnnotation) Return() {
+	mrm.call.SetReturn()
+}
+
+func (mrm *AnnotationParserMockRecorderForSetAnnotation) SetAnnotation(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *AnnotationParserMockRecorderForSetAnnotation) Callback(callback func(name string, annotationType interface{})) {
+	mrm.call.SetCallback(callback)
 }
 
 func (m *AnnotationParserMock) Parse(source string) (annotations []interface{}) {

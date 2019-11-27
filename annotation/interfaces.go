@@ -28,9 +28,9 @@ type Spec interface {
 	ImportsRenamer
 }
 
-//noinspection GoNameStartsWithPackageName
 type AnnotationParser interface {
-	Parse(string) []interface{}
+	SetAnnotation(name string, annotationType interface{})
+	Parse(content string) (annotations []interface{})
 }
 
 type SourceParser interface {

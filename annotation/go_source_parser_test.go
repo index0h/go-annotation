@@ -309,7 +309,6 @@ func TestSourceParser_Parse_WithOneImportAndImportGroupComment(t *testing.T) {
 			Name: "importGroupAnnotation",
 		},
 	}
-	importAlias := "path"
 	importNamespace := "importNamespace/path"
 	fileContent := `package filePackageName
 // importGroup
@@ -325,7 +324,6 @@ import "importNamespace/path"`
 				Annotations: importGroupAnnotations,
 				Imports: []*Import{
 					{
-						Alias:     importAlias,
 						Namespace: importNamespace,
 					},
 				},
@@ -360,7 +358,6 @@ func TestSourceParser_Parse_WithOneImport(t *testing.T) {
 
 	fileName := "fileName"
 	filePackageName := "filePackageName"
-	importAlias := "path"
 	importNamespace := "importNamespace/path"
 	fileContent := `package filePackageName
 
@@ -373,7 +370,6 @@ import "importNamespace/path"`
 			{
 				Imports: []*Import{
 					{
-						Alias:     importAlias,
 						Namespace: importNamespace,
 					},
 				},
@@ -558,7 +554,6 @@ func TestSourceParser_Parse_WithMultipleImportsAndImportGroupCommentAndImportCom
 			Name: "importGroupAnnotation",
 		},
 	}
-	import1Alias := "path1"
 	import1Namespace := "import1Namespace/path1"
 	import1Comment := "import1\ncomment"
 	import1Annotations := []interface{}{
@@ -566,7 +561,6 @@ func TestSourceParser_Parse_WithMultipleImportsAndImportGroupCommentAndImportCom
 			Name: "import1Annotation",
 		},
 	}
-	import2Alias := "path2"
 	import2Namespace := "import2Namespace/path2"
 	import2Comment := "import2\ncomment"
 	import2Annotations := []interface{}{
@@ -596,13 +590,11 @@ import (
 				Annotations: importGroupAnnotations,
 				Imports: []*Import{
 					{
-						Alias:       import1Alias,
 						Namespace:   import1Namespace,
 						Comment:     import1Comment,
 						Annotations: import1Annotations,
 					},
 					{
-						Alias:       import2Alias,
 						Namespace:   import2Namespace,
 						Comment:     import2Comment,
 						Annotations: import2Annotations,
@@ -651,9 +643,7 @@ func TestSourceParser_Parse_WithMultipleImports(t *testing.T) {
 
 	fileName := "fileName"
 	filePackageName := "filePackageName"
-	import1Alias := "path1"
 	import1Namespace := "import1Namespace/path1"
-	import2Alias := "path2"
 	import2Namespace := "import2Namespace/path2"
 	content := `package filePackageName
 
@@ -670,11 +660,9 @@ import (
 			{
 				Imports: []*Import{
 					{
-						Alias:     import1Alias,
 						Namespace: import1Namespace,
 					},
 					{
-						Alias:     import2Alias,
 						Namespace: import2Namespace,
 					},
 				},

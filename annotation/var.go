@@ -2,20 +2,22 @@ package annotation
 
 import (
 	"go/parser"
-	"regexp"
 	"strings"
 
 	"github.com/pkg/errors"
 )
 
+// Var represents var declaration.
 type Var struct {
 	Name        string
 	Value       string
 	Comment     string
 	Annotations []interface{}
-	Spec        Spec
+	// Allowed types: *SimpleSpec, *ArraySpec, *MapSpec, *StructSpec, *InterfaceSpec, *FuncSpec.
+	Spec Spec
 }
 
+// Validates Var model fields.
 func (m *Var) Validate() {
 	if m.Name == "" {
 		panic(errors.New("Variable 'Name' must be not empty"))
@@ -45,6 +47,7 @@ func (m *Var) Validate() {
 	}
 }
 
+// Renders Var model to string.
 func (m *Var) String() string {
 	result := ""
 
@@ -65,6 +68,7 @@ func (m *Var) String() string {
 	return result + "\n"
 }
 
+// Creates deep copy of Var model.
 func (m *Var) Clone() interface{} {
 	return &Var{
 		Name:        m.Name,
@@ -75,10 +79,20 @@ func (m *Var) Clone() interface{} {
 	}
 }
 
+// Fetches list of Import models registered in file argument, which are used by Spec and Value fields.
 func (m *Var) FetchImports(file *File) []*Import {
-	return m.Spec.FetchImports(file)
+	result := []*Import{}
+
+	if m.Spec != nil {
+		result = append(result, m.Spec.FetchImports(file)...)
+	}
+
+	result = append(result, fetchImportsFromContent(m.Value, file)...)
+
+	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Spec and Value fields.
 func (m *Var) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))
@@ -88,11 +102,9 @@ func (m *Var) RenameImports(oldAlias string, newAlias string) {
 		panic(errors.Errorf("Variable 'newAlias' must be valid identifier, actual value: '%s'", newAlias))
 	}
 
-	m.Spec.RenameImports(oldAlias, newAlias)
-
-	if m.Value != "" {
-		m.Value = regexp.
-			MustCompile("([ \\t\\n&;,!~^=+\\-*/()\\[\\]{}])"+oldAlias+"([ \\t]*\\.)").
-			ReplaceAllString(m.Value, "${1}"+newAlias+"${2}")
+	if m.Spec != nil {
+		m.Spec.RenameImports(oldAlias, newAlias)
 	}
+
+	m.Value = renameImportsInContent(m.Value, oldAlias, newAlias)
 }

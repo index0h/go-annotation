@@ -4,7 +4,6 @@ import (
 	"go/format"
 	"go/parser"
 	"go/token"
-	"regexp"
 	"strings"
 
 	"github.com/pkg/errors"
@@ -23,6 +22,7 @@ type File struct {
 	Funcs        []*Func
 }
 
+// Validates File model fields.
 func (m *File) Validate() {
 	if m.Name == "" {
 		panic(errors.New("Variable 'Name' must be not empty"))
@@ -83,6 +83,8 @@ func (m *File) Validate() {
 	}
 }
 
+// Renders File model to string.
+// By default String method adds prefix from Header constant.
 func (m *File) String() string {
 	if m.Content != "" {
 		return m.Content
@@ -125,6 +127,7 @@ func (m *File) String() string {
 	return string(formattedResult)
 }
 
+// Creates deep copy of File model.
 func (m *File) Clone() interface{} {
 	result := &File{
 		Name:        m.Name,
@@ -177,6 +180,7 @@ func (m *File) Clone() interface{} {
 	return result
 }
 
+// Renames import aliases, which are used by any field of File, including Content.
 func (m *File) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))
@@ -206,9 +210,5 @@ func (m *File) RenameImports(oldAlias string, newAlias string) {
 		element.RenameImports(oldAlias, newAlias)
 	}
 
-	if m.Content != "" {
-		m.Content = regexp.
-			MustCompile("([ \\t\\n&;,!~^=+\\-*/()\\[\\]{}])"+oldAlias+"([ \\t]*\\.)").
-			ReplaceAllString(m.Content, "${1}"+newAlias+"${2}")
-	}
+	m.Content = renameImportsInContent(m.Content, oldAlias, newAlias)
 }

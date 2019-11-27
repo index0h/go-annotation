@@ -15,6 +15,7 @@ type Storage struct {
 	Namespaces       []*Namespace
 }
 
+// Creates new instance of Storage.
 func NewStorage() *Storage {
 	annotationParser := NewJSONAnnotationParser()
 	sourceParser := NewGoSourceParser(annotationParser)
@@ -26,6 +27,7 @@ func NewStorage() *Storage {
 	}
 }
 
+// Validates Storage model Namespace field.
 func (m *Storage) Validate() {
 	namespaceNames := map[string]bool{}
 	namespacePaths := map[string]bool{}
@@ -51,6 +53,7 @@ func (m *Storage) Validate() {
 	}
 }
 
+// Creates deep copy of Storage model.
 func (m *Storage) Clone() interface{} {
 	result := &Storage{
 		AnnotationParser: m.AnnotationParser,
@@ -68,6 +71,7 @@ func (m *Storage) Clone() interface{} {
 	return result
 }
 
+// Returns namespace be its name.
 func (m *Storage) FindNamespaceByName(name string) *Namespace {
 	if name == "" {
 		panic(errors.New("Variable 'name' must be not empty"))
@@ -82,6 +86,9 @@ func (m *Storage) FindNamespaceByName(name string) *Namespace {
 	return nil
 }
 
+// Scans all golang sources recursively inside of rootPath argument.
+// If rootNamespace is empty rootPath will be ignored, and Namespace models will be created only for children folders.
+// Argument may contain part of path, or absolute path to folder, which must be ignored.
 func (m *Storage) ScanRecursive(rootNamespace string, rootPath string, ignores ...string) {
 	for _, folder := range m.findAllFolders(rootPath) {
 		pathSuffix := strings.TrimLeft(folder, rootPath)
@@ -113,6 +120,7 @@ func (m *Storage) ScanRecursive(rootNamespace string, rootPath string, ignores .
 	m.Validate()
 }
 
+// Creates list of File models by *.go files stored in path argument.
 func (m *Storage) ScanFiles(path string) []*File {
 	result := []*File{}
 
@@ -141,6 +149,7 @@ func (m *Storage) ScanFiles(path string) []*File {
 	return result
 }
 
+// Removes old generated files with content and FileIsGeneratedAnnotation annotation.
 func (m *Storage) RemoveOldGeneratedFiles() {
 	m.Validate()
 
@@ -175,6 +184,7 @@ func (m *Storage) RemoveOldGeneratedFiles() {
 	}
 }
 
+// Renders and writes File models without content.
 func (m *Storage) WriteGeneratedFiles() {
 	m.Validate()
 

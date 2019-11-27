@@ -444,6 +444,42 @@ func TestArraySpec_FetchImports(t *testing.T) {
 	ctrl.AssertSame(expected, actual)
 }
 
+func TestArraySpec_FetchImports_WithLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	expected := []*Import{
+		{
+			Alias:     "packageName",
+			Namespace: "namespace",
+		},
+	}
+
+	file := &File{
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: expected,
+			},
+		},
+	}
+
+	valueSpec := NewSpecMock(ctrl)
+
+	model := &ArraySpec{
+		Value:  valueSpec,
+		Length: "packageName.MyConst + 1",
+	}
+
+	valueSpec.
+		EXPECT().
+		FetchImports(ctrl.Same(file)).
+		Return(nil)
+
+	actual := model.FetchImports(file)
+
+	ctrl.AssertSame(expected, actual)
+}
+
 func TestArraySpec_RenameImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

@@ -428,9 +428,9 @@ func TestJSONAnnotationParser_Parse_WithUnknownAnnotation(t *testing.T) {
 		annotations: map[string]interface{}{},
 	}
 
-	ctrl.Subtest("").
-		Call(parser.Parse, content).
-		ExpectPanic(NewErrorMessageConstraint("Unknown annotation name 'value'"))
+	actual := parser.Parse(content)
+
+	ctrl.AssertEmpty(actual)
 }
 
 func TestJSONAnnotationParser_Parse_WithParseError(t *testing.T) {

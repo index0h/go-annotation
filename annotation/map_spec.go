@@ -2,11 +2,15 @@ package annotation
 
 import "github.com/pkg/errors"
 
+// MapSpec represents specification of map type.
 type MapSpec struct {
-	Key   Spec
+	// Allowed types: *SimpleSpec, *ArraySpec, *MapSpec, *StructSpec, *InterfaceSpec, *FuncSpec.
+	Key Spec
+	// Allowed types: *SimpleSpec, *ArraySpec, *MapSpec, *StructSpec, *InterfaceSpec, *FuncSpec.
 	Value Spec
 }
 
+// Validates MapSpec model fields.
 func (m *MapSpec) Validate() {
 	if m.Key == nil {
 		panic(errors.New("Variable 'Key' must be not nil"))
@@ -31,6 +35,7 @@ func (m *MapSpec) Validate() {
 	}
 }
 
+// Renders MapSpec model to string.
 func (m *MapSpec) String() string {
 	result := "map["
 
@@ -47,6 +52,7 @@ func (m *MapSpec) String() string {
 	return result + m.Value.String()
 }
 
+// Creates deep copy of MapSpec model.
 func (m *MapSpec) Clone() interface{} {
 	return &MapSpec{
 		Value: m.Value.Clone().(Spec),
@@ -54,6 +60,7 @@ func (m *MapSpec) Clone() interface{} {
 	}
 }
 
+// Fetches list of Import models registered in file argument, which are used by Key and Value fields.
 func (m *MapSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}
 	result = append(result, m.Key.FetchImports(file)...)
@@ -62,6 +69,7 @@ func (m *MapSpec) FetchImports(file *File) []*Import {
 	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Key and Value fields.
 func (m *MapSpec) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

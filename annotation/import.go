@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Import represents import declaration.
 type Import struct {
 	Alias       string
 	Namespace   string
@@ -15,6 +16,7 @@ type Import struct {
 	Annotations []interface{}
 }
 
+// Returns Alias field if it's not empty, otherwise base path of Namespace field.
 func (m *Import) RealAlias() string {
 	if m.Alias != "" {
 		return m.Alias
@@ -23,6 +25,7 @@ func (m *Import) RealAlias() string {
 	return filepath.Base(m.Namespace)
 }
 
+// Validates Import model fields.
 func (m *Import) Validate() {
 	if m.Alias != "" && !identRegexp.MatchString(m.Alias) {
 		panic(errors.Errorf("Variable 'Alias' must be valid identifier, actual value: '%s'", m.Alias))
@@ -33,6 +36,7 @@ func (m *Import) Validate() {
 	}
 }
 
+// Renders Import model to string.
 func (m *Import) String() string {
 	result := ""
 
@@ -40,9 +44,16 @@ func (m *Import) String() string {
 		result += "// " + strings.Join(strings.Split(strings.TrimSpace(m.Comment), "\n"), "\n// ") + "\n"
 	}
 
-	return result + "import " + m.Alias + " " + strconv.Quote(m.Namespace) + "\n"
+	result += "import "
+
+	if m.Alias != "" {
+		result += m.Alias + " "
+	}
+
+	return result + strconv.Quote(m.Namespace) + "\n"
 }
 
+// Creates deep copy of Import model.
 func (m *Import) Clone() interface{} {
 	return &Import{
 		Alias:       m.Alias,
@@ -52,6 +63,7 @@ func (m *Import) Clone() interface{} {
 	}
 }
 
+// Renames import Alias field if it is equal to oldAlias argument.
 func (m *Import) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))

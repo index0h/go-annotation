@@ -2,20 +2,22 @@ package annotation
 
 import (
 	"go/parser"
-	"regexp"
 	"strings"
 
 	"github.com/pkg/errors"
 )
 
+// Const represents const declaration.
 type Const struct {
-	Name        string
+	Name string
+	// Expression with, which could be calculated in compilation time, or empty.
 	Value       string
 	Comment     string
 	Annotations []interface{}
 	Spec        *SimpleSpec
 }
 
+// Validates Const model fields.
 func (m *Const) Validate() {
 	if m.Name == "" {
 		panic(errors.New("Variable 'Name' must be not empty"))
@@ -40,6 +42,8 @@ func (m *Const) Validate() {
 	}
 }
 
+// Renders Const model to string.
+// Const inside ConstGroup could be without Value, but single const requires Value field.
 func (m *Const) String() string {
 	if m.Value == "" {
 		panic(errors.New("Variable 'Value' must be not empty"))
@@ -60,6 +64,7 @@ func (m *Const) String() string {
 	return result + " = " + m.Value + "\n"
 }
 
+// Creates deep copy of Const model.
 func (m *Const) Clone() interface{} {
 	result := &Const{
 		Name:        m.Name,
@@ -75,10 +80,20 @@ func (m *Const) Clone() interface{} {
 	return result
 }
 
+// Fetches list of Import models registered in file argument, which are used by Spec and Value fields.
 func (m *Const) FetchImports(file *File) []*Import {
-	return m.Spec.FetchImports(file)
+	result := []*Import{}
+
+	if m.Spec != nil {
+		result = append(result, m.Spec.FetchImports(file)...)
+	}
+
+	result = append(result, fetchImportsFromContent(m.Value, file)...)
+
+	return uniqImports(result)
 }
 
+// Renames import aliases, which are used by Spec and Value fields.
 func (m *Const) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {
 		panic(errors.Errorf("Variable 'oldAlias' must be valid identifier, actual value: '%s'", oldAlias))
@@ -88,11 +103,9 @@ func (m *Const) RenameImports(oldAlias string, newAlias string) {
 		panic(errors.Errorf("Variable 'newAlias' must be valid identifier, actual value: '%s'", newAlias))
 	}
 
-	m.Spec.RenameImports(oldAlias, newAlias)
-
-	if m.Value != "" {
-		m.Value = regexp.
-			MustCompile("([ \\t\\n&;,!~^=+\\-*/()\\[\\]{}])"+oldAlias+"([ \\t]*\\.)").
-			ReplaceAllString(m.Value, "${1}"+newAlias+"${2}")
+	if m.Spec != nil {
+		m.Spec.RenameImports(oldAlias, newAlias)
 	}
+
+	m.Value = renameImportsInContent(m.Value, oldAlias, newAlias)
 }

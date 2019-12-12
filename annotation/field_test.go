@@ -249,6 +249,131 @@ func TestField_Clone(t *testing.T) {
 	ctrl.AssertNotSame(model.Annotations[1], actual.(*Field).Annotations[1])
 }
 
+func TestField_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Field{
+		Name: "name",
+		Tag:  "tag",
+		Spec: model1Spec,
+	}
+
+	model2 := &Field{
+		Name: "name",
+		Tag:  "tag",
+		Spec: model2Spec,
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestField_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+
+	model1 := &Field{
+		Name: "name",
+		Tag:  "tag",
+		Spec: model1Spec,
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestField_EqualSpec_WithName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Field{
+		Name: "name1",
+		Tag:  "tag",
+		Spec: model1Spec,
+	}
+
+	model2 := &Field{
+		Name: "name2",
+		Tag:  "tag",
+		Spec: model2Spec,
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestField_EqualSpec_WithTag(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Field{
+		Name: "name",
+		Tag:  "tag1",
+		Spec: model1Spec,
+	}
+
+	model2 := &Field{
+		Name: "name",
+		Tag:  "tag2",
+		Spec: model2Spec,
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestField_EqualSpec_WithSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Field{
+		Name: "name",
+		Tag:  "tag",
+		Spec: model1Spec,
+	}
+
+	model2 := &Field{
+		Name: "name",
+		Tag:  "tag",
+		Spec: model2Spec,
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestField_FetchImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

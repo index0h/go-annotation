@@ -79,6 +79,25 @@ func (m *Var) Clone() interface{} {
 	}
 }
 
+// Checks that value is deeply equal to Var model.
+// Ignores Comment and Annotations.
+func (m *Var) EqualSpec(value interface{}) bool {
+	model, ok := value.(*Var)
+
+	if !ok ||
+		model.Name != m.Name ||
+		model.Value != m.Value ||
+		((m.Spec == nil) != (model.Spec == nil)) {
+		return false
+	}
+
+	if m.Spec != nil && !m.Spec.EqualSpec(model.Spec) {
+		return false
+	}
+
+	return true
+}
+
 // Fetches list of Import models registered in file argument, which are used by Spec and Value fields.
 func (m *Var) FetchImports(file *File) []*Import {
 	result := []*Import{}

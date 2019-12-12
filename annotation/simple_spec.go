@@ -48,6 +48,16 @@ func (m *SimpleSpec) Clone() interface{} {
 	}
 }
 
+// Checks that value is equal to SimpleSpec model.
+func (m *SimpleSpec) EqualSpec(value interface{}) bool {
+	model, ok := value.(*SimpleSpec)
+
+	return ok &&
+		model.PackageName == m.PackageName &&
+		model.TypeName == m.TypeName &&
+		model.IsPointer == m.IsPointer
+}
+
 // Fetches list of Import models registered in file argument, which are used by PackageName field.
 func (m *SimpleSpec) FetchImports(file *File) []*Import {
 	if m.PackageName == "" {

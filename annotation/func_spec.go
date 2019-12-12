@@ -146,6 +146,33 @@ func (m *FuncSpec) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to FuncSpec model.
+// Ignores Comment and Annotations.
+func (m *FuncSpec) EqualSpec(value interface{}) bool {
+	model, ok := value.(*FuncSpec)
+
+	if !ok ||
+		m.IsVariadic != model.IsVariadic ||
+		len(m.Params) != len(model.Params) ||
+		len(m.Results) != len(model.Results) {
+		return false
+	}
+
+	for i, field := range m.Params {
+		if !field.EqualSpec(model.Params[i]) {
+			return false
+		}
+	}
+
+	for i, field := range m.Results {
+		if !field.EqualSpec(model.Results[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
 // Fetches list of Import models registered in file argument, which are used by Params and Results fields.
 func (m *FuncSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}

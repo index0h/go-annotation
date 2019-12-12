@@ -883,6 +883,238 @@ func TestStructSpec_Clone_WithoutFields(t *testing.T) {
 	ctrl.AssertEqual(model, actual)
 }
 
+func TestStructSpec_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Field1Spec := NewSpecMock(ctrl)
+	model1Field2Spec := NewSpecMock(ctrl)
+	model1Field3Spec := NewSpecMock(ctrl)
+	model2Field1Spec := NewSpecMock(ctrl)
+	model2Field2Spec := NewSpecMock(ctrl)
+	model2Field3Spec := NewSpecMock(ctrl)
+
+	model1 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model1Field1Spec,
+			},
+			{
+				Spec: model1Field2Spec,
+			},
+			{
+				Spec: model1Field3Spec,
+			},
+		},
+	}
+
+	model2 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model2Field1Spec,
+			},
+			{
+				Spec: model2Field2Spec,
+			},
+			{
+				Spec: model2Field3Spec,
+			},
+		},
+	}
+
+	model1Field1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field1Spec)).
+		Return(true)
+
+	model1Field2Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field2Spec)).
+		Return(true)
+
+	model1Field3Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field3Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestStructSpec_EqualSpec_WithoutOrder(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Field1Spec := NewSpecMock(ctrl)
+	model1Field2Spec := NewSpecMock(ctrl)
+	model1Field3Spec := NewSpecMock(ctrl)
+	model2Field1Spec := NewSpecMock(ctrl)
+	model2Field2Spec := NewSpecMock(ctrl)
+	model2Field3Spec := NewSpecMock(ctrl)
+
+	model1 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model1Field1Spec,
+			},
+			{
+				Spec: model1Field2Spec,
+			},
+			{
+				Spec: model1Field3Spec,
+			},
+		},
+	}
+
+	model2 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model2Field3Spec,
+			},
+			{
+				Spec: model2Field2Spec,
+			},
+			{
+				Spec: model2Field1Spec,
+			},
+		},
+	}
+
+	model1Field1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field3Spec)).
+		Return(false)
+
+	model1Field1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field2Spec)).
+		Return(false)
+
+	model1Field1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field1Spec)).
+		Return(true)
+
+	model1Field2Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field3Spec)).
+		Return(false)
+
+	model1Field2Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field2Spec)).
+		Return(true)
+
+	model1Field3Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field3Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestStructSpec_EqualSpec_WithFieldsLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Field1Spec := NewSpecMock(ctrl)
+	model1Field2Spec := NewSpecMock(ctrl)
+	model1Field3Spec := NewSpecMock(ctrl)
+	model2Field2Spec := NewSpecMock(ctrl)
+	model2Field3Spec := NewSpecMock(ctrl)
+
+	model1 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model1Field1Spec,
+			},
+			{
+				Spec: model1Field2Spec,
+			},
+			{
+				Spec: model1Field3Spec,
+			},
+		},
+	}
+
+	model2 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model2Field3Spec,
+			},
+			{
+				Spec: model2Field2Spec,
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestStructSpec_EqualSpec_WithSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Field1Spec := NewSpecMock(ctrl)
+	model1Field2Spec := NewSpecMock(ctrl)
+	model1Field3Spec := NewSpecMock(ctrl)
+	model2Field1Spec := NewSpecMock(ctrl)
+	model2Field2Spec := NewSpecMock(ctrl)
+	model2Field3Spec := NewSpecMock(ctrl)
+
+	model1 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model1Field1Spec,
+			},
+			{
+				Spec: model1Field2Spec,
+			},
+			{
+				Spec: model1Field3Spec,
+			},
+		},
+	}
+
+	model2 := &StructSpec{
+		Fields: []*Field{
+			{
+				Spec: model2Field1Spec,
+			},
+			{
+				Spec: model2Field2Spec,
+			},
+			{
+				Spec: model2Field3Spec,
+			},
+		},
+	}
+
+	model1Field1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field1Spec)).
+		Return(false)
+
+	model1Field1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field2Spec)).
+		Return(false)
+
+	model1Field1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Field3Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestStructSpec_FetchImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

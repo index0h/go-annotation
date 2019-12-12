@@ -252,6 +252,166 @@ func TestConst_Clone_WithoutFields(t *testing.T) {
 	ctrl.AssertNotSame(model, actual)
 }
 
+func TestConst_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+		Value: "value",
+	}
+
+	model2 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+		Value: "value",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestConst_EqualSpec_WithoutValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+	}
+
+	model2 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestConst_EqualSpec_WithoutSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Const{
+		Name:  "name",
+		Value: "value",
+	}
+
+	model2 := &Const{
+		Name:  "name",
+		Value: "value",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestConst_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestConst_EqualSpec_WithName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Const{
+		Name: "name1",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+		Value: "value",
+	}
+
+	model2 := &Const{
+		Name: "name2",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+		Value: "value",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestConst_EqualSpec_WithSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName1",
+		},
+		Value: "value",
+	}
+
+	model2 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName2",
+		},
+		Value: "value",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestConst_EqualSpec_WithValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+		Value: "value1",
+	}
+
+	model2 := &Const{
+		Name: "name",
+		Spec: &SimpleSpec{
+			TypeName: "typeName",
+		},
+		Value: "value2",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestConst_FetchImports_FoundImportByAlias(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

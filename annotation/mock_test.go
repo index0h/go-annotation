@@ -35,7 +35,7 @@ type (
 		call *MockCall
 	}
 
-	SpecMockRecorderForIsEqual struct {
+	SpecMockRecorderForEqualSpec struct {
 		call *MockCall
 	}
 )
@@ -287,13 +287,13 @@ func (mrm *SpecMockRecorderForRenameImports) Callback(callback func(oldAlias str
 	mrm.call.SetCallback(callback)
 }
 
-func (m *SpecMock) IsEqual(value interface{}) (result bool) {
+func (m *SpecMock) EqualSpec(value interface{}) (result bool) {
 	m.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
 	__params = append(__params, value)
 
-	switch __result, __type := m.callManager.FetchCall("IsEqual", __params...).Call(); __type {
+	switch __result, __type := m.callManager.FetchCall("EqualSpec", __params...).Call(); __type {
 	case MockCallTypeReturn:
 		return __result.([]interface{})[0].(bool)
 	case MockCallTypePanic:
@@ -305,26 +305,26 @@ func (m *SpecMock) IsEqual(value interface{}) (result bool) {
 	}
 }
 
-func (mr *SpecMockRecorder) IsEqual(value interface{}) *SpecMockRecorderForIsEqual {
+func (mr *SpecMockRecorder) EqualSpec(value interface{}) *SpecMockRecorderForEqualSpec {
 	mr.mock.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
 	__params = append(__params, value)
 
-	return &SpecMockRecorderForIsEqual{
-		call: mr.mock.callManager.CreateCall("IsEqual", __params...),
+	return &SpecMockRecorderForEqualSpec{
+		call: mr.mock.callManager.CreateCall("EqualSpec", __params...),
 	}
 }
 
-func (mrm *SpecMockRecorderForIsEqual) Return(result bool) {
+func (mrm *SpecMockRecorderForEqualSpec) Return(result bool) {
 	mrm.call.SetReturn(result)
 }
 
-func (mrm *SpecMockRecorderForIsEqual) IsEqual(value interface{}) {
+func (mrm *SpecMockRecorderForEqualSpec) EqualSpec(value interface{}) {
 	mrm.call.SetPanic(value)
 }
 
-func (mrm *SpecMockRecorderForIsEqual) Callback(callback func(value interface{}) (result bool)) {
+func (mrm *SpecMockRecorderForEqualSpec) Callback(callback func(value interface{}) (result bool)) {
 	mrm.call.SetCallback(callback)
 }
 

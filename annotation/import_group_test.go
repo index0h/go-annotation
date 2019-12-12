@@ -372,6 +372,292 @@ func TestImportGroup_Clone_WithEmptyFields(t *testing.T) {
 	ctrl.AssertNotSame(model, actual)
 }
 
+func TestImportGroup_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+			{
+				Alias:     "alias2",
+				Namespace: "namespace2",
+			},
+		},
+	}
+
+	model2 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+			{
+				Alias:     "alias2",
+				Namespace: "namespace2",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestImportGroup_EqualSpec_WithOrder(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+			{
+				Alias:     "alias2",
+				Namespace: "namespace2",
+			},
+		},
+	}
+
+	model2 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias2",
+				Namespace: "namespace2",
+			},
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestImportGroup_EqualSpec_WithLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+		},
+	}
+
+	model2 := &ImportGroup{}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestImportGroup_EqualSpec_WithRealAlias(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Namespace: "namespace/alias",
+			},
+		},
+	}
+
+	model2 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias",
+				Namespace: "namespace/alias",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestImportGroup_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias",
+				Namespace: "namespace",
+			},
+		},
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestImportGroup_EqualSpec_WithAlias(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias",
+				Namespace: "namespace",
+			},
+		},
+	}
+
+	model2 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "another",
+				Namespace: "namespace",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestImportGroup_EqualSpec_WithNamespace(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias",
+				Namespace: "namespace",
+			},
+		},
+	}
+
+	model2 := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias",
+				Namespace: "another",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestImportGroup_ContainsSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	element := &Import{
+		Alias:     "alias2",
+		Namespace: "namespace2",
+	}
+
+	model := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+			{
+				Alias:     "alias2",
+				Namespace: "namespace2",
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestImportGroup_ContainsSpec_WithRealAlias(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	element := &Import{
+		Namespace: "namespace2/alias2",
+	}
+
+	model := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+			{
+				Alias:     "alias2",
+				Namespace: "namespace2/alias2",
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestImportGroup_ContainsSpec_WithEmptyImports(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	element := &Import{
+		Alias:     "alias2",
+		Namespace: "namespace2",
+	}
+
+	model := &ImportGroup{}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestImportGroup_ContainsSpec_WithNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	element := &Import{
+		Alias:     "alias3",
+		Namespace: "namespace3",
+	}
+
+	model := &ImportGroup{
+		Imports: []*Import{
+			{
+				Alias:     "alias1",
+				Namespace: "namespace1",
+			},
+			{
+				Alias:     "alias2",
+				Namespace: "namespace2",
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestImportGroup_RenameImports_WithRenameAlias(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

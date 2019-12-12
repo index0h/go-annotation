@@ -84,6 +84,36 @@ func (m *ConstGroup) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to ConstGroup model.
+// Ignores Comment and Annotations.
+func (m *ConstGroup) EqualSpec(value interface{}) bool {
+	model, ok := value.(*ConstGroup)
+
+	if !ok || len(m.Consts) != len(model.Consts) {
+		return false
+	}
+
+	for i, element := range m.Consts {
+		if !element.EqualSpec(model.Consts[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
+// Checks that ConstGroup contain deeply equal value.
+// Ignores Comment and Annotations.
+func (m *ConstGroup) ContainsSpec(value *Const) bool {
+	for _, element := range m.Consts {
+		if element.EqualSpec(value) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // Fetches list of Import models registered in file argument, which are used by Consts field.
 func (m *ConstGroup) FetchImports(file *File) []*Import {
 	result := []*Import{}

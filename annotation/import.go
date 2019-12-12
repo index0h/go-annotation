@@ -63,6 +63,15 @@ func (m *Import) Clone() interface{} {
 	}
 }
 
+// Checks that value is equal to Import model.
+func (m *Import) EqualSpec(value interface{}) bool {
+	model, ok := value.(*Import)
+
+	return ok &&
+		model.RealAlias() == m.RealAlias() &&
+		model.Namespace == m.Namespace
+}
+
 // Renames import Alias field if it is equal to oldAlias argument.
 func (m *Import) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {

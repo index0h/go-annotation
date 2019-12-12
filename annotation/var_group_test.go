@@ -912,6 +912,426 @@ func TestVarGroup_Clone_WithoutFields(t *testing.T) {
 	ctrl.AssertNotSame(model, actual)
 }
 
+func TestVarGroup_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec1 := NewSpecMock(ctrl)
+	model1Spec2 := NewSpecMock(ctrl)
+	model2Spec1 := NewSpecMock(ctrl)
+	model2Spec2 := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name1",
+				Spec:  model1Spec1,
+				Value: "value1",
+			},
+			{
+				Name:  "name2",
+				Spec:  model1Spec2,
+				Value: "value2",
+			},
+		},
+	}
+
+	model2 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name1",
+				Spec:  model2Spec1,
+				Value: "value1",
+			},
+			{
+				Name:  "name2",
+				Spec:  model2Spec2,
+				Value: "value2",
+			},
+		},
+	}
+
+	model1Spec1.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec1)).
+		Return(true)
+
+	model1Spec2.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec2)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVarGroup_EqualSpec_WithoutValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name: "name",
+				Spec: model1Spec,
+			},
+		},
+	}
+
+	model2 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name: "name",
+				Spec: model2Spec,
+			},
+		},
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVarGroup_EqualSpec_WithoutSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name",
+				Value: "value",
+			},
+		},
+	}
+
+	model2 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name",
+				Value: "value",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVarGroup_EqualSpec_WithEmptyVarGroup(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &VarGroup{}
+	model2 := &VarGroup{}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVarGroup_EqualSpec_WithOrder(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec1 := NewSpecMock(ctrl)
+	model1Spec2 := NewSpecMock(ctrl)
+	model2Spec1 := NewSpecMock(ctrl)
+	model2Spec2 := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name1",
+				Spec:  model1Spec1,
+				Value: "value1",
+			},
+			{
+				Name:  "name2",
+				Spec:  model1Spec2,
+				Value: "value2",
+			},
+		},
+	}
+
+	model2 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name2",
+				Spec:  model2Spec2,
+				Value: "value2",
+			},
+			{
+				Name:  "name1",
+				Spec:  model2Spec1,
+				Value: "value1",
+			},
+		},
+	}
+
+	model1Spec1.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec1)).
+		Return(true)
+
+	model1Spec2.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec2)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVarGroup_EqualSpec_WithLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name1",
+				Spec:  model1Spec,
+				Value: "value1",
+			},
+		},
+	}
+
+	model2 := &VarGroup{}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVarGroup_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name: "name",
+				Spec: model1Spec,
+			},
+		},
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVarGroup_EqualSpec_WithName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name1",
+				Spec:  model1Spec,
+				Value: "value",
+			},
+		},
+	}
+
+	model2 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name2",
+				Spec:  model2Spec,
+				Value: "value",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVarGroup_EqualSpec_WithSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name",
+				Spec:  model1Spec,
+				Value: "value",
+			},
+		},
+	}
+
+	model2 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name",
+				Spec:  model2Spec,
+				Value: "value",
+			},
+		},
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVarGroup_EqualSpec_WithValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name",
+				Spec:  model1Spec,
+				Value: "value1",
+			},
+		},
+	}
+
+	model2 := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name",
+				Spec:  model2Spec,
+				Value: "value2",
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVarGroup_ContainsSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	elementSpec := NewSpecMock(ctrl)
+	modelSpec1 := NewSpecMock(ctrl)
+	modelSpec2 := NewSpecMock(ctrl)
+
+	element := &Var{
+		Name:  "name2",
+		Spec:  elementSpec,
+		Value: "value2",
+	}
+
+	model := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name1",
+				Spec:  modelSpec1,
+				Value: "value1",
+			},
+			{
+				Name:  "name2",
+				Spec:  modelSpec2,
+				Value: "value2",
+			},
+		},
+	}
+
+	modelSpec2.
+		EXPECT().
+		EqualSpec(ctrl.Same(elementSpec)).
+		Return(true)
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVarGroup_ContainsSpec_WithEmptyVars(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	modelSpec := NewSpecMock(ctrl)
+
+	element := &Var{
+		Name:  "name2",
+		Spec:  modelSpec,
+		Value: "value2",
+	}
+
+	model := &VarGroup{}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVarGroup_ContainsSpec_WithNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	elementSpec := NewSpecMock(ctrl)
+	modelSpec1 := NewSpecMock(ctrl)
+	modelSpec2 := NewSpecMock(ctrl)
+
+	element := &Var{
+		Name:  "name3",
+		Spec:  elementSpec,
+		Value: "value3",
+	}
+
+	model := &VarGroup{
+		Vars: []*Var{
+			{
+				Name:  "name1",
+				Spec:  modelSpec1,
+				Value: "value1",
+			},
+			{
+				Name:  "name2",
+				Spec:  modelSpec2,
+				Value: "value2",
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestVarGroup_FetchImports_WithFoundImport(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

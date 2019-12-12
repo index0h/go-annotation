@@ -89,6 +89,41 @@ func (m *InterfaceSpec) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to InterfaceSpec model.
+// Ignores Comment and Annotations.
+func (m *InterfaceSpec) EqualSpec(value interface{}) bool {
+	model, ok := value.(*InterfaceSpec)
+
+	if !ok || len(m.Fields) != len(model.Fields) {
+		return false
+	}
+
+	checkedModelFields := make([]bool, len(m.Fields))
+
+	for _, field := range m.Fields {
+		fieldEqual := false
+
+		for j, modelField := range model.Fields {
+			if checkedModelFields[j] {
+				continue
+			}
+
+			if field.EqualSpec(modelField) {
+				fieldEqual = true
+				checkedModelFields[j] = true
+
+				break
+			}
+		}
+
+		if !fieldEqual {
+			return false
+		}
+	}
+
+	return true
+}
+
 // Fetches list of Import models registered in file argument, which are used by Fields field.
 func (m *InterfaceSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}

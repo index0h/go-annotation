@@ -220,6 +220,107 @@ func TestSimpleSpec_Clone_WithTypeName(t *testing.T) {
 	ctrl.AssertNotSame(model, actual)
 }
 
+func TestSimpleSpec_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "typeName",
+		IsPointer:   true,
+	}
+
+	model2 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "typeName",
+		IsPointer:   true,
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestSimpleSpec_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "typeName",
+		IsPointer:   true,
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestSimpleSpec_EqualSpec_WithPackageName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "typeName",
+		IsPointer:   true,
+	}
+
+	model2 := &SimpleSpec{
+		PackageName: "another",
+		TypeName:    "typeName",
+		IsPointer:   true,
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestSimpleSpec_EqualSpec_WithTypeName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "typeName",
+		IsPointer:   true,
+	}
+
+	model2 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "another",
+		IsPointer:   true,
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestSimpleSpec_EqualSpec_WithIsPointer(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "typeName",
+		IsPointer:   true,
+	}
+
+	model2 := &SimpleSpec{
+		PackageName: "packageName",
+		TypeName:    "typeName",
+		IsPointer:   false,
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestSimpleSpec_FetchImports_FoundImportByAlias(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

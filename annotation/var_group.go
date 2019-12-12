@@ -84,6 +84,53 @@ func (m *VarGroup) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to VarGroup model.
+// Ignores Comment and Annotations.
+func (m *VarGroup) EqualSpec(value interface{}) bool {
+	model, ok := value.(*VarGroup)
+
+	if !ok || len(m.Vars) != len(model.Vars) {
+		return false
+	}
+
+	checkedModelElements := make([]bool, len(m.Vars))
+
+	for _, element := range m.Vars {
+		elementEqual := false
+
+		for j, modelElement := range model.Vars {
+			if checkedModelElements[j] {
+				continue
+			}
+
+			if element.EqualSpec(modelElement) {
+				elementEqual = true
+				checkedModelElements[j] = true
+
+				break
+			}
+		}
+
+		if !elementEqual {
+			return false
+		}
+	}
+
+	return true
+}
+
+// Checks that VarGroup contain deeply equal value.
+// Ignores Comment and Annotations.
+func (m *VarGroup) ContainsSpec(value *Var) bool {
+	for _, element := range m.Vars {
+		if element.EqualSpec(value) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // Fetches list of Import models registered in file argument, which are used by Vars field.
 func (m *VarGroup) FetchImports(file *File) []*Import {
 	result := []*Import{}

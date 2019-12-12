@@ -74,6 +74,53 @@ func (m *TypeGroup) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to TypeGroup model.
+// Ignores Comment and Annotations.
+func (m *TypeGroup) EqualSpec(value interface{}) bool {
+	model, ok := value.(*TypeGroup)
+
+	if !ok || len(m.Types) != len(model.Types) {
+		return false
+	}
+
+	checkedModelElements := make([]bool, len(m.Types))
+
+	for _, element := range m.Types {
+		elementEqual := false
+
+		for j, modelElement := range model.Types {
+			if checkedModelElements[j] {
+				continue
+			}
+
+			if element.EqualSpec(modelElement) {
+				elementEqual = true
+				checkedModelElements[j] = true
+
+				break
+			}
+		}
+
+		if !elementEqual {
+			return false
+		}
+	}
+
+	return true
+}
+
+// Checks that TypeGroup contain deeply equal value.
+// Ignores Comment and Annotations.
+func (m *TypeGroup) ContainsSpec(value *Type) bool {
+	for _, element := range m.Types {
+		if element.EqualSpec(value) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // Fetches list of Import models registered in file argument, which are used by Types field.
 func (m *TypeGroup) FetchImports(file *File) []*Import {
 	result := []*Import{}

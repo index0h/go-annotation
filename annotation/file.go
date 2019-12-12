@@ -180,6 +180,55 @@ func (m *File) Clone() interface{} {
 	return result
 }
 
+// Checks that File contain deeply equal value in ImportGroups, ConstGroups, VarGroups, TypeGroups and funcs.
+// Ignores Comment and Annotations.
+func (m *File) ContainsSpec(value interface{}) bool {
+	switch value := value.(type) {
+	case *Import:
+		for _, group := range m.ImportGroups {
+			if group.ContainsSpec(value) {
+				return true
+			}
+		}
+
+		return false
+	case *Const:
+		for _, group := range m.ConstGroups {
+			if group.ContainsSpec(value) {
+				return true
+			}
+		}
+
+		return false
+	case *Var:
+		for _, group := range m.VarGroups {
+			if group.ContainsSpec(value) {
+				return true
+			}
+		}
+
+		return false
+	case *Type:
+		for _, group := range m.TypeGroups {
+			if group.ContainsSpec(value) {
+				return true
+			}
+		}
+
+		return false
+	case *Func:
+		for _, element := range m.Funcs {
+			if element.EqualSpec(value) {
+				return true
+			}
+		}
+
+		return false
+	default:
+		panic(errors.Errorf("Variable 'value' has invalid type: %T", value))
+	}
+}
+
 // Renames import aliases, which are used by any field of File, including Content.
 func (m *File) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {

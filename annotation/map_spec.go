@@ -60,6 +60,16 @@ func (m *MapSpec) Clone() interface{} {
 	}
 }
 
+// Checks that value is deeply equal to Map model.
+// Ignores Comment and Annotations.
+func (m *MapSpec) EqualSpec(value interface{}) bool {
+	model, ok := value.(*MapSpec)
+
+	return ok &&
+		m.Key.EqualSpec(model.Key) &&
+		m.Value.EqualSpec(model.Value)
+}
+
 // Fetches list of Import models registered in file argument, which are used by Key and Value fields.
 func (m *MapSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}

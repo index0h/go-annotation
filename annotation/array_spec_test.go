@@ -415,6 +415,100 @@ func TestArraySpec_Clone(t *testing.T) {
 	ctrl.AssertSame(clonedValueSpec, actual.(*ArraySpec).Value)
 }
 
+func TestArraySpec_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1ValueSpec := NewSpecMock(ctrl)
+	model2ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &ArraySpec{
+		Value:  model1ValueSpec,
+		Length: "length",
+	}
+
+	model2 := &ArraySpec{
+		Value:  model2ValueSpec,
+		Length: "length",
+	}
+
+	model1ValueSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2ValueSpec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestArraySpec_EqualSpec_WithValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1ValueSpec := NewSpecMock(ctrl)
+	model2ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &ArraySpec{
+		Value:  model1ValueSpec,
+		Length: "length",
+	}
+
+	model2 := &ArraySpec{
+		Value:  model2ValueSpec,
+		Length: "length",
+	}
+
+	model1ValueSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2ValueSpec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestArraySpec_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &ArraySpec{
+		Value:  model1ValueSpec,
+		Length: "length",
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestArraySpec_EqualSpec_WithLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1ValueSpec := NewSpecMock(ctrl)
+	model2ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &ArraySpec{
+		Value:  model1ValueSpec,
+		Length: "length1",
+	}
+
+	model2 := &ArraySpec{
+		Value:  model2ValueSpec,
+		Length: "length2",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestArraySpec_FetchImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

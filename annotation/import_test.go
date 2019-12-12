@@ -190,6 +190,97 @@ func TestImport_Clone_WithEmptyFields(t *testing.T) {
 	ctrl.AssertNotSame(model, actual)
 }
 
+func TestImport_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Import{
+		Alias:     "alias",
+		Namespace: "namespace",
+	}
+
+	model2 := &Import{
+		Alias:     "alias",
+		Namespace: "namespace",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestImport_EqualSpec_WithRealAlias(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Import{
+		Namespace: "namespace/alias",
+	}
+
+	model2 := &Import{
+		Alias:     "alias",
+		Namespace: "namespace/alias",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestImport_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Import{
+		Alias:     "alias",
+		Namespace: "namespace",
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestImport_EqualSpec_WithAlias(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Import{
+		Alias:     "alias",
+		Namespace: "namespace",
+	}
+
+	model2 := &Import{
+		Alias:     "another",
+		Namespace: "namespace",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestImport_EqualSpec_WithNamespace(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Import{
+		Alias:     "alias",
+		Namespace: "namespace",
+	}
+
+	model2 := &Import{
+		Alias:     "alias",
+		Namespace: "another",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestImport_RenameImports_WithRenameAlias(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

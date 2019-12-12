@@ -77,6 +77,41 @@ func (m *StructSpec) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to StructSpec model.
+// Ignores Comment and Annotations.
+func (m *StructSpec) EqualSpec(value interface{}) bool {
+	model, ok := value.(*StructSpec)
+
+	if !ok || len(m.Fields) != len(model.Fields) {
+		return false
+	}
+
+	checkedModelFields := make([]bool, len(m.Fields))
+
+	for _, field := range m.Fields {
+		fieldEqual := false
+
+		for j, modelField := range model.Fields {
+			if checkedModelFields[j] {
+				continue
+			}
+
+			if field.EqualSpec(modelField) {
+				fieldEqual = true
+				checkedModelFields[j] = true
+
+				break
+			}
+		}
+
+		if !fieldEqual {
+			return false
+		}
+	}
+
+	return true
+}
+
 // Fetches list of Import models registered in file argument, which are used by Fields field.
 func (m *StructSpec) FetchImports(file *File) []*Import {
 	result := []*Import{}

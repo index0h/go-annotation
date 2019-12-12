@@ -101,6 +101,30 @@ func (m *Func) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to Func model.
+// Ignores Comment and Annotations.
+func (m *Func) EqualSpec(value interface{}) bool {
+	model, ok := value.(*Func)
+
+	if !ok ||
+		model.Name != m.Name ||
+		model.Content != m.Content ||
+		((m.Spec == nil) != (model.Spec == nil)) ||
+		((m.Related == nil) != (model.Related == nil)) {
+		return false
+	}
+
+	if m.Spec != nil && !m.Spec.EqualSpec(model.Spec) {
+		return false
+	}
+
+	if m.Related != nil && !m.Related.EqualSpec(model.Related) {
+		return false
+	}
+
+	return true
+}
+
 // Fetches list of Import models registered in file argument, which are used by Spec, Content and Related fields.
 func (m *Func) FetchImports(file *File) []*Import {
 	result := []*Import{}

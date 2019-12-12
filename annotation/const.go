@@ -80,6 +80,25 @@ func (m *Const) Clone() interface{} {
 	return result
 }
 
+// Checks that value is deeply equal to Const model.
+// Ignores Comment and Annotations.
+func (m *Const) EqualSpec(value interface{}) bool {
+	model, ok := value.(*Const)
+
+	if !ok ||
+		model.Name != m.Name ||
+		model.Value != m.Value ||
+		((m.Spec == nil) != (model.Spec == nil)) {
+		return false
+	}
+
+	if m.Spec != nil && !m.Spec.EqualSpec(model.Spec) {
+		return false
+	}
+
+	return true
+}
+
 // Fetches list of Import models registered in file argument, which are used by Spec and Value fields.
 func (m *Const) FetchImports(file *File) []*Import {
 	result := []*Import{}

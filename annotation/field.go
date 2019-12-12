@@ -42,6 +42,17 @@ func (m *Field) Clone() interface{} {
 	}
 }
 
+// Checks that value is deeply equal to Field model.
+// Ignores Comment and Annotations.
+func (m *Field) EqualSpec(value interface{}) bool {
+	model, ok := value.(*Field)
+
+	return ok &&
+		m.Name == model.Name &&
+		m.Tag == model.Tag &&
+		m.Spec.EqualSpec(model.Spec)
+}
+
 // Fetches list of Import models registered in file argument, which are used by Spec field.
 func (m *Field) FetchImports(file *File) []*Import {
 	return m.Spec.FetchImports(file)

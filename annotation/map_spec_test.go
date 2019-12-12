@@ -1073,6 +1073,122 @@ func TestMapSpec_Clone(t *testing.T) {
 	ctrl.AssertSame(clonedValueSpec, actual.(*MapSpec).Value)
 }
 
+func TestMapSpec_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1KeySpec := NewSpecMock(ctrl)
+	model1ValueSpec := NewSpecMock(ctrl)
+	model2KeySpec := NewSpecMock(ctrl)
+	model2ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &MapSpec{
+		Key:   model1KeySpec,
+		Value: model1ValueSpec,
+	}
+
+	model2 := &MapSpec{
+		Key:   model2KeySpec,
+		Value: model2ValueSpec,
+	}
+
+	model1KeySpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2KeySpec)).
+		Return(true)
+
+	model1ValueSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2ValueSpec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestMapSpec_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1KeySpec := NewSpecMock(ctrl)
+	model1ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &MapSpec{
+		Key:   model1KeySpec,
+		Value: model1ValueSpec,
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestMapSpec_EqualSpec_WithKey(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1KeySpec := NewSpecMock(ctrl)
+	model1ValueSpec := NewSpecMock(ctrl)
+	model2KeySpec := NewSpecMock(ctrl)
+	model2ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &MapSpec{
+		Key:   model1KeySpec,
+		Value: model1ValueSpec,
+	}
+
+	model2 := &MapSpec{
+		Key:   model2KeySpec,
+		Value: model2ValueSpec,
+	}
+
+	model1KeySpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2KeySpec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestMapSpec_EqualSpec_WithValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1KeySpec := NewSpecMock(ctrl)
+	model1ValueSpec := NewSpecMock(ctrl)
+	model2KeySpec := NewSpecMock(ctrl)
+	model2ValueSpec := NewSpecMock(ctrl)
+
+	model1 := &MapSpec{
+		Key:   model1KeySpec,
+		Value: model1ValueSpec,
+	}
+
+	model2 := &MapSpec{
+		Key:   model2KeySpec,
+		Value: model2ValueSpec,
+	}
+
+	model1KeySpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2KeySpec)).
+		Return(true)
+
+	model1ValueSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2ValueSpec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestMapSpec_FetchImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

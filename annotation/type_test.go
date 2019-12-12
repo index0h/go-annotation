@@ -357,6 +357,185 @@ func TestType_Clone_WithEmptyFields(t *testing.T) {
 	ctrl.AssertSame(clonedSpecSpec, actual.(*Type).Spec)
 }
 
+func TestType_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Type{
+		Name: "name",
+		Spec: model1Spec,
+	}
+
+	model2 := &Type{
+		Name: "name",
+		Spec: model2Spec,
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestType_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+
+	model1 := &Type{
+		Name: "name",
+		Spec: model1Spec,
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestType_EqualSpec_WithName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Type{
+		Name: "name1",
+		Spec: model1Spec,
+	}
+
+	model2 := &Type{
+		Name: "name2",
+		Spec: model2Spec,
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestType_EqualSpec_WithSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Type{
+		Name: "name",
+		Spec: model1Spec,
+	}
+
+	model2 := &Type{
+		Name: "name",
+		Spec: model2Spec,
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestTypeGroup_ContainsSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	elementSpec := NewSpecMock(ctrl)
+	modelSpec1 := NewSpecMock(ctrl)
+	modelSpec2 := NewSpecMock(ctrl)
+
+	element := &Type{
+		Name: "name2",
+		Spec: elementSpec,
+	}
+
+	model := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name1",
+				Spec: modelSpec1,
+			},
+			{
+				Name: "name2",
+				Spec: modelSpec2,
+			},
+		},
+	}
+
+	modelSpec2.
+		EXPECT().
+		EqualSpec(ctrl.Same(elementSpec)).
+		Return(true)
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestTypeGroup_ContainsSpec_WithEmptyTypes(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	modelSpec := NewSpecMock(ctrl)
+
+	element := &Type{
+		Name: "name2",
+		Spec: modelSpec,
+	}
+
+	model := &TypeGroup{}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestTypeGroup_ContainsSpec_WithNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	elementSpec := NewSpecMock(ctrl)
+	modelSpec1 := NewSpecMock(ctrl)
+	modelSpec2 := NewSpecMock(ctrl)
+
+	element := &Type{
+		Name: "name3",
+		Spec: elementSpec,
+	}
+
+	model := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name1",
+				Spec: modelSpec1,
+			},
+			{
+				Name: "name2",
+				Spec: modelSpec2,
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestType_FetchImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

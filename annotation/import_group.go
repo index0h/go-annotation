@@ -79,6 +79,56 @@ func (m *ImportGroup) Clone() interface{} {
 	return result
 }
 
+// Checks that value is equal to ImportGroup model.
+func (m *ImportGroup) EqualSpec(value interface{}) bool {
+	model, ok := value.(*ImportGroup)
+
+	if !ok {
+		return false
+	}
+
+	if len(m.Imports) != len(model.Imports) {
+		return false
+	}
+
+	checkedModelElements := make([]bool, len(m.Imports))
+
+	for _, element := range m.Imports {
+		elementEqual := false
+
+		for j, modelElement := range model.Imports {
+			if checkedModelElements[j] {
+				continue
+			}
+
+			if element.EqualSpec(modelElement) {
+				elementEqual = true
+				checkedModelElements[j] = true
+
+				break
+			}
+		}
+
+		if !elementEqual {
+			return false
+		}
+	}
+
+	return true
+}
+
+// Checks that ImportGroup contain deeply equal value.
+// Ignores Comment and Annotations.
+func (m *ImportGroup) ContainsSpec(value *Import) bool {
+	for _, element := range m.Imports {
+		if element.EqualSpec(value) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // Renames import aliases, which are used in Imports field.
 func (m *ImportGroup) RenameImports(oldAlias string, newAlias string) {
 	if !identRegexp.MatchString(oldAlias) {

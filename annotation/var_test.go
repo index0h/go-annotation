@@ -441,6 +441,176 @@ func TestVar_Clone_WithEmptyFields(t *testing.T) {
 	ctrl.AssertNotSame(model.Spec, actual.(*Var).Spec)
 }
 
+func TestVar_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Var{
+		Name:  "name",
+		Spec:  model1Spec,
+		Value: "value",
+	}
+
+	model2 := &Var{
+		Name:  "name",
+		Spec:  model2Spec,
+		Value: "value",
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVar_EqualSpec_WithoutSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Var{
+		Name:  "name",
+		Value: "value",
+	}
+
+	model2 := &Var{
+		Name:  "name",
+		Value: "value",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVar_EqualSpec_WithoutValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Var{
+		Name: "name",
+		Spec: model1Spec,
+	}
+
+	model2 := &Var{
+		Name: "name",
+		Spec: model2Spec,
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestVar_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+
+	model1 := &Var{
+		Name: "name",
+		Spec: model1Spec,
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVar_EqualSpec_WithName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Var{
+		Name:  "name1",
+		Spec:  model1Spec,
+		Value: "value",
+	}
+
+	model2 := &Var{
+		Name:  "name2",
+		Spec:  model2Spec,
+		Value: "value",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVar_EqualSpec_WithSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Var{
+		Name:  "name",
+		Spec:  model1Spec,
+		Value: "value",
+	}
+
+	model2 := &Var{
+		Name:  "name",
+		Spec:  model2Spec,
+		Value: "value",
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestVar_EqualSpec_WithValue(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &Var{
+		Name:  "name",
+		Spec:  model1Spec,
+		Value: "value1",
+	}
+
+	model2 := &Var{
+		Name:  "name",
+		Spec:  model2Spec,
+		Value: "value2",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestVar_FetchImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

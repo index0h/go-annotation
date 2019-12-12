@@ -12,6 +12,10 @@ type Cloner interface {
 	Clone() interface{}
 }
 
+type EqualerSpec interface {
+	EqualSpec(value interface{}) bool
+}
+
 type ImportsFetcher interface {
 	FetchImports(*File) []*Import
 }
@@ -24,6 +28,7 @@ type Spec interface {
 	Validator
 	Stringer
 	Cloner
+	EqualerSpec
 	ImportsFetcher
 	ImportsRenamer
 }

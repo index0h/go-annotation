@@ -391,6 +391,453 @@ func TestFunc_Clone(t *testing.T) {
 	ctrl.AssertNotSame(model.Annotations[0], actual.(*Func).Annotations[0])
 }
 
+func TestFunc_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model1RelatedSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	model1SpecParamSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2SpecParamSpec)).
+		Return(true)
+
+	model1RelatedSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2RelatedSpec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFunc_EqualSpec_WithoutSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1RelatedSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content",
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	model1RelatedSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2RelatedSpec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFunc_EqualSpec_WithoutRelated(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+	}
+
+	model1SpecParamSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2SpecParamSpec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFunc_EqualSpec_WithEmptyFields(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &Func{
+		Name: "name",
+	}
+
+	model2 := &Func{
+		Name: "name",
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFunc_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model1SpecResultSpec := NewSpecMock(ctrl)
+	model1RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+			Results: []*Field{
+				{
+					Spec: model1SpecResultSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFunc_EqualSpec_WithName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model1RelatedSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name1",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name2",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFunc_EqualSpec_WithContent(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model1RelatedSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content1",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content2",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFunc_EqualSpec_WithNilFuncSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1RelatedSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFunc_EqualSpec_WithNilRelated(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFunc_EqualSpec_WithFuncSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model1RelatedSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	model1SpecParamSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2SpecParamSpec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFunc_EqualSpec_WithRelated(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1SpecParamSpec := NewSpecMock(ctrl)
+	model1RelatedSpec := NewSpecMock(ctrl)
+	model2SpecParamSpec := NewSpecMock(ctrl)
+	model2RelatedSpec := NewSpecMock(ctrl)
+
+	model1 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model1SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model1RelatedSpec,
+		},
+	}
+
+	model2 := &Func{
+		Name:    "name",
+		Content: "content",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: model2SpecParamSpec,
+				},
+			},
+		},
+		Related: &Field{
+			Spec: model2RelatedSpec,
+		},
+	}
+
+	model1SpecParamSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2SpecParamSpec)).
+		Return(true)
+
+	model1RelatedSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2RelatedSpec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestFunc_Clone_WithEmptyFields(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

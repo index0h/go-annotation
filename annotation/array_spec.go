@@ -51,6 +51,13 @@ func (m *ArraySpec) Clone() interface{} {
 	}
 }
 
+// Checks that value is deeply equal to ArraySpec model.
+func (m *ArraySpec) EqualSpec(value interface{}) bool {
+	model, ok := value.(*ArraySpec)
+
+	return ok && model.Length == m.Length && m.Value.EqualSpec(model.Value)
+}
+
 // Fetches list of Import models registered in file argument, which are used by Value and Length fields.
 func (m *ArraySpec) FetchImports(file *File) []*Import {
 	result := m.Value.FetchImports(file)

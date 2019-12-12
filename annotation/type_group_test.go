@@ -644,6 +644,227 @@ func TestTypeGroup_Clone_WithoutFields(t *testing.T) {
 	ctrl.AssertNotSame(model, actual)
 }
 
+func TestTypeGroup_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec1 := NewSpecMock(ctrl)
+	model1Spec2 := NewSpecMock(ctrl)
+	model2Spec1 := NewSpecMock(ctrl)
+	model2Spec2 := NewSpecMock(ctrl)
+
+	model1 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name1",
+				Spec: model1Spec1,
+			},
+			{
+				Name: "name2",
+				Spec: model1Spec2,
+			},
+		},
+	}
+
+	model2 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name1",
+				Spec: model2Spec1,
+			},
+			{
+				Name: "name2",
+				Spec: model2Spec2,
+			},
+		},
+	}
+
+	model1Spec1.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec1)).
+		Return(true)
+
+	model1Spec2.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec2)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestTypeGroup_EqualSpec_WithEmptyTypeGroup(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1 := &TypeGroup{}
+	model2 := &TypeGroup{}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestTypeGroup_EqualSpec_WithOrder(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec1 := NewSpecMock(ctrl)
+	model1Spec2 := NewSpecMock(ctrl)
+	model2Spec1 := NewSpecMock(ctrl)
+	model2Spec2 := NewSpecMock(ctrl)
+
+	model1 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name1",
+				Spec: model1Spec1,
+			},
+			{
+				Name: "name2",
+				Spec: model1Spec2,
+			},
+		},
+	}
+
+	model2 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name2",
+				Spec: model2Spec2,
+			},
+			{
+				Name: "name1",
+				Spec: model2Spec1,
+			},
+		},
+	}
+
+	model1Spec1.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec1)).
+		Return(true)
+
+	model1Spec2.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec2)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestTypeGroup_EqualSpec_WithLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+
+	model1 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name1",
+				Spec: model1Spec,
+			},
+		},
+	}
+
+	model2 := &TypeGroup{}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestTypeGroup_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+
+	model1 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name",
+				Spec: model1Spec,
+			},
+		},
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestTypeGroup_EqualSpec_WithName(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name1",
+				Spec: model1Spec,
+			},
+		},
+	}
+
+	model2 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name2",
+				Spec: model2Spec,
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestTypeGroup_EqualSpec_WithSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Spec := NewSpecMock(ctrl)
+	model2Spec := NewSpecMock(ctrl)
+
+	model1 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name",
+				Spec: model1Spec,
+			},
+		},
+	}
+
+	model2 := &TypeGroup{
+		Types: []*Type{
+			{
+				Name: "name",
+				Spec: model2Spec,
+			},
+		},
+	}
+
+	model1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestTypeGroup_FetchImports_WithFoundImport(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

@@ -983,6 +983,1963 @@ func TestFile_Clone_WithEmptyFields(t *testing.T) {
 	ctrl.AssertNotSame(model, actual)
 }
 
+func TestFile_ContainsSpec_WithImport(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	element := &Import{
+		Alias:     "importGroup2Alias1",
+		Namespace: "importGroup1Namespace1",
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFile_ContainsSpec_WithImportAndNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	element := &Import{
+		Alias:     "unknown",
+		Namespace: "unknown",
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithImportEmptyFields(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	element := &Import{
+		Alias:     "unknown",
+		Namespace: "unknown",
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithConst(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	element := &Const{
+		Name:  "constGroup2Name1",
+		Value: "constGroup2Value1",
+		Spec: &SimpleSpec{
+			PackageName: "constGroup2PackageName1",
+			TypeName:    "constGroup2TypeName1",
+		},
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFile_ContainsSpec_WithConstAndNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	element := &Const{
+		Name:  "unknown",
+		Value: "unknown",
+		Spec: &SimpleSpec{
+			TypeName: "unknown",
+		},
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithConstEmptyFields(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	element := &Const{
+		Name:  "unknown",
+		Value: "unknown",
+		Spec: &SimpleSpec{
+			TypeName: "unknown",
+		},
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithVar(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	elementSpec := NewSpecMock(ctrl)
+
+	element := &Var{
+		Name:  "varGroup2Name1",
+		Value: "varGroup2Value1",
+		Spec:  elementSpec,
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	varGroup2Spec1.
+		EXPECT().
+		EqualSpec(ctrl.Same(elementSpec)).
+		Return(true)
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFile_ContainsSpec_WithVarAndNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	elementSpec := NewSpecMock(ctrl)
+
+	element := &Var{
+		Name:  "unknown",
+		Value: "unknown",
+		Spec:  elementSpec,
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithVarEmptyFields(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	elementSpec := NewSpecMock(ctrl)
+
+	element := &Var{
+		Name:  "varGroup2Name1",
+		Value: "varGroup2Value1",
+		Spec:  elementSpec,
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	elementSpec := NewSpecMock(ctrl)
+
+	element := &Type{
+		Name: "typeGroup2Name1",
+		Spec: elementSpec,
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	typeGroup2Spec1.
+		EXPECT().
+		EqualSpec(ctrl.Same(elementSpec)).
+		Return(true)
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFile_ContainsSpec_WithTypeAndNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	elementSpec := NewSpecMock(ctrl)
+
+	element := &Type{
+		Name: "unknown",
+		Spec: elementSpec,
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithTypeEmptyFields(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	elementSpec := NewSpecMock(ctrl)
+
+	element := &Type{
+		Name: "unknown",
+		Spec: elementSpec,
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithFunc(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	elementSpecParamSpec := NewSpecMock(ctrl)
+
+	element := &Func{
+		Name: "func2",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: elementSpecParamSpec,
+				},
+			},
+		},
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	func2SpecParamSpec.
+		EXPECT().
+		EqualSpec(ctrl.Same(elementSpecParamSpec)).
+		Return(true)
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFile_ContainsSpec_WithFuncAndNotContains(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	varGroup1Spec1 := NewSpecMock(ctrl)
+	varGroup1Spec2 := NewSpecMock(ctrl)
+	varGroup2Spec1 := NewSpecMock(ctrl)
+	varGroup2Spec2 := NewSpecMock(ctrl)
+
+	typeGroup1Spec1 := NewSpecMock(ctrl)
+	typeGroup1Spec2 := NewSpecMock(ctrl)
+	typeGroup2Spec1 := NewSpecMock(ctrl)
+	typeGroup2Spec2 := NewSpecMock(ctrl)
+
+	func1SpecParamSpec := NewSpecMock(ctrl)
+	func2SpecParamSpec := NewSpecMock(ctrl)
+
+	elementSpecParamSpec := NewSpecMock(ctrl)
+
+	element := &Func{
+		Name: "unknown",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: elementSpecParamSpec,
+				},
+			},
+		},
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+		ImportGroups: []*ImportGroup{
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup1Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup1Alias2",
+						Namespace: "importGroup1Namespace2",
+					},
+				},
+			},
+			{
+				Imports: []*Import{
+					{
+						Alias:     "importGroup2Alias1",
+						Namespace: "importGroup1Namespace1",
+					},
+					{
+						Alias:     "importGroup2Alias2",
+						Namespace: "importGroup2Namespace2",
+					},
+				},
+			},
+		},
+		ConstGroups: []*ConstGroup{
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup1Name1",
+						Value: "constGroup1Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup1PackageName1",
+							TypeName:    "constGroup1TypeName1",
+						},
+					},
+				},
+			},
+			{
+				Consts: []*Const{
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+					{
+						Name:  "constGroup2Name1",
+						Value: "constGroup2Value1",
+						Spec: &SimpleSpec{
+							PackageName: "constGroup2PackageName1",
+							TypeName:    "constGroup2TypeName1",
+						},
+					},
+				},
+			},
+		},
+		VarGroups: []*VarGroup{
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec1,
+					},
+					{
+						Name:  "varGroup1Name1",
+						Value: "varGroup1Value1",
+						Spec:  varGroup1Spec2,
+					},
+				},
+			},
+			{
+				Vars: []*Var{
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec1,
+					},
+					{
+						Name:  "varGroup2Name1",
+						Value: "varGroup2Value1",
+						Spec:  varGroup2Spec2,
+					},
+				},
+			},
+		},
+		TypeGroups: []*TypeGroup{
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup1Name1",
+						Spec: typeGroup1Spec1,
+					},
+					{
+						Name: "typeGroup1Name2",
+						Spec: typeGroup1Spec2,
+					},
+				},
+			},
+			{
+				Types: []*Type{
+					{
+						Name: "typeGroup2Name1",
+						Spec: typeGroup2Spec1,
+					},
+					{
+						Name: "typeGroup2Name2",
+						Spec: typeGroup2Spec2,
+					},
+				},
+			},
+		},
+		Funcs: []*Func{
+			{
+				Name: "func1",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func1SpecParamSpec,
+						},
+					},
+				},
+			},
+			{
+				Name: "func2",
+				Spec: &FuncSpec{
+					Params: []*Field{
+						{
+							Spec: func2SpecParamSpec,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithFuncEmptyFields(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	elementSpecParamSpec := NewSpecMock(ctrl)
+
+	element := &Func{
+		Name: "unknown",
+		Spec: &FuncSpec{
+			Params: []*Field{
+				{
+					Spec: elementSpecParamSpec,
+				},
+			},
+		},
+	}
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+	}
+
+	actual := model.ContainsSpec(element)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFile_ContainsSpec_WithInvalidType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	element := "invalid"
+
+	model := &File{
+		Name:        "fileName",
+		PackageName: "filePackageName",
+	}
+
+	ctrl.Subtest("").
+		Call(model.ContainsSpec, element).
+		ExpectPanic(
+			NewErrorMessageConstraint("Variable 'value' has invalid type: %T", element),
+		)
+}
+
 func TestFile_RenameImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

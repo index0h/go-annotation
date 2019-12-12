@@ -1315,6 +1315,464 @@ func TestFuncSpec_Clone_WithoutParamsAndWithoutResults(t *testing.T) {
 	ctrl.AssertEqual(model, actual)
 }
 
+func TestFuncSpec_EqualSpec(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Param1Spec := NewSpecMock(ctrl)
+	model1Param2Spec := NewSpecMock(ctrl)
+	model1Param3Spec := NewSpecMock(ctrl)
+	model1Result1Spec := NewSpecMock(ctrl)
+	model1Result2Spec := NewSpecMock(ctrl)
+	model2Param1Spec := NewSpecMock(ctrl)
+	model2Param2Spec := NewSpecMock(ctrl)
+	model2Param3Spec := NewSpecMock(ctrl)
+	model2Result1Spec := NewSpecMock(ctrl)
+	model2Result2Spec := NewSpecMock(ctrl)
+
+	model1 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model1Param1Spec,
+			},
+			{
+				Spec: model1Param2Spec,
+			},
+			{
+				Spec: model1Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model1Result1Spec,
+			},
+			{
+				Spec: model1Result2Spec,
+			},
+		},
+	}
+
+	model2 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model2Param1Spec,
+			},
+			{
+				Spec: model2Param2Spec,
+			},
+			{
+				Spec: model2Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model2Result1Spec,
+			},
+			{
+				Spec: model2Result2Spec,
+			},
+		},
+	}
+
+	model1Param1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Param1Spec)).
+		Return(true)
+
+	model1Param2Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Param2Spec)).
+		Return(true)
+
+	model1Param3Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Param3Spec)).
+		Return(true)
+
+	model1Result1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Result1Spec)).
+		Return(true)
+
+	model1Result2Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Result2Spec)).
+		Return(true)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertTrue(actual)
+}
+
+func TestFuncSpec_EqualSpec_WithAnotherType(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Param1Spec := NewSpecMock(ctrl)
+	model1Result1Spec := NewSpecMock(ctrl)
+
+	model1 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model1Param1Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model1Result1Spec,
+			},
+		},
+	}
+
+	model2 := "model2"
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFuncSpec_EqualSpec_WithVariadic(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Param1Spec := NewSpecMock(ctrl)
+	model1Param2Spec := NewSpecMock(ctrl)
+	model1Param3Spec := NewSpecMock(ctrl)
+	model1Result1Spec := NewSpecMock(ctrl)
+	model1Result2Spec := NewSpecMock(ctrl)
+	model2Param1Spec := NewSpecMock(ctrl)
+	model2Param2Spec := NewSpecMock(ctrl)
+	model2Param3Spec := NewSpecMock(ctrl)
+	model2Result1Spec := NewSpecMock(ctrl)
+	model2Result2Spec := NewSpecMock(ctrl)
+
+	model1 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model1Param1Spec,
+			},
+			{
+				Spec: model1Param2Spec,
+			},
+			{
+				Spec: model1Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model1Result1Spec,
+			},
+			{
+				Spec: model1Result2Spec,
+			},
+		},
+	}
+
+	model2 := &FuncSpec{
+		IsVariadic: false,
+		Params: []*Field{
+			{
+				Spec: model2Param1Spec,
+			},
+			{
+				Spec: model2Param2Spec,
+			},
+			{
+				Spec: model2Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model2Result1Spec,
+			},
+			{
+				Spec: model2Result2Spec,
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFuncSpec_EqualSpec_WithParamsLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Param1Spec := NewSpecMock(ctrl)
+	model1Param2Spec := NewSpecMock(ctrl)
+	model1Param3Spec := NewSpecMock(ctrl)
+	model1Result1Spec := NewSpecMock(ctrl)
+	model1Result2Spec := NewSpecMock(ctrl)
+	model2Param1Spec := NewSpecMock(ctrl)
+	model2Result1Spec := NewSpecMock(ctrl)
+	model2Result2Spec := NewSpecMock(ctrl)
+
+	model1 := &FuncSpec{
+		Params: []*Field{
+			{
+				Spec: model1Param1Spec,
+			},
+			{
+				Spec: model1Param2Spec,
+			},
+			{
+				Spec: model1Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model1Result1Spec,
+			},
+			{
+				Spec: model1Result2Spec,
+			},
+		},
+	}
+
+	model2 := &FuncSpec{
+		Params: []*Field{
+			{
+				Spec: model2Param1Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model2Result1Spec,
+			},
+			{
+				Spec: model2Result2Spec,
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFuncSpec_EqualSpec_WithResultsLength(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Param1Spec := NewSpecMock(ctrl)
+	model1Param2Spec := NewSpecMock(ctrl)
+	model1Param3Spec := NewSpecMock(ctrl)
+	model1Result1Spec := NewSpecMock(ctrl)
+	model1Result2Spec := NewSpecMock(ctrl)
+	model2Param1Spec := NewSpecMock(ctrl)
+	model2Param2Spec := NewSpecMock(ctrl)
+	model2Param3Spec := NewSpecMock(ctrl)
+	model2Result1Spec := NewSpecMock(ctrl)
+
+	model1 := &FuncSpec{
+		Params: []*Field{
+			{
+				Spec: model1Param1Spec,
+			},
+			{
+				Spec: model1Param2Spec,
+			},
+			{
+				Spec: model1Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model1Result1Spec,
+			},
+			{
+				Spec: model1Result2Spec,
+			},
+		},
+	}
+
+	model2 := &FuncSpec{
+		Params: []*Field{
+			{
+				Spec: model2Param1Spec,
+			},
+			{
+				Spec: model2Param2Spec,
+			},
+			{
+				Spec: model2Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model2Result1Spec,
+			},
+		},
+	}
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFuncSpec_EqualSpec_WithParam(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Param1Spec := NewSpecMock(ctrl)
+	model1Param2Spec := NewSpecMock(ctrl)
+	model1Param3Spec := NewSpecMock(ctrl)
+	model1Result1Spec := NewSpecMock(ctrl)
+	model1Result2Spec := NewSpecMock(ctrl)
+	model2Param1Spec := NewSpecMock(ctrl)
+	model2Param2Spec := NewSpecMock(ctrl)
+	model2Param3Spec := NewSpecMock(ctrl)
+	model2Result1Spec := NewSpecMock(ctrl)
+	model2Result2Spec := NewSpecMock(ctrl)
+
+	model1 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model1Param1Spec,
+			},
+			{
+				Spec: model1Param2Spec,
+			},
+			{
+				Spec: model1Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model1Result1Spec,
+			},
+			{
+				Spec: model1Result2Spec,
+			},
+		},
+	}
+
+	model2 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model2Param1Spec,
+			},
+			{
+				Spec: model2Param2Spec,
+			},
+			{
+				Spec: model2Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model2Result1Spec,
+			},
+			{
+				Spec: model2Result2Spec,
+			},
+		},
+	}
+
+	model1Param1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Param1Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
+func TestFuncSpec_EqualSpec_WithResult(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	model1Param1Spec := NewSpecMock(ctrl)
+	model1Param2Spec := NewSpecMock(ctrl)
+	model1Param3Spec := NewSpecMock(ctrl)
+	model1Result1Spec := NewSpecMock(ctrl)
+	model1Result2Spec := NewSpecMock(ctrl)
+	model2Param1Spec := NewSpecMock(ctrl)
+	model2Param2Spec := NewSpecMock(ctrl)
+	model2Param3Spec := NewSpecMock(ctrl)
+	model2Result1Spec := NewSpecMock(ctrl)
+	model2Result2Spec := NewSpecMock(ctrl)
+
+	model1 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model1Param1Spec,
+			},
+			{
+				Spec: model1Param2Spec,
+			},
+			{
+				Spec: model1Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model1Result1Spec,
+			},
+			{
+				Spec: model1Result2Spec,
+			},
+		},
+	}
+
+	model2 := &FuncSpec{
+		IsVariadic: true,
+		Params: []*Field{
+			{
+				Spec: model2Param1Spec,
+			},
+			{
+				Spec: model2Param2Spec,
+			},
+			{
+				Spec: model2Param3Spec,
+			},
+		},
+		Results: []*Field{
+			{
+				Spec: model2Result1Spec,
+			},
+			{
+				Spec: model2Result2Spec,
+			},
+		},
+	}
+
+	model1Param1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Param1Spec)).
+		Return(true)
+
+	model1Param2Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Param2Spec)).
+		Return(true)
+
+	model1Param3Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Param3Spec)).
+		Return(true)
+
+	model1Result1Spec.
+		EXPECT().
+		EqualSpec(ctrl.Same(model2Result1Spec)).
+		Return(false)
+
+	actual := model1.EqualSpec(model2)
+
+	ctrl.AssertFalse(actual)
+}
+
 func TestFuncSpec_FetchImports(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()

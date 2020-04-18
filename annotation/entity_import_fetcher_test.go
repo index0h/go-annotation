@@ -10,12 +10,12 @@ func TestNewImportFetcher(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	expected := &EntityImportFetcher{importUniquer: NewEntityImportUniquer()}
+	importUniquer := NewImportUniquerMock(ctrl)
 
-	actual := NewEntityImportFetcher(expected.importUniquer)
+	actual := NewEntityImportFetcher(importUniquer)
 
-	ctrl.AssertEqual(expected, actual)
-	ctrl.AssertSame(expected.importUniquer, actual.importUniquer)
+	ctrl.AssertNotNil(actual)
+	ctrl.AssertSame(importUniquer, actual.importUniquer)
 }
 
 func TestNewImportFetcher_WithNilImportUniquer(t *testing.T) {
@@ -47,7 +47,11 @@ func TestImportFetcher_Fetch_WithSimpleSpec(t *testing.T) {
 		TypeName: "typeName",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -77,7 +81,11 @@ func TestImportFetcher_Fetch_WithSimpleSpecAndPackageName(t *testing.T) {
 		TypeName:    "typeName",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -103,7 +111,11 @@ func TestImportFetcher_Fetch_WithSimpleSpecAndPackageNameAndNotFound(t *testing.
 		TypeName:    "typeName",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -135,7 +147,16 @@ func TestImportFetcher_Fetch_WithArraySpec(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(file.ImportGroups[0].Imports).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -167,7 +188,16 @@ func TestImportFetcher_Fetch_WithArraySpecAndLength(t *testing.T) {
 		Length: "packageName.MyConst + 1",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(file.ImportGroups[0].Imports).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -194,7 +224,16 @@ func TestImportFetcher_Fetch_WithArraySpecAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -234,7 +273,20 @@ func TestImportFetcher_Fetch_WithMapSpecAndKey(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(
+			[]*Import{
+				file.ImportGroups[0].Imports[0],
+			},
+		).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -274,7 +326,20 @@ func TestImportFetcher_Fetch_WithMapSpecAndValue(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(
+			[]*Import{
+				file.ImportGroups[0].Imports[1],
+			},
+		).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -309,7 +374,16 @@ func TestImportFetcher_Fetch_WithMapSpecAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -342,7 +416,11 @@ func TestImportFetcher_Fetch_WithField(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -370,7 +448,11 @@ func TestImportFetcher_Fetch_WithFieldAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -420,7 +502,16 @@ func TestImportFetcher_Fetch_WithFuncSpec(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -463,7 +554,16 @@ func TestImportFetcher_Fetch_WithFuncSpecAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -500,7 +600,16 @@ func TestImportFetcher_Fetch_WithInterfaceSpec(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -532,7 +641,16 @@ func TestImportFetcher_Fetch_WithInterfaceSpecAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -569,7 +687,16 @@ func TestImportFetcher_Fetch_WithStructSpec(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -601,7 +728,16 @@ func TestImportFetcher_Fetch_WithStructSpecAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -635,7 +771,16 @@ func TestImportFetcher_Fetch_WithConst(t *testing.T) {
 		Value: "value",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -668,7 +813,16 @@ func TestImportFetcher_Fetch_WithConstAndValue(t *testing.T) {
 		Value: "packageName.MyConst + 1",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -697,7 +851,16 @@ func TestImportFetcher_Fetch_WithConstAndNotFound(t *testing.T) {
 		Value: "value",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -735,7 +898,21 @@ func TestImportFetcher_Fetch_WithConstGroup(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -772,7 +949,21 @@ func TestImportFetcher_Fetch_WithConstGroupAndValue(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -805,7 +996,21 @@ func TestImportFetcher_Fetch_WithConstGroupAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -838,7 +1043,16 @@ func TestImportFetcher_Fetch_WithVar(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -871,7 +1085,16 @@ func TestImportFetcher_Fetch_WithVarAndValue(t *testing.T) {
 		Value: "packageName.MyVar + 1",
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -899,7 +1122,16 @@ func TestImportFetcher_Fetch_WithVarAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -936,7 +1168,21 @@ func TestImportFetcher_Fetch_WithVarGroup(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -973,7 +1219,21 @@ func TestImportFetcher_Fetch_WithVarGroupAndValue(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -1005,7 +1265,21 @@ func TestImportFetcher_Fetch_WithVarGroupAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -1038,7 +1312,11 @@ func TestImportFetcher_Fetch_WithType(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -1066,7 +1344,11 @@ func TestImportFetcher_Fetch_WithTypeAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -1103,7 +1385,16 @@ func TestImportFetcher_Fetch_WithTypeGroup(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -1135,7 +1426,16 @@ func TestImportFetcher_Fetch_WithTypeGroupAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -1200,7 +1500,31 @@ func TestImportFetcher_Fetch_WithFunc(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique(
+			[]*Import{
+				file.ImportGroups[0].Imports[0],
+				file.ImportGroups[0].Imports[1],
+			},
+		).
+		Return(
+			[]*Import{
+				file.ImportGroups[0].Imports[0],
+				file.ImportGroups[0].Imports[1],
+			},
+		)
+
+	importUniquer.
+		EXPECT().
+		Unique(expected).
+		Return(expected)
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -1256,7 +1580,21 @@ func TestImportFetcher_Fetch_WithFuncAndNotFound(t *testing.T) {
 		},
 	}
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).Fetch(file, entity)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	importUniquer.
+		EXPECT().
+		Unique([]*Import{}).
+		Return([]*Import{})
+
+	actual := entityImportFetcher.Fetch(file, entity)
 
 	ctrl.AssertEmpty(actual)
 }
@@ -1306,7 +1644,11 @@ func TestImportFetcher_fetchFromContent(t *testing.T) {
 
 	content := "fmt.Println(\"Hello world\" + strconv.Itoa(5))"
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).fetchFromContent(file, content)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.fetchFromContent(file, content)
 
 	ctrl.AssertEqual(expected, actual)
 }
@@ -1322,7 +1664,11 @@ func TestImportFetcher_fetchFromContent_WithEmptyImports(t *testing.T) {
 
 	content := "// comment"
 
-	actual := (&EntityImportFetcher{importUniquer: NewEntityImportUniquer()}).fetchFromContent(file, content)
+	importUniquer := NewImportUniquerMock(ctrl)
+
+	entityImportFetcher := &EntityImportFetcher{importUniquer: importUniquer}
+
+	actual := entityImportFetcher.fetchFromContent(file, content)
 
 	ctrl.AssertEmpty(actual)
 }

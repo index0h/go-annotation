@@ -14,13 +14,9 @@ func TestNewGoSourceParser(t *testing.T) {
 
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	expected := &GoSourceParser{
-		annotationParser: annotationParser,
-	}
-
 	actual := NewGoSourceParser(annotationParser)
 
-	ctrl.AssertEqual(expected, actual, unit.IgnoreUnexportedOption{Value: AnnotationParserMock{}})
+	ctrl.AssertNotNil(actual)
 	ctrl.AssertSame(annotationParser, actual.annotationParser)
 }
 

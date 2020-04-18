@@ -15,19 +15,11 @@ func TestNewGoScanner(t *testing.T) {
 	sourceParser := NewSourceParserMock(ctrl)
 	annotationParser := NewAnnotationParserMock(ctrl)
 
-	expected := &GoScanner{
-		sourceParser:     sourceParser,
-		annotationParser: annotationParser,
-	}
-
 	actual := NewGoScanner(sourceParser, annotationParser)
 
-	ctrl.AssertEqual(
-		expected,
-		actual,
-		unit.IgnoreUnexportedOption{Value: SourceParserMock{}},
-		unit.IgnoreUnexportedOption{Value: AnnotationParserMock{}},
-	)
+	ctrl.AssertNotNil(actual)
+	ctrl.AssertSame(actual.sourceParser, sourceParser)
+	ctrl.AssertSame(actual.annotationParser, annotationParser)
 }
 
 func TestNewGoScanner_WithNilSourceParse(t *testing.T) {

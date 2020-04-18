@@ -22,6 +22,15 @@ func TestNewEntityContainsChecker(t *testing.T) {
 	ctrl.AssertSame(expected.equaler, actual.equaler)
 }
 
+func TestNewEntityContainsChecker_WithNilEqualer(t *testing.T) {
+	ctrl := unit.NewController(t)
+	defer ctrl.Finish()
+
+	ctrl.Subtest("").
+		Call(NewEntityContainsChecker, nil).
+		ExpectPanic(NewErrorMessageConstraint("Variable 'equaler' must be not nil"))
+}
+
 func TestEntityContainsChecker_Contains_WithImportAndImportGroup(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
@@ -44,11 +53,21 @@ func TestEntityContainsChecker_Contains_WithImportAndImportGroup(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Imports[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Imports[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -74,11 +93,21 @@ func TestEntityContainsChecker_Contains_WithImportAndImportGroupAndRealAlias(t *
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Imports[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Imports[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -94,11 +123,11 @@ func TestEntityContainsChecker_Contains_WithImportAndImportGroupAndEmptyImports(
 
 	collection := &ImportGroup{}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -125,11 +154,21 @@ func TestEntityContainsChecker_Contains_WithImportAndImportGroupAndNotContains(t
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Imports[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Imports[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -165,11 +204,21 @@ func TestEntityContainsChecker_Contains_WithConstAndConstGroup(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Consts[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Consts[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -188,11 +237,11 @@ func TestEntityContainsChecker_Contains_WithConstAndConstGroupAndEmptyConstGroup
 
 	collection := &ConstGroup{}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -228,11 +277,21 @@ func TestEntityContainsChecker_Contains_WithConstAndConstGroupAndNotContains(t *
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Consts[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Consts[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -268,11 +327,21 @@ func TestEntityContainsChecker_Contains_WithVarAndVarGroup(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Vars[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Vars[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -291,11 +360,11 @@ func TestEntityContainsChecker_Contains_WithVarAndVarGroupAndEmptyVarGroup(t *te
 
 	collection := &VarGroup{}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -331,11 +400,21 @@ func TestEntityContainsChecker_Contains_WithVarAndVarGroupAndNotContains(t *test
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Vars[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Vars[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -368,11 +447,21 @@ func TestEntityContainsChecker_Contains_WithTypeAndTypeGroup(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Types[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Types[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -390,11 +479,11 @@ func TestEntityContainsChecker_Contains_WithTypeAndTypeGroupAndEmptyTypeGroup(t 
 
 	collection := &TypeGroup{}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -427,11 +516,21 @@ func TestEntityContainsChecker_Contains_WithTypeAndTypeGroupAndNotContains(t *te
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Types[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.Types[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -462,11 +561,21 @@ func TestEntityContainsChecker_Contains_WithImportAndFile(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.ImportGroups[0].Imports[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.ImportGroups[0].Imports[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -496,11 +605,21 @@ func TestEntityContainsChecker_Contains_WithImportAndFileAndRealAlias(t *testing
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.ImportGroups[0].Imports[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.ImportGroups[0].Imports[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -518,11 +637,11 @@ func TestEntityContainsChecker_Contains_WithImportAndFileAndEmptyImports(t *test
 		ImportGroups: []*ImportGroup{},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -553,11 +672,21 @@ func TestEntityContainsChecker_Contains_WithImportAndFileAndNotContains(t *testi
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.ImportGroups[0].Imports[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.ImportGroups[0].Imports[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -597,11 +726,21 @@ func TestEntityContainsChecker_Contains_WithConstAndFile(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.ConstGroups[0].Consts[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.ConstGroups[0].Consts[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -622,11 +761,11 @@ func TestEntityContainsChecker_Contains_WithConstAndFileAndEmptyConstGroup(t *te
 		ConstGroups: []*ConstGroup{},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -666,11 +805,21 @@ func TestEntityContainsChecker_Contains_WithConstAndFileAndNotContains(t *testin
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.ConstGroups[0].Consts[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.ConstGroups[0].Consts[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -710,11 +859,21 @@ func TestEntityContainsChecker_Contains_WithVarAndFile(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.VarGroups[0].Vars[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.VarGroups[0].Vars[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -735,11 +894,11 @@ func TestEntityContainsChecker_Contains_WithVarAndFileAndEmptyVarGroup(t *testin
 		VarGroups: []*VarGroup{},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -779,11 +938,21 @@ func TestEntityContainsChecker_Contains_WithVarAndFileAndNotContains(t *testing.
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.VarGroups[0].Vars[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.VarGroups[0].Vars[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -820,11 +989,21 @@ func TestEntityContainsChecker_Contains_WithTypeAndFile(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.TypeGroups[0].Types[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.TypeGroups[0].Types[1], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -844,11 +1023,11 @@ func TestEntityContainsChecker_Contains_WithTypeAndFileAndEmptyTypeGroup(t *test
 		TypeGroups: []*TypeGroup{},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -885,11 +1064,21 @@ func TestEntityContainsChecker_Contains_WithTypeAndFileAndNotContains(t *testing
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.TypeGroups[0].Types[0], entity).
+		Return(false)
+
+	equaler.
+		EXPECT().
+		Equal(collection.TypeGroups[0].Types[1], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -930,11 +1119,16 @@ func TestEntityContainsChecker_Contains_WithFuncAndFile(t *testing.T) {
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Funcs[0], entity).
+		Return(true)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertTrue(actual)
 }
@@ -959,11 +1153,11 @@ func TestEntityContainsChecker_Contains_WithFuncAndFileAndEmptyFile(t *testing.T
 
 	collection := &File{}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -1004,11 +1198,16 @@ func TestEntityContainsChecker_Contains_WithFuncAndFileAndNotContains(t *testing
 		},
 	}
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	equaler.
+		EXPECT().
+		Equal(collection.Funcs[0], entity).
+		Return(false)
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }
@@ -1024,11 +1223,11 @@ func TestEntityContainsChecker_Contains_WithInvalidCollectionType(t *testing.T) 
 
 	collection := "invalid"
 
-	EntityContainsChecker := &EntityContainsChecker{
-		equaler: NewEntityEqualer(),
-	}
+	equaler := NewEqualerMock(ctrl)
 
-	actual := EntityContainsChecker.Contains(collection, entity)
+	entityContainsChecker := &EntityContainsChecker{equaler: equaler}
+
+	actual := entityContainsChecker.Contains(collection, entity)
 
 	ctrl.AssertFalse(actual)
 }

@@ -1,10 +1,16 @@
 package annotation
 
+import "github.com/pkg/errors"
+
 type EntityContainsChecker struct {
 	equaler Equaler
 }
 
 func NewEntityContainsChecker(equaler Equaler) *EntityContainsChecker {
+	if equaler == nil {
+		panic(errors.New("Variable 'equaler' must be not nil"))
+	}
+
 	return &EntityContainsChecker{
 		equaler: equaler,
 	}

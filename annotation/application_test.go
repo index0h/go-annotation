@@ -263,12 +263,18 @@ func TestApplication_RegisterGenerator(t *testing.T) {
 
 	annotationParser.
 		EXPECT().
-		SetAnnotation(annotation1Name, annotation1Type).
+		SetAnnotation(
+			ctrl.Or(ctrl.Same(annotation1Name), ctrl.Same(annotation2Name)),
+			ctrl.Or(ctrl.Same(annotation1Type), ctrl.Same(annotation2Type)),
+		).
 		Return()
 
 	annotationParser.
 		EXPECT().
-		SetAnnotation(annotation2Name, annotation2Type).
+		SetAnnotation(
+			ctrl.Or(ctrl.Same(annotation1Name), ctrl.Same(annotation2Name)),
+			ctrl.Or(ctrl.Same(annotation1Type), ctrl.Same(annotation2Type)),
+		).
 		Return()
 
 	application.RegisterGenerator(generator)

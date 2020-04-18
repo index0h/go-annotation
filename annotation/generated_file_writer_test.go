@@ -1,6 +1,7 @@
 package annotation
 
 import (
+	"github.com/pkg/errors"
 	"os"
 	"path/filepath"
 	"testing"
@@ -12,8 +13,8 @@ func TestNewGeneratedFileWriter(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	validator := NewEntityValidator()
-	renderer := NewEntityRenderer()
+	validator := NewValidatorMock(ctrl)
+	renderer := NewRendererMock(ctrl)
 
 	expected := &GeneratedFileWriter{
 		validator: validator,
@@ -22,14 +23,16 @@ func TestNewGeneratedFileWriter(t *testing.T) {
 
 	actual := NewGeneratedFileWriter(validator, renderer)
 
-	ctrl.AssertEqual(expected, actual)
+	ctrl.AssertNotNil(actual)
+	ctrl.AssertSame(expected.renderer, renderer)
+	ctrl.AssertSame(expected.validator, validator)
 }
 
 func TestNewGeneratedFileWriter_WithNilValidator(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	renderer := NewEntityRenderer()
+	renderer := NewRendererMock(ctrl)
 
 	ctrl.Subtest("").
 		Call(NewGeneratedFileWriter, nil, renderer).
@@ -40,7 +43,7 @@ func TestNewGeneratedFileWriter_WithNilRenderer(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	validator := NewEntityValidator()
+	validator := NewValidatorMock(ctrl)
 
 	ctrl.Subtest("").
 		Call(NewGeneratedFileWriter, validator, nil).
@@ -54,6 +57,9 @@ func TestGeneratedFileWriter_Write(t *testing.T) {
 	fs := NewTmpFS(ctrl).
 		CreateDir("root", 0777).
 		CreateFile("root/do_not_override.go", 0666, "// do not override\npackage namespace")
+
+	content1 := "// content 1"
+	content2 := "// content 2"
 
 	storage := &Storage{
 		Namespaces: []*Namespace{
@@ -90,10 +96,25 @@ func TestGeneratedFileWriter_Write(t *testing.T) {
 		},
 	}
 
-	validator := NewEntityValidator()
-	renderer := NewEntityRenderer()
+	validator := NewValidatorMock(ctrl)
+	renderer := NewRendererMock(ctrl)
 
 	generatedFileWriter := &GeneratedFileWriter{validator: validator, renderer: renderer}
+
+	validator.
+		EXPECT().
+		Validate(storage).
+		Return(nil)
+
+	renderer.
+		EXPECT().
+		Render(storage.Namespaces[0].Files[0]).
+		Return(content1)
+
+	renderer.
+		EXPECT().
+		Render(storage.Namespaces[1].Files[0]).
+		Return(content2)
 
 	generatedFileWriter.Write(storage)
 
@@ -121,14 +142,21 @@ func TestGeneratedFileWriter_Write_WithInvalidStorage(t *testing.T) {
 		},
 	}
 
-	validator := NewEntityValidator()
-	renderer := NewEntityRenderer()
+	err := errors.New("Variable 'Name' must be not empty")
+
+	validator := NewValidatorMock(ctrl)
+	renderer := NewRendererMock(ctrl)
 
 	generatedFileWriter := &GeneratedFileWriter{validator: validator, renderer: renderer}
 
+	validator.
+		EXPECT().
+		Validate(storage).
+		Return(err)
+
 	ctrl.Subtest("").
 		Call(generatedFileWriter.Write, storage).
-		ExpectPanic(NewErrorMessageConstraint("Variable 'Name' must be not empty"))
+		ExpectPanic(ctrl.Same(err))
 }
 
 func TestGeneratedFileWriter_Write_WithCreateFolderError(t *testing.T) {
@@ -137,6 +165,8 @@ func TestGeneratedFileWriter_Write_WithCreateFolderError(t *testing.T) {
 
 	fs := NewTmpFS(ctrl).
 		CreateDir("root", 0000)
+
+	content := "// content"
 
 	storage := &Storage{
 		Namespaces: []*Namespace{
@@ -153,10 +183,20 @@ func TestGeneratedFileWriter_Write_WithCreateFolderError(t *testing.T) {
 		},
 	}
 
-	validator := NewEntityValidator()
-	renderer := NewEntityRenderer()
+	validator := NewValidatorMock(ctrl)
+	renderer := NewRendererMock(ctrl)
 
 	generatedFileWriter := &GeneratedFileWriter{validator: validator, renderer: renderer}
+
+	validator.
+		EXPECT().
+		Validate(storage).
+		Return(nil)
+
+	renderer.
+		EXPECT().
+		Render(storage.Namespaces[0].Files[0]).
+		Return(content)
 
 	ctrl.Subtest("").
 		Call(generatedFileWriter.Write, storage).
@@ -170,6 +210,8 @@ func TestGeneratedFileWriter_Write_WithFileOverrideError(t *testing.T) {
 	fs := NewTmpFS(ctrl).
 		CreateDir("root", 0777).
 		CreateFile("root/file.go", 0666, "package root")
+
+	content := "// content"
 
 	storage := &Storage{
 		Namespaces: []*Namespace{
@@ -186,8 +228,18 @@ func TestGeneratedFileWriter_Write_WithFileOverrideError(t *testing.T) {
 		},
 	}
 
-	validator := NewEntityValidator()
-	renderer := NewEntityRenderer()
+	validator := NewValidatorMock(ctrl)
+	renderer := NewRendererMock(ctrl)
+
+	validator.
+		EXPECT().
+		Validate(storage).
+		Return(nil)
+
+	renderer.
+		EXPECT().
+		Render(storage.Namespaces[0].Files[0]).
+		Return(content)
 
 	generatedFileWriter := &GeneratedFileWriter{validator: validator, renderer: renderer}
 
@@ -205,6 +257,8 @@ func TestGeneratedFileWriter_Write_WithFileWriteError(t *testing.T) {
 	fs := NewTmpFS(ctrl).
 		CreateDir("root", 0111)
 
+	content := "// content"
+
 	storage := &Storage{
 		Namespaces: []*Namespace{
 			{
@@ -220,8 +274,18 @@ func TestGeneratedFileWriter_Write_WithFileWriteError(t *testing.T) {
 		},
 	}
 
-	validator := NewEntityValidator()
-	renderer := NewEntityRenderer()
+	validator := NewValidatorMock(ctrl)
+	renderer := NewRendererMock(ctrl)
+
+	validator.
+		EXPECT().
+		Validate(storage).
+		Return(nil)
+
+	renderer.
+		EXPECT().
+		Render(storage.Namespaces[0].Files[0]).
+		Return(content)
 
 	generatedFileWriter := &GeneratedFileWriter{validator: validator, renderer: renderer}
 

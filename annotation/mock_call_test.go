@@ -27,7 +27,7 @@ func NewMockCall(methodName string, comparator unit.EqualComparer, arguments ...
 
 func (c *MockCall) SetReturn(values ...interface{}) {
 	if c.mockCallType != MockCallTypeNotConfigured {
-		panic(unit.NewErrorf("Call for row %s already configured", c.methodName))
+		panic(unit.NewErrorf("Call for method %s already configured", c.methodName))
 	}
 
 	c.mockCallType = MockCallTypeReturn
@@ -36,7 +36,7 @@ func (c *MockCall) SetReturn(values ...interface{}) {
 
 func (c *MockCall) SetPanic(value interface{}) {
 	if c.mockCallType != MockCallTypeNotConfigured {
-		panic(unit.NewErrorf("Call for row %s already configured", c.methodName))
+		panic(unit.NewErrorf("Call for method %s already configured", c.methodName))
 	}
 
 	c.mockCallType = MockCallTypePanic
@@ -45,7 +45,7 @@ func (c *MockCall) SetPanic(value interface{}) {
 
 func (c *MockCall) SetCallback(callback interface{}) {
 	if c.mockCallType != MockCallTypeNotConfigured {
-		panic(unit.NewErrorf("Call for row %s already configured", c.methodName))
+		panic(unit.NewErrorf("Call for method %s already configured", c.methodName))
 	}
 
 	c.mockCallType = MockCallTypeCallback
@@ -61,6 +61,6 @@ func (c *MockCall) Call() (interface{}, int8) {
 	case MockCallTypeCallback:
 		return c.callback, c.mockCallType
 	default:
-		panic(unit.NewErrorf("Call for row %s is not configured", c.methodName))
+		panic(unit.NewErrorf("Call for method %s is not configured", c.methodName))
 	}
 }

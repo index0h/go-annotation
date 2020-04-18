@@ -11,15 +11,14 @@ func TestNewJSONAnnotationParser(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	// @TODO: https://github.com/index0h/go-annotation/issues/10
-	//annotations := map[string]interface{}{
-	//	"FileIsGenerated": FileIsGeneratedAnnotation(false),
-	//}
+	annotations := map[string]interface{}{
+		"FileIsGenerated": FileIsGeneratedAnnotation(false),
+	}
 
 	actual := NewJSONAnnotationParser()
 
 	ctrl.AssertNotNil(actual)
-	//ctrl.AssertEqual(annotations, actual.annotations)
+	ctrl.AssertEqual(annotations, actual.annotations)
 }
 
 func TestJSONAnnotationParser_SetAnnotation(t *testing.T) {

@@ -6,36 +6,61 @@ import (
 )
 
 type (
-	SpecMock struct {
+	ClonerMock struct {
 		ctrl        *unit.Controller
 		callManager *MockCallManager
 	}
 
-	SpecMockRecorder struct {
-		mock *SpecMock
+	ClonerMockRecorder struct {
+		mock *ClonerMock
 	}
 
-	SpecMockRecorderForString struct {
+	ClonerMockRecorderForClone struct {
 		call *MockCall
 	}
+)
 
-	SpecMockRecorderForValidate struct {
-		call *MockCall
+type (
+	ScannerMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
 	}
 
-	SpecMockRecorderForClone struct {
-		call *MockCall
+	ScannerMockRecorder struct {
+		mock *ScannerMock
 	}
 
-	SpecMockRecorderForFetchImports struct {
+	ScannerMockRecorderForScan struct {
 		call *MockCall
 	}
+)
 
-	SpecMockRecorderForRenameImports struct {
-		call *MockCall
+type (
+	RendererMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
 	}
 
-	SpecMockRecorderForEqualSpec struct {
+	RendererMockRecorder struct {
+		mock *RendererMock
+	}
+
+	RendererMockRecorderForRender struct {
+		call *MockCall
+	}
+)
+
+type (
+	ValidatorMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	ValidatorMockRecorder struct {
+		mock *ValidatorMock
+	}
+
+	ValidatorMockRecorderForValidate struct {
 		call *MockCall
 	}
 )
@@ -75,256 +100,378 @@ type (
 )
 
 type (
-	MarshalerJSONMock struct {
+	StorageWriterMock struct {
 		ctrl        *unit.Controller
 		callManager *MockCallManager
 	}
 
-	MarshalerJSONMockRecorder struct {
-		mock *MarshalerJSONMock
+	StorageWriterMockRecorder struct {
+		mock *StorageWriterMock
 	}
 
-	MarshalerJSONMockRecorderForMarshalJSON struct {
+	StorageWriterMockRecorderForWrite struct {
 		call *MockCall
 	}
 )
 
-func NewSpecMock(ctrl *unit.Controller, options ...interface{}) *SpecMock {
-	return &SpecMock{
+type (
+	StorageCleanerMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	StorageCleanerMockRecorder struct {
+		mock *StorageCleanerMock
+	}
+
+	StorageCleanerMockRecorderForClean struct {
+		call *MockCall
+	}
+)
+
+type (
+	GeneratorMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	GeneratorMockRecorder struct {
+		mock *GeneratorMock
+	}
+
+	GeneratorMockRecorderForAnnotations struct {
+		call *MockCall
+	}
+
+	GeneratorMockRecorderForGenerate struct {
+		call *MockCall
+	}
+)
+
+type (
+	ImportFetcherMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	ImportFetcherMockRecorder struct {
+		mock *ImportFetcherMock
+	}
+
+	ImportFetcherMockRecorderForFetch struct {
+		call *MockCall
+	}
+)
+
+type (
+	ImportRenamerMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	ImportRenamerMockRecorder struct {
+		mock *ImportRenamerMock
+	}
+
+	ImportRenamerMockRecorderForRename struct {
+		call *MockCall
+	}
+)
+
+type (
+	ImportUniquerMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	ImportUniquerMockRecorder struct {
+		mock *ImportUniquerMock
+	}
+
+	ImportUniquerMockRecorderForUnique struct {
+		call *MockCall
+	}
+)
+
+type (
+	EqualerMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	EqualerMockRecorder struct {
+		mock *EqualerMock
+	}
+
+	EqualerMockRecorderForEqual struct {
+		call *MockCall
+	}
+)
+
+type (
+	ContainsCheckerMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	ContainsCheckerMockRecorder struct {
+		mock *ContainsCheckerMock
+	}
+
+	ContainsCheckerMockRecorderForContains struct {
+		call *MockCall
+	}
+)
+
+type (
+	MarshalerMock struct {
+		ctrl        *unit.Controller
+		callManager *MockCallManager
+	}
+
+	MarshalerMockRecorder struct {
+		mock *MarshalerMock
+	}
+
+	MarshalerMockRecorderForMarshalJSON struct {
+		call *MockCall
+	}
+)
+
+func NewClonerMock(ctrl *unit.Controller, options ...interface{}) *ClonerMock {
+	return &ClonerMock{
 		ctrl:        ctrl,
 		callManager: NewMockCallManager(ctrl, options...),
 	}
 }
 
-func (m *SpecMock) EXPECT() *SpecMockRecorder {
-	return &SpecMockRecorder{mock: m}
+func (m *ClonerMock) EXPECT() *ClonerMockRecorder {
+	return &ClonerMockRecorder{mock: m}
 }
 
-func (m *SpecMock) String() (result string) {
-	m.ctrl.TestingT().Helper()
-
-	switch __result, __type := m.callManager.FetchCall("String").Call(); __type {
-	case MockCallTypeReturn:
-		return __result.([]interface{})[0].(string)
-	case MockCallTypePanic:
-		panic(__result)
-	case MockCallTypeCallback:
-		return __result.(func() (result string))()
-	default:
-		panic(errors.New("Unknown mock call type, you should regenerate mock"))
-	}
-}
-
-func (mr *SpecMockRecorder) String() *SpecMockRecorderForString {
-	mr.mock.ctrl.TestingT().Helper()
-
-	return &SpecMockRecorderForString{
-		call: mr.mock.callManager.CreateCall("String"),
-	}
-}
-
-func (mrm *SpecMockRecorderForString) Return(result string) {
-	mrm.call.SetReturn(result)
-}
-
-func (mrm *SpecMockRecorderForString) String(value interface{}) {
-	mrm.call.SetPanic(value)
-}
-
-func (mrm *SpecMockRecorderForString) Callback(callback func() (result string)) {
-	mrm.call.SetCallback(callback)
-}
-
-func (m *SpecMock) Validate() {
-	m.ctrl.TestingT().Helper()
-
-	switch __result, __type := m.callManager.FetchCall("Validate").Call(); __type {
-	case MockCallTypeReturn:
-	case MockCallTypePanic:
-		panic(__result)
-	case MockCallTypeCallback:
-		__result.(func())()
-	default:
-		panic(errors.New("Unknown mock call type, you should regenerate mock"))
-	}
-}
-
-func (mr *SpecMockRecorder) Validate() *SpecMockRecorderForValidate {
-	mr.mock.ctrl.TestingT().Helper()
-
-	return &SpecMockRecorderForValidate{
-		call: mr.mock.callManager.CreateCall("Validate"),
-	}
-}
-
-func (mrm *SpecMockRecorderForValidate) Return() {
-	mrm.call.SetReturn()
-}
-
-func (mrm *SpecMockRecorderForValidate) Validate(value interface{}) {
-	mrm.call.SetPanic(value)
-}
-
-func (mrm *SpecMockRecorderForValidate) Callback(callback func()) {
-	mrm.call.SetCallback(callback)
-}
-
-func (m *SpecMock) Clone() (result interface{}) {
-	m.ctrl.TestingT().Helper()
-
-	switch __result, __type := m.callManager.FetchCall("Clone").Call(); __type {
-	case MockCallTypeReturn:
-		return __result.([]interface{})[0].(interface{})
-	case MockCallTypePanic:
-		panic(__result)
-	case MockCallTypeCallback:
-		return __result.(func() (result interface{}))()
-	default:
-		panic(errors.New("Unknown mock call type, you should regenerate mock"))
-	}
-}
-
-func (mr *SpecMockRecorder) Clone() *SpecMockRecorderForClone {
-	mr.mock.ctrl.TestingT().Helper()
-
-	return &SpecMockRecorderForClone{
-		call: mr.mock.callManager.CreateCall("Clone"),
-	}
-}
-
-func (mrm *SpecMockRecorderForClone) Return(result interface{}) {
-	mrm.call.SetReturn(result)
-}
-
-func (mrm *SpecMockRecorderForClone) Clone(value interface{}) {
-	mrm.call.SetPanic(value)
-}
-
-func (mrm *SpecMockRecorderForClone) Callback(callback func() (result interface{})) {
-	mrm.call.SetCallback(callback)
-}
-
-func (m *SpecMock) FetchImports(file *File) (result0 []*Import) {
+func (m *ClonerMock) Clone(param0 interface{}) (result0 interface{}) {
 	m.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, file)
+	__params = append(__params, param0)
 
-	switch __result, __type := m.callManager.FetchCall("FetchImports", __params...).Call(); __type {
+	switch __result, __type := m.callManager.FetchCall("Clone", __params...).Call(); __type {
 	case MockCallTypeReturn:
-		return __result.([]interface{})[0].([]*Import)
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].(interface{})
+		}
+
+		return
 	case MockCallTypePanic:
 		panic(__result)
 	case MockCallTypeCallback:
-		return __result.(func(file *File) []*Import)(file)
+		return __result.(func(interface{}) interface{})(param0)
 	default:
 		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
-func (mr *SpecMockRecorder) FetchImports(file interface{}) *SpecMockRecorderForFetchImports {
+func (mr *ClonerMockRecorder) Clone(param0 interface{}) *ClonerMockRecorderForClone {
 	mr.mock.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, file)
+	__params = append(__params, param0)
 
-	return &SpecMockRecorderForFetchImports{
-		call: mr.mock.callManager.CreateCall("FetchImports", __params...),
+	return &ClonerMockRecorderForClone{
+		call: mr.mock.callManager.CreateCall("Clone", __params...),
 	}
 }
 
-func (mrm *SpecMockRecorderForFetchImports) Return(result0 []*Import) {
+func (mrm *ClonerMockRecorderForClone) Return(result0 interface{}) {
 	mrm.call.SetReturn(result0)
 }
 
-func (mrm *SpecMockRecorderForFetchImports) FetchImports(value interface{}) {
+func (mrm *ClonerMockRecorderForClone) Clone(value interface{}) {
 	mrm.call.SetPanic(value)
 }
 
-func (mrm *SpecMockRecorderForFetchImports) Callback(callback func(file *File) []*Import) {
+func (mrm *ClonerMockRecorderForClone) Callback(callback func(interface{}) interface{}) {
 	mrm.call.SetCallback(callback)
 }
 
-func (m *SpecMock) RenameImports(oldAlias string, newAlias string) {
+func NewScannerMock(ctrl *unit.Controller, options ...interface{}) *ScannerMock {
+	return &ScannerMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *ScannerMock) EXPECT() *ScannerMockRecorder {
+	return &ScannerMockRecorder{mock: m}
+}
+
+func (m *ScannerMock) Scan(storage *Storage, rootNamespace string, rootPath string, ignores ...string) {
 	m.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, oldAlias)
-	__params = append(__params, newAlias)
+	__params = append(__params, storage)
+	__params = append(__params, rootNamespace)
+	__params = append(__params, rootPath)
 
-	switch __result, __type := m.callManager.FetchCall("RenameImports", __params...).Call(); __type {
+	for _, __param := range ignores {
+		__params = append(__params, __param)
+	}
+
+	switch __result, __type := m.callManager.FetchCall("Scan", __params...).Call(); __type {
 	case MockCallTypeReturn:
 	case MockCallTypePanic:
 		panic(__result)
 	case MockCallTypeCallback:
-		__result.(func(oldAlias string, newAlias string))(oldAlias, newAlias)
+		__result.(func(storage *Storage, rootNamespace string, rootPath string, ignores ...string))(storage, rootNamespace, rootPath, ignores...)
 	default:
 		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
-func (mr *SpecMockRecorder) RenameImports(oldAlias interface{}, newAlias interface{}) *SpecMockRecorderForRenameImports {
+func (mr *ScannerMockRecorder) Scan(storage interface{}, rootNamespace interface{}, rootPath interface{}, ignores ...interface{}) *ScannerMockRecorderForScan {
 	mr.mock.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, oldAlias)
-	__params = append(__params, newAlias)
+	__params = append(__params, storage)
+	__params = append(__params, rootNamespace)
+	__params = append(__params, rootPath)
 
-	return &SpecMockRecorderForRenameImports{
-		call: mr.mock.callManager.CreateCall("RenameImports", __params...),
+	for _, __param := range ignores {
+		__params = append(__params, __param)
+	}
+
+	return &ScannerMockRecorderForScan{
+		call: mr.mock.callManager.CreateCall("Scan", __params...),
 	}
 }
 
-func (mrm *SpecMockRecorderForRenameImports) Return() {
+func (mrm *ScannerMockRecorderForScan) Return() {
 	mrm.call.SetReturn()
 }
 
-func (mrm *SpecMockRecorderForRenameImports) RenameImports(value interface{}) {
+func (mrm *ScannerMockRecorderForScan) Scan(value interface{}) {
 	mrm.call.SetPanic(value)
 }
 
-func (mrm *SpecMockRecorderForRenameImports) Callback(callback func(oldAlias string, newAlias string)) {
+func (mrm *ScannerMockRecorderForScan) Callback(callback func(storage *Storage, rootNamespace string, rootPath string, ignores ...string)) {
 	mrm.call.SetCallback(callback)
 }
 
-func (m *SpecMock) EqualSpec(value interface{}) (result bool) {
+func NewRendererMock(ctrl *unit.Controller, options ...interface{}) *RendererMock {
+	return &RendererMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *RendererMock) EXPECT() *RendererMockRecorder {
+	return &RendererMockRecorder{mock: m}
+}
+
+func (m *RendererMock) Render(entity interface{}) (result0 string) {
 	m.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, value)
+	__params = append(__params, entity)
 
-	switch __result, __type := m.callManager.FetchCall("EqualSpec", __params...).Call(); __type {
+	switch __result, __type := m.callManager.FetchCall("Render", __params...).Call(); __type {
 	case MockCallTypeReturn:
-		return __result.([]interface{})[0].(bool)
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].(string)
+		}
+
+		return
 	case MockCallTypePanic:
 		panic(__result)
 	case MockCallTypeCallback:
-		return __result.(func(value interface{}) (result bool))(value)
+		return __result.(func(entity interface{}) string)(entity)
 	default:
 		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
-func (mr *SpecMockRecorder) EqualSpec(value interface{}) *SpecMockRecorderForEqualSpec {
+func (mr *RendererMockRecorder) Render(entity interface{}) *RendererMockRecorderForRender {
 	mr.mock.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, value)
+	__params = append(__params, entity)
 
-	return &SpecMockRecorderForEqualSpec{
-		call: mr.mock.callManager.CreateCall("EqualSpec", __params...),
+	return &RendererMockRecorderForRender{
+		call: mr.mock.callManager.CreateCall("Render", __params...),
 	}
 }
 
-func (mrm *SpecMockRecorderForEqualSpec) Return(result bool) {
-	mrm.call.SetReturn(result)
+func (mrm *RendererMockRecorderForRender) Return(result0 string) {
+	mrm.call.SetReturn(result0)
 }
 
-func (mrm *SpecMockRecorderForEqualSpec) EqualSpec(value interface{}) {
+func (mrm *RendererMockRecorderForRender) Render(value interface{}) {
 	mrm.call.SetPanic(value)
 }
 
-func (mrm *SpecMockRecorderForEqualSpec) Callback(callback func(value interface{}) (result bool)) {
+func (mrm *RendererMockRecorderForRender) Callback(callback func(entity interface{}) string) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewValidatorMock(ctrl *unit.Controller, options ...interface{}) *ValidatorMock {
+	return &ValidatorMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *ValidatorMock) EXPECT() *ValidatorMockRecorder {
+	return &ValidatorMockRecorder{mock: m}
+}
+
+func (m *ValidatorMock) Validate(entity interface{}) (result0 error) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, entity)
+
+	switch __result, __type := m.callManager.FetchCall("Validate", __params...).Call(); __type {
+	case MockCallTypeReturn:
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].(error)
+		}
+
+		return
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		return __result.(func(entity interface{}) error)(entity)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *ValidatorMockRecorder) Validate(entity interface{}) *ValidatorMockRecorderForValidate {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, entity)
+
+	return &ValidatorMockRecorderForValidate{
+		call: mr.mock.callManager.CreateCall("Validate", __params...),
+	}
+}
+
+func (mrm *ValidatorMockRecorderForValidate) Return(result0 error) {
+	mrm.call.SetReturn(result0)
+}
+
+func (mrm *ValidatorMockRecorderForValidate) Validate(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *ValidatorMockRecorderForValidate) Callback(callback func(entity interface{}) error) {
 	mrm.call.SetCallback(callback)
 }
 
@@ -381,29 +528,35 @@ func (mrm *AnnotationParserMockRecorderForSetAnnotation) Callback(callback func(
 	mrm.call.SetCallback(callback)
 }
 
-func (m *AnnotationParserMock) Parse(source string) (annotations []interface{}) {
+func (m *AnnotationParserMock) Parse(content string) (annotations []interface{}) {
 	m.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, source)
+	__params = append(__params, content)
 
 	switch __result, __type := m.callManager.FetchCall("Parse", __params...).Call(); __type {
 	case MockCallTypeReturn:
-		return __result.([]interface{})[0].([]interface{})
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			annotations = __results[0].([]interface{})
+		}
+
+		return
 	case MockCallTypePanic:
 		panic(__result)
 	case MockCallTypeCallback:
-		return __result.(func(source string) (annotations []interface{}))(source)
+		return __result.(func(content string) (annotations []interface{}))(content)
 	default:
 		panic(errors.New("Unknown mock call type, you should regenerate mock"))
 	}
 }
 
-func (mr *AnnotationParserMockRecorder) Parse(source interface{}) *AnnotationParserMockRecorderForParse {
+func (mr *AnnotationParserMockRecorder) Parse(content interface{}) *AnnotationParserMockRecorderForParse {
 	mr.mock.ctrl.TestingT().Helper()
 
 	__params := []interface{}{}
-	__params = append(__params, source)
+	__params = append(__params, content)
 
 	return &AnnotationParserMockRecorderForParse{
 		call: mr.mock.callManager.CreateCall("Parse", __params...),
@@ -418,7 +571,7 @@ func (mrm *AnnotationParserMockRecorderForParse) Parse(value interface{}) {
 	mrm.call.SetPanic(value)
 }
 
-func (mrm *AnnotationParserMockRecorderForParse) Callback(callback func(source string) (annotations []interface{})) {
+func (mrm *AnnotationParserMockRecorderForParse) Callback(callback func(content string) (annotations []interface{})) {
 	mrm.call.SetCallback(callback)
 }
 
@@ -442,7 +595,13 @@ func (m *SourceParserMock) Parse(fileName string, content string) (result0 *File
 
 	switch __result, __type := m.callManager.FetchCall("Parse", __params...).Call(); __type {
 	case MockCallTypeReturn:
-		return __result.([]interface{})[0].(*File)
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].(*File)
+		}
+
+		return
 	case MockCallTypePanic:
 		panic(__result)
 	case MockCallTypeCallback:
@@ -476,30 +635,517 @@ func (mrm *SourceParserMockRecorderForParse) Callback(callback func(fileName str
 	mrm.call.SetCallback(callback)
 }
 
-func NewMarshalerJSONMock(ctrl *unit.Controller, options ...interface{}) *MarshalerJSONMock {
-	return &MarshalerJSONMock{
+func NewStorageWriterMock(ctrl *unit.Controller, options ...interface{}) *StorageWriterMock {
+	return &StorageWriterMock{
 		ctrl:        ctrl,
 		callManager: NewMockCallManager(ctrl, options...),
 	}
 }
 
-func (m *MarshalerJSONMock) EXPECT() *MarshalerJSONMockRecorder {
-	return &MarshalerJSONMockRecorder{mock: m}
+func (m *StorageWriterMock) EXPECT() *StorageWriterMockRecorder {
+	return &StorageWriterMockRecorder{mock: m}
 }
 
-func (m *MarshalerJSONMock) MarshalJSON() (result0 []byte, result1 error) {
+func (m *StorageWriterMock) Write(storage *Storage) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, storage)
+
+	switch __result, __type := m.callManager.FetchCall("Write", __params...).Call(); __type {
+	case MockCallTypeReturn:
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		__result.(func(storage *Storage))(storage)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *StorageWriterMockRecorder) Write(storage interface{}) *StorageWriterMockRecorderForWrite {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, storage)
+
+	return &StorageWriterMockRecorderForWrite{
+		call: mr.mock.callManager.CreateCall("Write", __params...),
+	}
+}
+
+func (mrm *StorageWriterMockRecorderForWrite) Return() {
+	mrm.call.SetReturn()
+}
+
+func (mrm *StorageWriterMockRecorderForWrite) Write(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *StorageWriterMockRecorderForWrite) Callback(callback func(storage *Storage)) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewStorageCleanerMock(ctrl *unit.Controller, options ...interface{}) *StorageCleanerMock {
+	return &StorageCleanerMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *StorageCleanerMock) EXPECT() *StorageCleanerMockRecorder {
+	return &StorageCleanerMockRecorder{mock: m}
+}
+
+func (m *StorageCleanerMock) Clean(storage *Storage) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, storage)
+
+	switch __result, __type := m.callManager.FetchCall("Clean", __params...).Call(); __type {
+	case MockCallTypeReturn:
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		__result.(func(storage *Storage))(storage)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *StorageCleanerMockRecorder) Clean(storage interface{}) *StorageCleanerMockRecorderForClean {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, storage)
+
+	return &StorageCleanerMockRecorderForClean{
+		call: mr.mock.callManager.CreateCall("Clean", __params...),
+	}
+}
+
+func (mrm *StorageCleanerMockRecorderForClean) Return() {
+	mrm.call.SetReturn()
+}
+
+func (mrm *StorageCleanerMockRecorderForClean) Clean(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *StorageCleanerMockRecorderForClean) Callback(callback func(storage *Storage)) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewGeneratorMock(ctrl *unit.Controller, options ...interface{}) *GeneratorMock {
+	return &GeneratorMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *GeneratorMock) EXPECT() *GeneratorMockRecorder {
+	return &GeneratorMockRecorder{mock: m}
+}
+
+func (m *GeneratorMock) Annotations() (result0 map[string]interface{}) {
+	m.ctrl.TestingT().Helper()
+
+	switch __result, __type := m.callManager.FetchCall("Annotations").Call(); __type {
+	case MockCallTypeReturn:
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].(map[string]interface{})
+		}
+
+		return
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		return __result.(func() map[string]interface{})()
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *GeneratorMockRecorder) Annotations() *GeneratorMockRecorderForAnnotations {
+	mr.mock.ctrl.TestingT().Helper()
+
+	return &GeneratorMockRecorderForAnnotations{
+		call: mr.mock.callManager.CreateCall("Annotations"),
+	}
+}
+
+func (mrm *GeneratorMockRecorderForAnnotations) Return(result0 map[string]interface{}) {
+	mrm.call.SetReturn(result0)
+}
+
+func (mrm *GeneratorMockRecorderForAnnotations) Annotations(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *GeneratorMockRecorderForAnnotations) Callback(callback func() map[string]interface{}) {
+	mrm.call.SetCallback(callback)
+}
+
+func (m *GeneratorMock) Generate(param0 *Application) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, param0)
+
+	switch __result, __type := m.callManager.FetchCall("Generate", __params...).Call(); __type {
+	case MockCallTypeReturn:
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		__result.(func(*Application))(param0)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *GeneratorMockRecorder) Generate(param0 interface{}) *GeneratorMockRecorderForGenerate {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, param0)
+
+	return &GeneratorMockRecorderForGenerate{
+		call: mr.mock.callManager.CreateCall("Generate", __params...),
+	}
+}
+
+func (mrm *GeneratorMockRecorderForGenerate) Return() {
+	mrm.call.SetReturn()
+}
+
+func (mrm *GeneratorMockRecorderForGenerate) Generate(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *GeneratorMockRecorderForGenerate) Callback(callback func(*Application)) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewImportFetcherMock(ctrl *unit.Controller, options ...interface{}) *ImportFetcherMock {
+	return &ImportFetcherMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *ImportFetcherMock) EXPECT() *ImportFetcherMockRecorder {
+	return &ImportFetcherMockRecorder{mock: m}
+}
+
+func (m *ImportFetcherMock) Fetch(file *File, entity interface{}) (result0 []*Import) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, file)
+	__params = append(__params, entity)
+
+	switch __result, __type := m.callManager.FetchCall("Fetch", __params...).Call(); __type {
+	case MockCallTypeReturn:
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].([]*Import)
+		}
+
+		return
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		return __result.(func(file *File, entity interface{}) []*Import)(file, entity)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *ImportFetcherMockRecorder) Fetch(file interface{}, entity interface{}) *ImportFetcherMockRecorderForFetch {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, file)
+	__params = append(__params, entity)
+
+	return &ImportFetcherMockRecorderForFetch{
+		call: mr.mock.callManager.CreateCall("Fetch", __params...),
+	}
+}
+
+func (mrm *ImportFetcherMockRecorderForFetch) Return(result0 []*Import) {
+	mrm.call.SetReturn(result0)
+}
+
+func (mrm *ImportFetcherMockRecorderForFetch) Fetch(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *ImportFetcherMockRecorderForFetch) Callback(callback func(file *File, entity interface{}) []*Import) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewImportRenamerMock(ctrl *unit.Controller, options ...interface{}) *ImportRenamerMock {
+	return &ImportRenamerMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *ImportRenamerMock) EXPECT() *ImportRenamerMockRecorder {
+	return &ImportRenamerMockRecorder{mock: m}
+}
+
+func (m *ImportRenamerMock) Rename(entity interface{}, oldAlias string, newAlias string) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, entity)
+	__params = append(__params, oldAlias)
+	__params = append(__params, newAlias)
+
+	switch __result, __type := m.callManager.FetchCall("Rename", __params...).Call(); __type {
+	case MockCallTypeReturn:
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		__result.(func(entity interface{}, oldAlias string, newAlias string))(entity, oldAlias, newAlias)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *ImportRenamerMockRecorder) Rename(entity interface{}, oldAlias interface{}, newAlias interface{}) *ImportRenamerMockRecorderForRename {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, entity)
+	__params = append(__params, oldAlias)
+	__params = append(__params, newAlias)
+
+	return &ImportRenamerMockRecorderForRename{
+		call: mr.mock.callManager.CreateCall("Rename", __params...),
+	}
+}
+
+func (mrm *ImportRenamerMockRecorderForRename) Return() {
+	mrm.call.SetReturn()
+}
+
+func (mrm *ImportRenamerMockRecorderForRename) Rename(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *ImportRenamerMockRecorderForRename) Callback(callback func(entity interface{}, oldAlias string, newAlias string)) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewImportUniquerMock(ctrl *unit.Controller, options ...interface{}) *ImportUniquerMock {
+	return &ImportUniquerMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *ImportUniquerMock) EXPECT() *ImportUniquerMockRecorder {
+	return &ImportUniquerMockRecorder{mock: m}
+}
+
+func (m *ImportUniquerMock) Unique(list []*Import) (result0 []*Import) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, list)
+
+	switch __result, __type := m.callManager.FetchCall("Unique", __params...).Call(); __type {
+	case MockCallTypeReturn:
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].([]*Import)
+		}
+
+		return
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		return __result.(func(list []*Import) []*Import)(list)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *ImportUniquerMockRecorder) Unique(list interface{}) *ImportUniquerMockRecorderForUnique {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, list)
+
+	return &ImportUniquerMockRecorderForUnique{
+		call: mr.mock.callManager.CreateCall("Unique", __params...),
+	}
+}
+
+func (mrm *ImportUniquerMockRecorderForUnique) Return(result0 []*Import) {
+	mrm.call.SetReturn(result0)
+}
+
+func (mrm *ImportUniquerMockRecorderForUnique) Unique(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *ImportUniquerMockRecorderForUnique) Callback(callback func(list []*Import) []*Import) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewEqualerMock(ctrl *unit.Controller, options ...interface{}) *EqualerMock {
+	return &EqualerMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *EqualerMock) EXPECT() *EqualerMockRecorder {
+	return &EqualerMockRecorder{mock: m}
+}
+
+func (m *EqualerMock) Equal(x interface{}, y interface{}) (result0 bool) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, x)
+	__params = append(__params, y)
+
+	switch __result, __type := m.callManager.FetchCall("Equal", __params...).Call(); __type {
+	case MockCallTypeReturn:
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].(bool)
+		}
+
+		return
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		return __result.(func(x interface{}, y interface{}) bool)(x, y)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *EqualerMockRecorder) Equal(x interface{}, y interface{}) *EqualerMockRecorderForEqual {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, x)
+	__params = append(__params, y)
+
+	return &EqualerMockRecorderForEqual{
+		call: mr.mock.callManager.CreateCall("Equal", __params...),
+	}
+}
+
+func (mrm *EqualerMockRecorderForEqual) Return(result0 bool) {
+	mrm.call.SetReturn(result0)
+}
+
+func (mrm *EqualerMockRecorderForEqual) Equal(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *EqualerMockRecorderForEqual) Callback(callback func(x interface{}, y interface{}) bool) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewContainsCheckerMock(ctrl *unit.Controller, options ...interface{}) *ContainsCheckerMock {
+	return &ContainsCheckerMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *ContainsCheckerMock) EXPECT() *ContainsCheckerMockRecorder {
+	return &ContainsCheckerMockRecorder{mock: m}
+}
+
+func (m *ContainsCheckerMock) Contains(collection interface{}, entity interface{}) (result0 bool) {
+	m.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, collection)
+	__params = append(__params, entity)
+
+	switch __result, __type := m.callManager.FetchCall("Contains", __params...).Call(); __type {
+	case MockCallTypeReturn:
+		__results := __result.([]interface{})
+
+		if __results[0] != nil {
+			result0 = __results[0].(bool)
+		}
+
+		return
+	case MockCallTypePanic:
+		panic(__result)
+	case MockCallTypeCallback:
+		return __result.(func(collection interface{}, entity interface{}) bool)(collection, entity)
+	default:
+		panic(errors.New("Unknown mock call type, you should regenerate mock"))
+	}
+}
+
+func (mr *ContainsCheckerMockRecorder) Contains(collection interface{}, entity interface{}) *ContainsCheckerMockRecorderForContains {
+	mr.mock.ctrl.TestingT().Helper()
+
+	__params := []interface{}{}
+	__params = append(__params, collection)
+	__params = append(__params, entity)
+
+	return &ContainsCheckerMockRecorderForContains{
+		call: mr.mock.callManager.CreateCall("Contains", __params...),
+	}
+}
+
+func (mrm *ContainsCheckerMockRecorderForContains) Return(result0 bool) {
+	mrm.call.SetReturn(result0)
+}
+
+func (mrm *ContainsCheckerMockRecorderForContains) Contains(value interface{}) {
+	mrm.call.SetPanic(value)
+}
+
+func (mrm *ContainsCheckerMockRecorderForContains) Callback(callback func(collection interface{}, entity interface{}) bool) {
+	mrm.call.SetCallback(callback)
+}
+
+func NewMarshalerMock(ctrl *unit.Controller, options ...interface{}) *MarshalerMock {
+	return &MarshalerMock{
+		ctrl:        ctrl,
+		callManager: NewMockCallManager(ctrl, options...),
+	}
+}
+
+func (m *MarshalerMock) EXPECT() *MarshalerMockRecorder {
+	return &MarshalerMockRecorder{mock: m}
+}
+
+func (m *MarshalerMock) MarshalJSON() (result0 []byte, result1 error) {
 	m.ctrl.TestingT().Helper()
 
 	switch __result, __type := m.callManager.FetchCall("MarshalJSON").Call(); __type {
 	case MockCallTypeReturn:
-		results := __result.([]interface{})
+		__results := __result.([]interface{})
 
-		if results[0] != nil {
-			result0 = __result.([]interface{})[0].([]byte)
+		if __results[0] != nil {
+			result0 = __results[0].([]byte)
 		}
 
-		if results[1] != nil {
-			result1 = __result.([]interface{})[1].(error)
+		if __results[1] != nil {
+			result1 = __results[1].(error)
 		}
 
 		return
@@ -512,22 +1158,22 @@ func (m *MarshalerJSONMock) MarshalJSON() (result0 []byte, result1 error) {
 	}
 }
 
-func (mr *MarshalerJSONMockRecorder) MarshalJSON() *MarshalerJSONMockRecorderForMarshalJSON {
+func (mr *MarshalerMockRecorder) MarshalJSON() *MarshalerMockRecorderForMarshalJSON {
 	mr.mock.ctrl.TestingT().Helper()
 
-	return &MarshalerJSONMockRecorderForMarshalJSON{
+	return &MarshalerMockRecorderForMarshalJSON{
 		call: mr.mock.callManager.CreateCall("MarshalJSON"),
 	}
 }
 
-func (mrm *MarshalerJSONMockRecorderForMarshalJSON) Return(result0 []byte, result1 error) {
+func (mrm *MarshalerMockRecorderForMarshalJSON) Return(result0 []byte, result1 error) {
 	mrm.call.SetReturn(result0, result1)
 }
 
-func (mrm *MarshalerJSONMockRecorderForMarshalJSON) MarshalJSON(value interface{}) {
+func (mrm *MarshalerMockRecorderForMarshalJSON) MarshalJSON(value interface{}) {
 	mrm.call.SetPanic(value)
 }
 
-func (mrm *MarshalerJSONMockRecorderForMarshalJSON) Callback(callback func() ([]byte, error)) {
+func (mrm *MarshalerMockRecorderForMarshalJSON) Callback(callback func() ([]byte, error)) {
 	mrm.call.SetCallback(callback)
 }

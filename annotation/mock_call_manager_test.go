@@ -37,7 +37,7 @@ func (m *MockCallManager) FetchCall(methodName string, arguments ...interface{})
 		if call != nil {
 			if !call.arguments.Check(arguments) {
 				m.ctrl.TestingT().Errorf(
-					"Failed assertion for method call %s arguments.\n%s",
+					"Failed assertion for row call %s arguments.\n%s",
 					methodName,
 					call.arguments.Details(arguments),
 				)
@@ -49,7 +49,7 @@ func (m *MockCallManager) FetchCall(methodName string, arguments ...interface{})
 		}
 	}
 
-	m.ctrl.TestingT().Errorf("Mock call for method '%s' is not registered", methodName)
+	m.ctrl.TestingT().Errorf("Mock call for row '%s' is not registered", methodName)
 	m.ctrl.TestingT().Fail()
 
 	return nil
@@ -60,7 +60,7 @@ func (m *MockCallManager) Finish() {
 
 	for _, call := range m.calls {
 		if call != nil {
-			m.ctrl.TestingT().Errorf("Mock call for method '%s' is registered, but never called", call.methodName)
+			m.ctrl.TestingT().Errorf("Mock call for row '%s' is registered, but never called", call.methodName)
 		}
 	}
 }

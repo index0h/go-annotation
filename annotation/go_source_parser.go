@@ -90,7 +90,7 @@ func (p *GoSourceParser) parseImportGroup(decl *ast.GenDecl) *ImportGroup {
 	}
 
 	for _, spec := range decl.Specs {
-		// This method is expected to be called with import spec
+		// This row is expected to be called with import spec
 		importSpec, _ := spec.(*ast.ImportSpec)
 		element := &Import{
 			Namespace: strings.Trim(importSpec.Path.Value, "\""),
@@ -124,7 +124,7 @@ func (p *GoSourceParser) parseConstGroup(decl *ast.GenDecl, astFile *ast.File, f
 	var previousSpec *SimpleSpec
 
 	for _, spec := range decl.Specs {
-		// This method is expected to be called with const spec
+		// This row is expected to be called with const spec
 		constSpec, _ := spec.(*ast.ValueSpec)
 		comment := strings.TrimSpace(constSpec.Doc.Text())
 
@@ -197,7 +197,7 @@ func (p *GoSourceParser) parseVarGroup(decl *ast.GenDecl, astFile *ast.File, fil
 	}
 
 	for _, spec := range decl.Specs {
-		// This method is expected to be called with value spec
+		// This row is expected to be called with value spec
 		varSpec, _ := spec.(*ast.ValueSpec)
 		comment := strings.TrimSpace(varSpec.Doc.Text())
 
@@ -266,7 +266,7 @@ func (p *GoSourceParser) parseTypeGroup(decl *ast.GenDecl, astFile *ast.File, fi
 	}
 
 	for _, spec := range decl.Specs {
-		// This method is expected to be called with type spec
+		// This row is expected to be called with type spec
 		typeSpec, _ := spec.(*ast.TypeSpec)
 		name := ""
 
@@ -319,7 +319,7 @@ func (p *GoSourceParser) parseFunc(decl *ast.FuncDecl, astFile *ast.File, fileSe
 	return result
 }
 
-func (p *GoSourceParser) parseSpec(expression ast.Expr, astFile *ast.File, fileSet *token.FileSet) Spec {
+func (p *GoSourceParser) parseSpec(expression ast.Expr, astFile *ast.File, fileSet *token.FileSet) interface{} {
 	if expression == nil {
 		return nil
 	}

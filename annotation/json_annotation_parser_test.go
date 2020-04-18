@@ -11,15 +11,14 @@ func TestNewJSONAnnotationParser(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	expected := &JSONAnnotationParser{
-		annotations: map[string]interface{}{
-			"FileIsGenerated": FileIsGeneratedAnnotation(false),
-		},
+	annotations := map[string]interface{}{
+		"FileIsGenerated": FileIsGeneratedAnnotation(false),
 	}
 
 	actual := NewJSONAnnotationParser()
 
-	ctrl.AssertEqual(expected, actual)
+	ctrl.AssertNotNil(actual)
+	ctrl.AssertEqual(annotations, actual.annotations)
 }
 
 func TestJSONAnnotationParser_SetAnnotation(t *testing.T) {

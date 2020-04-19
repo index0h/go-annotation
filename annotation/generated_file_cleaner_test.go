@@ -12,11 +12,9 @@ func TestNewGeneratedFileCleaner(t *testing.T) {
 	ctrl := unit.NewController(t)
 	defer ctrl.Finish()
 
-	expected := &GeneratedFileCleaner{}
-
 	actual := NewGeneratedFileCleaner()
 
-	ctrl.AssertEqual(expected, actual)
+	ctrl.AssertNotNil(actual)
 }
 
 func TestGeneratedFileCleaner_Clean(t *testing.T) {
